@@ -11,7 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.dailylog.api.domain.Post;
 import com.project.dailylog.api.domain.PostRepository;
 import com.project.dailylog.api.request.PostCreate;
-import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -119,32 +120,43 @@ class PostControllerTest {
   }
 
   @Test
-  @DisplayName("/posts 요청으로 여러 건의 데이터를 조회힌다.")
+  @DisplayName("/posts 요청으로 2페이지 데이터 여러건을 조회한다.")
   void list() throws Exception {
     // given
-    postRepository.saveAll(List.of(
-        Post.builder()
-            .title("제목1")
-            .content("내용1")
-            .userId("choi")
-            .build(),
-        Post.builder()
-            .title("제목2")
-            .content("내용2")
-            .userId("choi2")
-            .build(),
-        Post.builder()
-            .title("제목3")
-            .content("내용3")
-            .userId("choi3")
-            .build()
-        ));
+    postRepository.saveAll(IntStream.range(0,31)
+        .mapToObj(i -> Post.builder()
+              .title("제목-"+i)
+              .content("내용-"+i)
+              .userId("choi-"+i)
+              .build()).collect(Collectors.toList())
+    );
 
     // expected
-    this.mockMvc.perform(get("/posts"))
+    this.mockMvc.perform(get("/posts?page=2&size=10"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.length()", is(3)))
-        .andExpect(jsonPath("$[0].title").value("제목1"))
-        .andExpect(jsonPath("$[0].content").value("내용1"));
+        .andExpect(jsonPath("$.length()", is(10)))
+        .andExpect(jsonPath("$[0].title").value("제목-20"))
+        .andExpect(jsonPath("$[0].content").value("내용-20"));
+  }
+
+  @Test
+  @DisplayName("페이지를 0으로 요청하면 첫 페이지를 가져온다")
+  void list1() throws Exception{
+    // given
+    postRepository.saveAll(
+        IntStream.range(0,21)
+        .mapToObj(i -> Post.builder()
+            .title("제목"+i)
+            .content("내용"+i)
+            .userId("user"+i)
+            .build())
+        .collect(Collectors.toList()));
+
+    // expected
+    this.mockMvc.perform(get("/posts?page=0&size=20")
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.length()").value("20"))
+        .andExpect(jsonPath("$[0].title").value("제목20"));
   }
 }

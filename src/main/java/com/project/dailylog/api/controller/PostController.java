@@ -1,6 +1,7 @@
 package com.project.dailylog.api.controller;
 
 import com.project.dailylog.api.request.PostCreate;
+import com.project.dailylog.api.request.PostSearch;
 import com.project.dailylog.api.response.PostResponse;
 import com.project.dailylog.api.service.PostService;
 import java.util.List;
@@ -32,8 +33,8 @@ public class PostController {
   }
 
   @GetMapping("/posts")
-  public List<PostResponse> list() {
-    return postService.getList();
+  public List<PostResponse> list(PostSearch postSearch) {
+    return postService.getList(postSearch);
   }
 
 }

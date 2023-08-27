@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity(name="tb_post")
 @NoArgsConstructor
-public class Post {
+public class Post extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

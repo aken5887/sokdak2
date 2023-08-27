@@ -6,9 +6,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.project.dailylog.api.domain.Post;
 import com.project.dailylog.api.domain.PostRepository;
 import com.project.dailylog.api.request.PostCreate;
+import com.project.dailylog.api.request.PostSearch;
 import com.project.dailylog.api.response.PostResponse;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -63,6 +66,8 @@ class PostServiceTest {
     assertThat(postResponse).isNotNull();
     assertThat(postResponse.getTitle()).isEqualTo(postCreate.getTitle());
     assertThat(postResponse.getContent()).isEqualTo(postCreate.getContent());
+    assertThat(postResponse.getCreatedTime()).isBefore(LocalDateTime.now());
+    assertThat(postResponse.getLastUpdatedTime()).isBefore(LocalDateTime.now());
   }
 
   @Test
@@ -74,23 +79,30 @@ class PostServiceTest {
   }
 
   @Test
-  @DisplayName("여러 건의 데이터를 조회한다.")
+  @DisplayName("여러 건의 데이터 중 2페이지를 조회한다.")
   void list() {
     // given
-    List<Post> posts = new ArrayList<>();
-    for(int i=0; i<10; i++){
-      posts.add(Post.builder()
-              .title("제목 :"+i)
-              .content("내용 :"+i)
-              .build());
-    }
+    List<Post> posts = IntStream.range(0, 31)
+            .mapToObj(
+                i -> Post.builder()
+                    .title("제목 = "+i)
+                    .content("내용 = "+i)
+                    .userId("작성자"+i)
+                    .build()
+            ).collect(Collectors.toList());
     postRepository.saveAll(posts);
 
+    PostSearch postSearch = PostSearch.builder()
+        .page(2)
+        .build();
+
     // when
-    List<PostResponse> postResponses = postService.getList();
+    List<PostResponse> postResponses = postService.getList(postSearch);
 
     // then
-    assertThat(postResponses.size()).isEqualTo(posts.size());
+    assertThat(postResponses.size()).isEqualTo(postSearch.getSize());
+    assertThat(postResponses.get(0).getTitle()).isEqualTo("제목 = 20");
+    assertThat(postResponses.get(0).getContent()).isEqualTo("내용 = 20");
   }
 
 }

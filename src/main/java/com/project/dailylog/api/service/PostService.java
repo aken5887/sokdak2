@@ -2,7 +2,9 @@ package com.project.dailylog.api.service;
 
 import com.project.dailylog.api.domain.Post;
 import com.project.dailylog.api.domain.PostRepository;
+import com.project.dailylog.api.domain.PostRepositoryCustom;
 import com.project.dailylog.api.request.PostCreate;
+import com.project.dailylog.api.request.PostSearch;
 import com.project.dailylog.api.response.PostResponse;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,9 +30,9 @@ public class PostService {
     return new PostResponse(post);
   }
 
-  public List<PostResponse> getList() {
-    List<Post> posts = postRepository.findAll();
-    return posts.stream()
+  public List<PostResponse> getList(PostSearch postSearch) {
+    return postRepository.findAllByPage(postSearch)
+        .stream()
         .map(PostResponse::new)
         .collect(Collectors.toList());
   }

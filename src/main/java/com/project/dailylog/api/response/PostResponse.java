@@ -1,6 +1,7 @@
 package com.project.dailylog.api.response;
 
 import com.project.dailylog.api.domain.Post;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,12 +12,16 @@ public class PostResponse {
   private String title;
   private String userId;
   private String content;
+  private LocalDateTime createdTime;
+  private LocalDateTime lastUpdatedTime;
 
   public PostResponse(Post post) {
     this.id = id;
     this.title = post.getTitle();
     this.userId = post.getUserId();
     this.content = post.getContent();
+    this.createdTime = post.getCreatedTime();
+    this.lastUpdatedTime = post.getLastUpdatedTime();
   }
 
   @Builder
