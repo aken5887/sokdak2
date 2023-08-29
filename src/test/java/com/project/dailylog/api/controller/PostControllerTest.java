@@ -2,6 +2,7 @@ package com.project.dailylog.api.controller;
 
 import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -9,8 +10,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.dailylog.api.domain.Post;
-import com.project.dailylog.api.domain.PostRepository;
+import com.project.dailylog.api.repository.PostRepository;
 import com.project.dailylog.api.request.PostCreate;
+import com.project.dailylog.api.request.PostEdit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.assertj.core.api.Assertions;
@@ -158,5 +160,32 @@ class PostControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.length()").value("20"))
         .andExpect(jsonPath("$[0].title").value("제목20"));
+  }
+
+  @DisplayName("글 제목 및 내용 수정")
+  @Test
+  void edit() throws Exception {
+    // given
+    Post post = Post.builder()
+        .title("제목")
+        .content("내용")
+        .userId("writer")
+        .build();
+    postRepository.save(post);
+
+    PostEdit postEdit = PostEdit.builder()
+        .title("제목(수정)")
+        .content("내용(수정)")
+        .build();
+
+    String value = objectMapper.writeValueAsString(postEdit);
+
+    // expected
+    this.mockMvc.perform(patch("/posts/{postId}", post.getId())
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(value))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.title").value("제목(수정)"))
+        .andExpect(jsonPath("$.content").value("내용(수정)"));
   }
 }

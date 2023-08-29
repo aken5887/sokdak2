@@ -37,4 +37,17 @@ public class Post extends BaseTimeEntity {
     this.content = postCreate.getContent();
     return this;
   }
+
+  public PostEditor.PostEditorBuilder toEditor(){
+    PostEditor.PostEditorBuilder editorBuilder = PostEditor.builder()
+        .title(this.title)
+        .content(this.content);
+    return editorBuilder;
+  }
+
+  public Post edit(PostEditor postEditor) {
+    this.title = postEditor.getTitle();
+    this.content = postEditor.getContent();
+    return this;
+  }
 }

@@ -4,15 +4,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.project.dailylog.api.domain.Post;
-import com.project.dailylog.api.domain.PostRepository;
+import com.project.dailylog.api.repository.PostRepository;
 import com.project.dailylog.api.request.PostCreate;
+import com.project.dailylog.api.request.PostEdit;
 import com.project.dailylog.api.request.PostSearch;
 import com.project.dailylog.api.response.PostResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ class PostServiceTest {
   @Autowired
   PostRepository postRepository;
 
-  @AfterEach
+  @BeforeEach
   void clean() {
     postRepository.deleteAll();
   }
@@ -52,15 +53,16 @@ class PostServiceTest {
   @DisplayName("저장된 POST 엔티티를 조회한다.")
   void get() {
     // given
-    PostCreate postCreate = PostCreate.builder()
+    Post postCreate = Post.builder()
         .title("테스트 제목2")
         .content("테스트 내용2")
         .build();
 
-    postService.save(postCreate);
+    postRepository.save(postCreate);
 
     // when
-    PostResponse postResponse = postService.get(1L);
+    System.out.printf("postCreate id = %d", postCreate.getId());
+    PostResponse postResponse = postService.get(postCreate.getId());
 
     // then
     assertThat(postResponse).isNotNull();
@@ -105,4 +107,57 @@ class PostServiceTest {
     assertThat(postResponses.get(0).getContent()).isEqualTo("내용 = 20");
   }
 
+  @DisplayName("글 제목과 내용이 정상적으로 수정된다.")
+  @Test
+  void edit() throws Exception {
+    // given
+    Post savedPost = postRepository.save(Post
+        .builder()
+        .title("제목")
+        .content("제목")
+        .userId("choi")
+        .build());
+
+    PostEdit postEdit = PostEdit.builder()
+        .title("제목(수정)")
+        .content("내용(수정)")
+        .build();
+
+    // when
+    postService.edit(savedPost.getId(), postEdit);
+
+    // then
+    Post post = postRepository.findById(savedPost.getId())
+            .orElseThrow(()->new IllegalArgumentException("존재하지 않는 게시글입니다."));
+    assertThat(post.getId()).isEqualTo(savedPost.getId());
+    assertThat(post.getTitle()).isEqualTo(postEdit.getTitle());
+    assertThat(post.getContent()).isEqualTo(postEdit.getContent());
+  }
+
+  @DisplayName("글 제목이 null인경우 수정되지 않는다.")
+  @Test
+  void edit_test2() throws Exception {
+    // given
+    Post savedPost = postRepository.save(Post
+        .builder()
+        .title("제목")
+        .content("내용")
+        .userId("choi")
+        .build());
+
+    PostEdit postEdit = PostEdit.builder()
+        .title(null)
+        .content(null)
+        .build();
+
+   // when
+    postService.edit(savedPost.getId(), postEdit);
+
+    // then
+    Post post = postRepository.findById(savedPost.getId())
+        .orElseThrow(()->new IllegalArgumentException("존재하지 않는 게시글입니다."));
+    assertThat(post.getId()).isEqualTo(savedPost.getId());
+    assertThat(post.getTitle()).isEqualTo("제목");
+    assertThat(post.getContent()).isEqualTo("내용");
+  }
 }
