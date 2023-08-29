@@ -1,5 +1,6 @@
 package com.project.dailylog.api.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -15,7 +16,6 @@ import com.project.dailylog.api.request.PostCreate;
 import com.project.dailylog.api.request.PostEdit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +24,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -99,8 +100,8 @@ class PostControllerTest {
             .content(postCreateStr))
         .andExpect(status().isOk());
     // then
-    Assertions.assertThat(postRepository.count()).isEqualTo(1);
-    Assertions.assertThat(postRepository.findAll().get(0).getTitle()).isEqualTo("제목입니다.");
+    assertThat(postRepository.count()).isEqualTo(1);
+    assertThat(postRepository.findAll().get(0).getTitle()).isEqualTo("제목입니다.");
   }
 
   @Test
@@ -187,5 +188,23 @@ class PostControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.title").value("제목(수정)"))
         .andExpect(jsonPath("$.content").value("내용(수정)"));
+  }
+
+  @DisplayName("/posts DELETE 요청시 게시글이 성공적으로 삭제된다.")
+  @Test
+  void delete_test() throws Exception {
+    // given
+    Post post = Post.builder()
+        .title("제목")
+        .content("내용")
+        .build();
+    postRepository.save(post);
+
+    // when
+    this.mockMvc.perform(MockMvcRequestBuilders.delete("/posts/{postId}", post.getId()))
+        .andExpect(status().isOk());
+
+    // then
+    assertThat(postRepository.count()).isEqualTo(0);
   }
 }

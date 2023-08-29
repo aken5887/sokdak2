@@ -160,4 +160,22 @@ class PostServiceTest {
     assertThat(post.getTitle()).isEqualTo("제목");
     assertThat(post.getContent()).isEqualTo("내용");
   }
+
+  @DisplayName("글이 정상적으로 삭제된다.")
+  @Test
+  void delete_test() {
+    // given
+    Post post = Post.builder()
+        .title("삭제 테스트")
+        .content("삭제할 내용")
+        .build();
+
+    postRepository.save(post);
+
+    // when
+    postService.delete(post.getId());
+
+    // then
+    assertThat(postRepository.count()).isEqualTo(0);
+  }
 }
