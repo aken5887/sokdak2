@@ -27,6 +27,7 @@ public class PostController {
   @PostMapping("/posts")
   public void create(@RequestBody @Valid PostCreate postCreate){
     log.info("PostCreate : {}", postCreate.toString());
+    postCreate.validate();
     postService.save(postCreate);
   }
 
@@ -42,6 +43,7 @@ public class PostController {
 
   @PatchMapping("/posts/{postId}")
   public PostResponse edit(@PathVariable long postId, @RequestBody @Valid PostEdit postEdit){
+    postEdit.validate();
     return postService.edit(postId, postEdit);
   }
 

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.project.dailylog.api.domain.Post;
+import com.project.dailylog.api.exception.PostNotFoundException;
 import com.project.dailylog.api.repository.PostRepository;
 import com.project.dailylog.api.request.PostCreate;
 import com.project.dailylog.api.request.PostEdit;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -70,14 +72,6 @@ class PostServiceTest {
     assertThat(postResponse.getContent()).isEqualTo(postCreate.getContent());
     assertThat(postResponse.getCreatedTime()).isBefore(LocalDateTime.now());
     assertThat(postResponse.getLastUpdatedTime()).isBefore(LocalDateTime.now());
-  }
-
-  @Test
-  @DisplayName("없는 게시글을 조회할 때 Exception 발생시킨다.")
-  void get_exception() {
-    // expected
-    assertThatThrownBy(
-        () -> postService.get(2L)).isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test
@@ -177,5 +171,33 @@ class PostServiceTest {
 
     // then
     assertThat(postRepository.count()).isEqualTo(0);
+  }
+
+  @DisplayName("게시글 조회 - PostNotFoundException")
+  @Test
+  void get_exception2() {
+    // expected
+    assertThatThrownBy(() -> postService.get(1L)).isInstanceOf(PostNotFoundException.class)
+        .hasMessageContaining("존재하지 않는 게시글입니다.");
+  }
+
+  @DisplayName("게시글 수정 - PostNotFoundException")
+  @Test
+  void edit_exception() {
+    // given
+    PostEdit postEdit = PostEdit.builder().build();
+
+    // expected
+    PostNotFoundException e
+        = Assertions.assertThrows(PostNotFoundException.class, () -> postService.edit(1L, postEdit));
+    assertThat(e.getMessage()).isEqualTo("존재하지 않는 게시글입니다.");
+  }
+
+  @DisplayName("게시글 삭제 - PostNotFoundException")
+  @Test
+  void delete_exception() {
+    // expected
+    assertThatThrownBy(() -> postService.delete(1L)).isInstanceOf(PostNotFoundException.class)
+        .hasMessageContaining("존재하지 않는 게시글입니다.");
   }
 }

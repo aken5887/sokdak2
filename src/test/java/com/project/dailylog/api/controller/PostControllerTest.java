@@ -16,6 +16,7 @@ import com.project.dailylog.api.request.PostCreate;
 import com.project.dailylog.api.request.PostEdit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -80,7 +81,7 @@ class PostControllerTest {
         .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.code").value("400"))
-        .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+        .andExpect(jsonPath("$.message").value(StringContains.containsString("잘못된 요청")))
         .andExpect(jsonPath("$.validation.writer").value("작성자는 필수입니다."));
   }
 
@@ -206,5 +207,53 @@ class PostControllerTest {
 
     // then
     assertThat(postRepository.count()).isEqualTo(0);
+  }
+
+  @DisplayName("존재하지 않는 게시글을 조회하면 404오류가 발생한다.")
+  @Test
+  void get_not_found() throws Exception {
+    // expected
+    this.mockMvc.perform(get("/posts/1")
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
+  }
+
+  @DisplayName("존재하지 않는 게시글을 수정하면 404오류가 발생한다.")
+  @Test
+  void edit_not_found() throws Exception {
+    // given
+    PostEdit postEdit = PostEdit.builder()
+        .title("제목")
+        .content("내용")
+        .build();
+
+    String content = objectMapper.writeValueAsString(postEdit);
+
+    // expected
+    this.mockMvc.perform(patch("/posts/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(content))
+        .andExpect(status().isNotFound());
+  }
+
+  @DisplayName("게시글 작성시 제목에 '테스트'가 들어가면 400오류가 발생한다.")
+  @Test
+  void create_invalid_request() throws Exception {
+   // given
+   PostCreate postCreate = PostCreate.builder()
+       .title("테스트 제목")
+       .content("테스트 내용")
+       .writer("userId")
+       .build();
+
+   String content = objectMapper.writeValueAsString(postCreate);
+
+   // expected
+    this.mockMvc.perform(post("/posts")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(content))
+        .andDo(print())
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.validation.title").value("제목엔 '테스트'가 포함될 수 없습니다."));
   }
 }

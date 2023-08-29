@@ -2,6 +2,7 @@ package com.project.dailylog.api.service;
 
 import com.project.dailylog.api.domain.Post;
 import com.project.dailylog.api.domain.PostEditor;
+import com.project.dailylog.api.exception.PostNotFoundException;
 import com.project.dailylog.api.repository.PostRepository;
 import com.project.dailylog.api.request.PostCreate;
 import com.project.dailylog.api.request.PostEdit;
@@ -28,7 +29,7 @@ public class PostService {
 
   public PostResponse get(Long postId) {
     Post post = postRepository.findById(postId)
-        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글 입니다. id="+postId));
+        .orElseThrow(() -> new PostNotFoundException());
     return new PostResponse(post);
   }
 
@@ -42,7 +43,7 @@ public class PostService {
   @Transactional
   public PostResponse edit(long postId, PostEdit postEdit) {
     Post post = postRepository.findById(postId)
-        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다. id="+postId));
+        .orElseThrow(() -> new PostNotFoundException());
 
     PostEditor.PostEditorBuilder postEditorBuilder = post.toEditor();
     PostEditor postEditor = postEditorBuilder
@@ -57,7 +58,7 @@ public class PostService {
 
   public void delete(long postId){
     Post post = postRepository.findById(postId)
-        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다. id="+postId));
+        .orElseThrow(() -> new PostNotFoundException());
     postRepository.delete(post);
   }
 }
