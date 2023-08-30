@@ -16,7 +16,7 @@ public class PostResponse {
   private LocalDateTime lastUpdatedTime;
 
   public PostResponse(Post post) {
-    this.id = id;
+    this.id = post.getId();
     this.title = post.getTitle();
     this.userId = post.getUserId();
     this.content = post.getContent();

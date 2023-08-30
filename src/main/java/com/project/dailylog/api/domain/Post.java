@@ -6,12 +6,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
-@Entity(name="tb_post")
+@Entity
+@Table(name="tb_post")
 @NoArgsConstructor
 public class Post extends BaseTimeEntity {
 
@@ -22,7 +25,8 @@ public class Post extends BaseTimeEntity {
   private String userId;
   @Lob
   private String content;
-  private int count=0;
+  @ColumnDefault("0")
+  private int count;
 
   @Builder
   public Post(String title, String userId, String content){

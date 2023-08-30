@@ -1,19 +1,26 @@
 package com.project.dailylog.api.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.dailylog.api.domain.Post;
 import com.project.dailylog.api.repository.PostRepository;
 import com.project.dailylog.api.request.PostCreate;
 import com.project.dailylog.api.request.PostEdit;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.hamcrest.core.StringContains;
@@ -25,7 +32,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.servlet.ModelAndView;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -60,7 +69,10 @@ class PostControllerTest {
     this.mockMvc.perform(post("/posts")
             .contentType(MediaType.APPLICATION_JSON)
             .content(postCreateStr))
-        .andExpect(status().isOk());
+        .andDo(print())
+        .andExpect(status().is3xxRedirection())
+        .andExpect(view().name(StringContains.containsString("/posts/")))
+        .andExpect(flash().attributeExists("response"));
   }
 
   @Test
@@ -99,7 +111,9 @@ class PostControllerTest {
     this.mockMvc.perform(post("/posts")
             .contentType(MediaType.APPLICATION_JSON)
             .content(postCreateStr))
-        .andExpect(status().isOk());
+        .andDo(print())
+        .andExpect(status().is3xxRedirection())
+        .andExpect(view().name(StringContains.containsString("/posts/")));
     // then
     assertThat(postRepository.count()).isEqualTo(1);
     assertThat(postRepository.findAll().get(0).getTitle()).isEqualTo("제목입니다.");
@@ -118,9 +132,12 @@ class PostControllerTest {
 
     // when
     this.mockMvc.perform(get("/posts/{postId}", post.getId()))
+        .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.title").value(post.getTitle()))
-        .andExpect(jsonPath("$.content").value(post.getContent()));
+        .andExpect(model()
+            .attribute("response", hasProperty("title", is(post.getTitle()))))
+        .andExpect(model()
+            .attribute("response", hasProperty("content", is(post.getContent()))));
   }
 
   @Test
@@ -136,11 +153,18 @@ class PostControllerTest {
     );
 
     // expected
-    this.mockMvc.perform(get("/posts?page=2&size=10"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.length()", is(10)))
-        .andExpect(jsonPath("$[0].title").value("제목-20"))
-        .andExpect(jsonPath("$[0].content").value("내용-20"));
+    MvcResult mvcResult =
+      this.mockMvc.perform(get("/posts?page=2")
+          .contentType(MediaType.APPLICATION_JSON))
+          .andDo(print())
+          .andExpect(status().isOk())
+          .andExpect(model().attribute("response", hasProperty("result")))
+          .andExpect(model().attribute("posts", hasSize(10)))
+          .andReturn();
+
+    ModelAndView mav = mvcResult.getModelAndView();
+    List<Post> posts = (List<Post>) mav.getModel().get("posts");
+    assertThat(posts.get(0).getTitle()).isEqualTo("제목-20");
   }
 
   @Test
@@ -159,9 +183,7 @@ class PostControllerTest {
     // expected
     this.mockMvc.perform(get("/posts?page=0&size=20")
         .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.length()").value("20"))
-        .andExpect(jsonPath("$[0].title").value("제목20"));
+        .andExpect(status().isOk());
   }
 
   @DisplayName("글 제목 및 내용 수정")
@@ -186,9 +208,13 @@ class PostControllerTest {
     this.mockMvc.perform(patch("/posts/{postId}", post.getId())
         .contentType(MediaType.APPLICATION_JSON)
         .content(value))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.title").value("제목(수정)"))
-        .andExpect(jsonPath("$.content").value("내용(수정)"));
+        .andDo(print())
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/posts/"+post.getId()))
+        .andExpect(flash()
+            .attribute("postResponse", hasProperty("title", is("제목(수정)"))))
+        .andExpect(flash()
+            .attribute("postResponse", hasProperty("content", is("내용(수정)"))));
   }
 
   @DisplayName("/posts DELETE 요청시 게시글이 성공적으로 삭제된다.")
@@ -203,7 +229,9 @@ class PostControllerTest {
 
     // when
     this.mockMvc.perform(MockMvcRequestBuilders.delete("/posts/{postId}", post.getId()))
-        .andExpect(status().isOk());
+            .andDo(print())
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/posts"));
 
     // then
     assertThat(postRepository.count()).isEqualTo(0);

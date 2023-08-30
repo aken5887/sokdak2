@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +23,10 @@ public class PostService {
 
   private final PostRepository postRepository;
 
-  public void save(PostCreate postCreate){
+  public PostResponse save(PostCreate postCreate){
     Post post = new Post().toEntity(postCreate);
     postRepository.save(post);
+    return new PostResponse(post);
   }
 
   public PostResponse get(Long postId) {
@@ -38,6 +40,10 @@ public class PostService {
         .stream()
         .map(PostResponse::new)
         .collect(Collectors.toList());
+  }
+
+  public Page<Post> getListByPage(PostSearch postSearch) {
+    return postRepository.findPostsByCondition(postSearch);
   }
 
   @Transactional

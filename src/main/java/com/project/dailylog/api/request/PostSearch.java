@@ -4,20 +4,28 @@ import lombok.Builder;
 import lombok.ToString;
 
 @ToString
-@Builder
 public class PostSearch {
 
   private static final int DEFAULT_SIZE = 10;
   private static final int DEFAULT_MAX_SIZE = 50;
 
-  @Builder.Default
-  private Integer page = 1;
-
-  @Builder.Default
-  private Integer size = DEFAULT_SIZE;
-
+  private Integer page;
+  private Integer size;
   private String type;
   private String keyword;
+
+  public PostSearch(){
+    this.page = 1;
+    this.size = DEFAULT_SIZE;
+  }
+
+  @Builder
+  public PostSearch(Integer page, Integer size, String type, String keyword) {
+    this.page = page!=null ? page : 1;
+    this.size = size!=null ? size : DEFAULT_SIZE;
+    this.type = type;
+    this.keyword = keyword;
+  }
 
   public long getOffSet() {
     return (Math.max(1, page) - 1) * Math.min(this.size, DEFAULT_MAX_SIZE);
@@ -36,7 +44,7 @@ public class PostSearch {
   }
 
   public void setSize(Integer size) {
-    this.size = (size < DEFAULT_SIZE) || (size > DEFAULT_MAX_SIZE) ? DEFAULT_SIZE:size;
+    this.size = (size == null) || (size < DEFAULT_SIZE) || (size > DEFAULT_MAX_SIZE) ? DEFAULT_SIZE:size;
   }
 
   public String getType() {
