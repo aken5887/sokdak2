@@ -1,56 +1,97 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>공지사항</title>
-    <link rel="stylesheet" href="/static/css/css.css">
-</head>
-<body>
-    <div class="board_wrap">
-        <div class="board_title">
-            <strong>공지사항</strong>
-            <p>공지사항을 빠르고 정확하게 안내해드립니다.</p>            
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout}">
+<div class="board_write_wrap" layout:fragment="content">
+    <div class="board_write">
+        <div class="title">
+            <dl>
+                <dt>제목</dt>
+                <dd>
+                    <input class="required" type="text" name="title" placeholder="제목 입력" title="제목" th:value="${response.title}">
+                </dd>
+            </dl>
         </div>
-        <div class="board_write_wrap">
-            <div class="board_write">
-                <div class="title">
-                    <dl>
-                        <dt>제목</dt>
-                        <dd>
-                            <input type="text" placeholder="제목 입력" value="글제목이 들어갑니다.">
-                        </dd>
-                    </dl>
-                </div>
-                <div class="info">
-                    <dl>
-                        <dt>글쓴이</dt>
-                        <dd>
-                            <input type="text" placeholder="제목 입력" value="김재중">
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt>비밀번호</dt>
-                        <dd>
-                            <input type="password" placeholder="제목 입력" value="1234">
-                        </dd>
-                    </dl>
-                </div>
-                <div class="cont">
-                    <textarea placeholder="내용입력">
-글 내용이 들어갑니다.
-글 내용이 들어갑니다.
-글 내용이 들어갑니다.
-글 내용이 들어갑니다.
-글 내용이 들어갑니다.
-글 내용이 들어갑니다.</textarea>
-                </div>
-            </div>
+        <div class="info">
+            <dl>
+                <dt>글쓴이</dt>
+                <dd th:text="${response.userId}"></dd>
+            </dl>
+            <dl>
+                <dt>비밀번호</dt>
+                <dd>
+                    <input class="required" id="password_field" title="비밀번호"
+                           type="password" name="password" placeholder="비밀번호 입력">
+                </dd>
+            </dl>
         </div>
-        <div class="bt_wrap">
-            <a href="view.html" class="on">저장</a>
-            <a href="view.html">취소</a>
+        <div class="cont">
+            <textarea placeholder="내용입력" name="content" th:text="${response.content}"></textarea>
         </div>
     </div>
-</body>
-</html>
+    <div class="bt_wrap">
+        <a href="javascript:void(0);" class="on" id="saveBtn">저장</a>
+        <a href="javascript:void(0)" id="cancelBtn">취소</a>
+    </div>
+    <form id="editForm" action="" method="get">
+        <input type="hidden" name="page" th:value="${postSearch.page}">
+        <input type="hidden" name="size" th:value="${postSearch.size}">
+        <input type="hidden" name="kw_opt" th:value="${postSearch.kwOpt}">
+        <input type="hidden" name="kw" th:value="${postSearch.kw}">
+    </form>
+</div>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function(){
+           const ef = $("#editForm");
+           const postId = [[${response.id}]];
+
+           $("div.bt_wrap #saveBtn").click(function(e){
+                e.preventDefault();
+                if(common.validate.checkRequired("div.board_write input.required")){
+                    let postEdit   = {};
+                    postEdit.title = $("input[name=title]").val();
+                    postEdit.content = $("textarea[name=content]").val();
+                    postEdit.password = $("input[name=password]").val();
+
+                    $.ajax({
+                        url : '/posts/'+postId,
+                        method : 'PATCH',
+                        contentType : 'application/json',
+                        dataType: 'json',
+                        data : JSON.stringify(postEdit),
+                        success : function(response) {
+                            alert("저장에 성공하였습니다.");
+                            ef.attr("action", "/posts/"+postId)
+                            ef.attr("method", "get");
+                            ef.submit();
+                        },
+                        error: function(response) {
+                            let responseJson = response.responseJSON;
+                            let rCode = responseJson.code;
+                            let rMessage = responseJson.message;
+
+                            if(rMessage != null){
+                                alert(rMessage+"(오류코드 : "+rCode+")");
+                            }else{
+                                alert("저장에 실패하였습니다. (오류코드 : "+rCode+")");
+                            }
+                        }
+                    });
+                }
+           });
+
+           $("div.bt_wrap #cancelBtn").click(function(e){
+                e.preventDefault();
+                ef.attr("action","/posts/"+postId);
+                ef.submit();
+            });
+
+           $("div.board_write input#password_field").on("keyup paste", function(){
+               let $password = $(this);
+               common.validate.password($password);
+           });
+        });
+
+    </script>
+</th:block>

@@ -1,54 +1,125 @@
-insert into tb_post (title, content, user_id, created_time) values('제목1','내용1','user1',now());
-insert into tb_post (title, content, user_id, created_time) values('제목2','내용2','user2',now());
-insert into tb_post (title, content, user_id, created_time) values('제목3','내용3','user3',now());
-insert into tb_post (title, content, user_id, created_time) values('제목4','내용4','user4',now());
-insert into tb_post (title, content, user_id, created_time) values('제목5','내용5','user5',now());
-insert into tb_post (title, content, user_id, created_time) values('제목6','내용6','user6',now());
-insert into tb_post (title, content, user_id, created_time) values('제목7','내용7','user7',now());
-insert into tb_post (title, content, user_id, created_time) values('제목8','내용8','user8',now());
-insert into tb_post (title, content, user_id, created_time) values('제목9','내용9','user9',now());
-insert into tb_post (title, content, user_id, created_time) values('제목10','내용10','user10',now());
-insert into tb_post (title, content, user_id, created_time) values('제목11','내용11','user11',now());
-insert into tb_post (title, content, user_id, created_time) values('제목12','내용12','user12',now());
-insert into tb_post (title, content, user_id, created_time) values('제목13','내용13','user13',now());
-insert into tb_post (title, content, user_id, created_time) values('제목14','내용14','user14',now());
-insert into tb_post (title, content, user_id, created_time) values('제목15','내용15','user15',now());
-insert into tb_post (title, content, user_id, created_time) values('제목16','내용16','user16',now());
-insert into tb_post (title, content, user_id, created_time) values('제목17','내용17','user17',now());
-insert into tb_post (title, content, user_id, created_time) values('제목18','내용18','user18',now());
-insert into tb_post (title, content, user_id, created_time) values('제목19','내용19','user19',now());
-insert into tb_post (title, content, user_id, created_time) values('제목20','내용20','user20',now());
-insert into tb_post (title, content, user_id, created_time) values('제목21','내용21','user21',now());
-insert into tb_post (title, content, user_id, created_time) values('제목22','내용22','user22',now());
-insert into tb_post (title, content, user_id, created_time) values('제목23','내용23','user23',now());
-insert into tb_post (title, content, user_id, created_time) values('제목24','내용24','user24',now());
-insert into tb_post (title, content, user_id, created_time) values('제목25','내용25','user25',now());
-insert into tb_post (title, content, user_id, created_time) values('제목26','내용26','user26',now());
-insert into tb_post (title, content, user_id, created_time) values('제목27','내용27','user27',now());
-insert into tb_post (title, content, user_id, created_time) values('제목28','내용28','user28',now());
-insert into tb_post (title, content, user_id, created_time) values('제목29','내용29','user29',now());
-insert into tb_post (title, content, user_id, created_time) values('제목30','내용30','user30',now());
-insert into tb_post (title, content, user_id, created_time) values('제목31','내용31','user31',now());
-insert into tb_post (title, content, user_id, created_time) values('제목32','내용32','user32',now());
-insert into tb_post (title, content, user_id, created_time) values('제목33','내용33','user33',now());
-insert into tb_post (title, content, user_id, created_time) values('제목34','내용34','user34',now());
-insert into tb_post (title, content, user_id, created_time) values('제목35','내용35','user35',now());
-insert into tb_post (title, content, user_id, created_time) values('제목36','내용36','user36',now());
-insert into tb_post (title, content, user_id, created_time) values('제목37','내용37','user37',now());
-insert into tb_post (title, content, user_id, created_time) values('제목38','내용38','user38',now());
-insert into tb_post (title, content, user_id, created_time) values('제목39','내용39','user39',now());
-insert into tb_post (title, content, user_id, created_time) values('제목40','내용40','user40',now());
-insert into tb_post (title, content, user_id, created_time) values('제목41','내용41','user41',now());
-insert into tb_post (title, content, user_id, created_time) values('제목42','내용42','user42',now());
-insert into tb_post (title, content, user_id, created_time) values('제목43','내용43','user43',now());
-insert into tb_post (title, content, user_id, created_time) values('제목44','내용44','user44',now());
-insert into tb_post (title, content, user_id, created_time) values('제목45','내용45','user45',now());
-insert into tb_post (title, content, user_id, created_time) values('제목46','내용46','user46',now());
-insert into tb_post (title, content, user_id, created_time) values('제목47','내용47','user47',now());
-insert into tb_post (title, content, user_id, created_time) values('제목48','내용48','user48',now());
-insert into tb_post (title, content, user_id, created_time) values('제목49','내용49','user49',now());
-insert into tb_post (title, content, user_id, created_time) values('제목50','내용50','user50',now());
-insert into tb_post (title, content, user_id, created_time) values('제목51','내용51','user51',now());
-insert into tb_post (title, content, user_id, created_time) values('제목52','내용52','user52',now());
-insert into tb_post (title, content, user_id, created_time) values('제목53','내용53','user53',now());
-insert into tb_post (title, content, user_id, created_time) values('제목54','내용54','user54',now());
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-1','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-1','user-1',now(),'1234');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-2','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-2','user-2',now(),'1235');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-3','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-3','user-3',now(),'1236');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-4','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-4','user-4',now(),'1237');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-5','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-5','user-5',now(),'1238');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-6','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-6','user-6',now(),'1239');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-7','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-7','user-7',now(),'1240');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-8','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-8','user-8',now(),'1241');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-9','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-9','user-9',now(),'1242');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-10','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-10','user-10',now(),'1243');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-11','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-11','user-11',now(),'1244');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-12','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-12','user-12',now(),'1245');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-13','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-13','user-13',now(),'1246');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-14','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-14','user-14',now(),'1247');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-15','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-15','user-15',now(),'1248');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-16','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-16','user-16',now(),'1249');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-17','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-17','user-17',now(),'1250');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-18','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-18','user-18',now(),'1251');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-19','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-19','user-19',now(),'1252');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-20','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-20','user-20',now(),'1253');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-21','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-21','user-21',now(),'1254');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-22','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-22','user-22',now(),'1255');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-23','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-23','user-23',now(),'1256');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-24','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-24','user-24',now(),'1257');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-25','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-25','user-25',now(),'1258');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-26','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-26','user-26',now(),'1259');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-27','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-27','user-27',now(),'1260');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-28','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-28','user-28',now(),'1261');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-29','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-29','user-29',now(),'1262');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-30','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-30','user-30',now(),'1263');
+insert into tb_post (title, content, user_id, created_time, password) values ('제목-31','내용입니다-1
+내용입니다-1
+내용입니다-1
+내용입니다-31','user-31',now(),'1264');
+update tb_post set password='1234';

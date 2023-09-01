@@ -31,7 +31,7 @@ a {
 }
 
 .board_title p {
-    margin-top: 5px;
+    margin-top: 10px;
     font-size: 1.4rem;
 }
 
@@ -218,7 +218,7 @@ a {
 .board_view .cont{
     padding: 15px;
     border-bottom: 1px solid #000;
-    line-height: 160%;
+    line-height: 170%;
     font-size: 1.4rem;
 }
 

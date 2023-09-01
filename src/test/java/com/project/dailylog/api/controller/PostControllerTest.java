@@ -8,18 +8,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.dailylog.api.domain.Post;
+import com.project.dailylog.api.exception.PostNotFoundException;
 import com.project.dailylog.api.repository.PostRepository;
 import com.project.dailylog.api.request.PostCreate;
 import com.project.dailylog.api.request.PostEdit;
+import com.project.dailylog.api.response.PostResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -60,8 +59,9 @@ class PostControllerTest {
     // given
     PostCreate postCreate = PostCreate.builder()
         .title("제목입니다.")
-        .writer("작성자입니다.")
+        .userId("작성자입니다.")
         .content("내용입니다.")
+        .password(1234)
         .build();
     String postCreateStr = objectMapper.writeValueAsString(postCreate);
 
@@ -70,19 +70,21 @@ class PostControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(postCreateStr))
         .andDo(print())
-        .andExpect(status().is3xxRedirection())
-        .andExpect(view().name(StringContains.containsString("/posts/")))
-        .andExpect(flash().attributeExists("response"));
+        .andExpect(status().isOk());
+//        .andExpect(status().is3xxRedirection())
+//        .andExpect(view().name(StringContains.containsString("/posts/")))
+//        .andExpect(flash().attributeExists("response"));
   }
 
   @Test
-  @DisplayName("/posts POST 요청시 title과 writer는 필수 값이다.")
+  @DisplayName("/posts POST 요청시 title과 userId는 필수 값이다.")
   void create2() throws Exception {
     // given
     PostCreate postCreate = PostCreate.builder()
         .title(null)
-        .writer(null)
+        .userId(null)
         .content("내용입니다.")
+        .password(1234)
         .build();
     String postCreateStr = objectMapper.writeValueAsString(postCreate);
 
@@ -94,7 +96,7 @@ class PostControllerTest {
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.code").value("400"))
         .andExpect(jsonPath("$.message").value(StringContains.containsString("잘못된 요청")))
-        .andExpect(jsonPath("$.validation.writer").value("작성자는 필수입니다."));
+        .andExpect(jsonPath("$.validation.userId").value("작성자는 필수입니다."));
   }
 
   @Test
@@ -103,8 +105,9 @@ class PostControllerTest {
     //given
     PostCreate postCreate = PostCreate.builder()
         .title("제목입니다.")
-        .writer("작성자입니다.")
+        .userId("작성자입니다.")
         .content("내용입니다.")
+        .password(1234)
         .build();
     String postCreateStr = objectMapper.writeValueAsString(postCreate);
     // when
@@ -112,8 +115,8 @@ class PostControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(postCreateStr))
         .andDo(print())
-        .andExpect(status().is3xxRedirection())
-        .andExpect(view().name(StringContains.containsString("/posts/")));
+        .andExpect(status().isOk());
+//        .andExpect(view().name(StringContains.containsString("/posts/")));
     // then
     assertThat(postRepository.count()).isEqualTo(1);
     assertThat(postRepository.findAll().get(0).getTitle()).isEqualTo("제목입니다.");
@@ -163,7 +166,7 @@ class PostControllerTest {
           .andReturn();
 
     ModelAndView mav = mvcResult.getModelAndView();
-    List<Post> posts = (List<Post>) mav.getModel().get("posts");
+    List<PostResponse> posts = (List<PostResponse>) mav.getModel().get("posts");
     assertThat(posts.get(0).getTitle()).isEqualTo("제목-20");
   }
 
@@ -194,12 +197,14 @@ class PostControllerTest {
         .title("제목")
         .content("내용")
         .userId("writer")
+        .password(1234)
         .build();
     postRepository.save(post);
 
     PostEdit postEdit = PostEdit.builder()
         .title("제목(수정)")
         .content("내용(수정)")
+        .password(1234)
         .build();
 
     String value = objectMapper.writeValueAsString(postEdit);
@@ -209,12 +214,15 @@ class PostControllerTest {
         .contentType(MediaType.APPLICATION_JSON)
         .content(value))
         .andDo(print())
-        .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrl("/posts/"+post.getId()))
-        .andExpect(flash()
-            .attribute("postResponse", hasProperty("title", is("제목(수정)"))))
-        .andExpect(flash()
-            .attribute("postResponse", hasProperty("content", is("내용(수정)"))));
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.title").value("제목(수정)"))
+        .andExpect(jsonPath("$.content").value("내용(수정)"));
+//        .andExpect(status().is3xxRedirection())
+//        .andExpect(redirectedUrl("/posts/"+post.getId()))
+//        .andExpect(flash()
+//            .attribute("postResponse", hasProperty("title", is("제목(수정)"))))
+//        .andExpect(flash()
+//            .attribute("postResponse", hasProperty("content", is("내용(수정)"))));
   }
 
   @DisplayName("/posts DELETE 요청시 게시글이 성공적으로 삭제된다.")
@@ -230,8 +238,9 @@ class PostControllerTest {
     // when
     this.mockMvc.perform(MockMvcRequestBuilders.delete("/posts/{postId}", post.getId()))
             .andDo(print())
-            .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/posts"));
+            .andExpect(status().isOk());
+//            .andExpect(status().is3xxRedirection())
+//            .andExpect(redirectedUrl("/posts"));
 
     // then
     assertThat(postRepository.count()).isEqualTo(0);
@@ -253,6 +262,7 @@ class PostControllerTest {
     PostEdit postEdit = PostEdit.builder()
         .title("제목")
         .content("내용")
+        .password(1234)
         .build();
 
     String content = objectMapper.writeValueAsString(postEdit);
@@ -271,7 +281,8 @@ class PostControllerTest {
    PostCreate postCreate = PostCreate.builder()
        .title("테스트 제목")
        .content("테스트 내용")
-       .writer("userId")
+       .userId("userId")
+       .password(1234)
        .build();
 
    String content = objectMapper.writeValueAsString(postCreate);
@@ -283,5 +294,27 @@ class PostControllerTest {
         .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.validation.title").value("제목엔 '테스트'가 포함될 수 없습니다."));
+  }
+
+  @DisplayName("게시글 조회시 count가 1 증가한다.")
+  @Test
+  void count_test() throws Exception {
+    // given
+    Post post = Post.builder()
+        .title("제목")
+        .content("내용")
+        .password(1234)
+        .build();
+    postRepository.save(post);
+
+    // when
+    this.mockMvc.perform(get("/posts/{postId}", post.getId())
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
+
+    // then
+    int afterCount = postRepository.findById(post.getId())
+        .orElseThrow(() -> new PostNotFoundException()).getCount();
+    assertThat(afterCount).isGreaterThan(0);
   }
 }

@@ -2,6 +2,7 @@ package com.project.dailylog.api.repository;
 
 import com.project.dailylog.api.domain.Post;
 import com.project.dailylog.api.request.PostSearch;
+import com.project.dailylog.api.response.PostResponse;
 import com.project.dailylog.api.util.PageMaker;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -30,11 +31,14 @@ class PostRepositoryTest {
                 .build())
             .collect(Collectors.toList())
     );
-    PostSearch postSearch = PostSearch.builder().build();
+    PostSearch postSearch = PostSearch.builder()
+        .page(1)
+        .size(10)
+        .build();
 
     // when
-    Page<Post> result = postRepository.findPostsByCondition(postSearch);
-    PageMaker<Post> returnResult = new PageMaker<>(result);
+    Page<PostResponse> result = postRepository.findPostsByCondition(postSearch);
+    PageMaker<PostResponse> returnResult = new PageMaker<>(result);
     returnResult.getResult().getContent().stream()
         .forEach(post -> {
           System.out.println(post.getTitle());

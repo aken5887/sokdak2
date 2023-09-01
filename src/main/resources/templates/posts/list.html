@@ -1,78 +1,76 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>공지사항</title>
-    <link rel="stylesheet" href="/css/css.css">
-</head>
-<body>
-    <div class="board_wrap">
-        <div class="board_title">
-            <strong>공지사항</strong>
-            <p>공지사항을 빠르고 정확하게 안내해드립니다.</p>            
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout}">
+
+<div class="bt_wrap right" layout:fragment="bt_area">
+    <a class="on" href="javascript:void(0);" id="writeBtn">등록</a>
+</div>
+<div class="board_list_wrap" layout:fragment="content">
+    <div class="board_list" th:with="result=${response.result}">
+        <div class="top">
+            <div class="num">번호</div>
+            <div class="title">제목</div>
+            <div class="writer">글쓴이</div>
+            <div class="date">작성일</div>
+            <div class="count">조회</div>
         </div>
-        <div class="bt_wrap right">
-            <a href="write.html" class="on">등록</a>
-        </div>
-        <div class="board_list_wrap">
-            <div class="board_list">
-                <div class="top">
-                    <div class="num">번호</div>
-                    <div class="title">제목</div>
-                    <div class="writer">글쓴이</div>
-                    <div class="date">작성일</div>
-                    <div class="count">조회</div>
-                </div>
-                <div>
-                    <div class="num">5</div>
-                    <div class="title"><a href="view.html">글 제목이 들어갑니다.</a></div>
-                    <div class="writer">김재중</div>
-                    <div class="date">2023.08.19</div>
-                    <div class="count">25</div>
-                </div>
-                <div>
-                    <div class="num">4</div>
-                    <div class="title"><a href="view.html">글 제목이 들어갑니다.</a></div>
-                    <div class="writer">김재중</div>
-                    <div class="date">2023.08.19</div>
-                    <div class="count">25</div>
-                </div>
-                <div>
-                    <div class="num">3</div>
-                    <div class="title"><a href="view.html">글 제목이 들어갑니다.</a></div>
-                    <div class="writer">김재중</div>
-                    <div class="date">2023.08.19</div>
-                    <div class="count">25</div>
-                </div>
-                <div>
-                    <div class="num">2</div>
-                    <div class="title"><a href="view.html">글 제목이 들어갑니다.</a></div>
-                    <div class="writer">김재중</div>
-                    <div class="date">2023.08.19</div>
-                    <div class="count">25</div>
-                </div>
-                <div>
-                    <div class="num">1</div>
-                    <div class="title"><a href="view.html">글 제목이 들어갑니다.</a></div>
-                    <div class="writer">김재중</div>
-                    <div class="date">2023.08.19</div>
-                    <div class="count">25</div>
-                </div>
-            </div>
-            <div class="board_page">
-                <a href="#" class="bt first"><<</a>
-                <a href="#" class="bt prev"><</a>
-                <a href="#" class="num">1</a>
-                <a href="#" class="num">2</a>
-                <a href="#" class="num">3</a>
-                <a href="#" class="num on">4</a>
-                <a href="#" class="num">5</a>
-                <a href="#" class="bt next">></a>
-                <a href="#" class="bt last">>></a>
-            </div>
+        <div th:each="arr:${result.content}">
+            <div class="num">[[${arr.id}]]</div>
+<!--                    <div class="title"><a th:href="|/posts/${arr.id}|">[[${arr.title}]]</a></div>-->
+            <div class="title"><a th:href="${arr.id}">[[${arr.title}]]</a></div>
+            <div class="writer">[[${arr.userId}]]</div>
+            <div class="date">[[${arr.createdTime}]]</div>
+            <div class="count">[[${arr.count}]]</div>
         </div>
     </div>
-</body>
+    <div class="board_page" id="pagination">
+        <th:block th:if="${response.prevPage}">
+            <a th:href="${response.prevPage.pageNumber}+1" class="bt first" ><<</a>
+        </th:block>
+        <a th:href="${response.currentPageNo==1}?1:${response.currentPageNo-1}" class="bt prev"><</a>
+
+        <a th:each="p:${response.pageList}"
+           class="num"
+           th:classappend="${p.pageNumber+1 == response.currentPageNo}?on:''"
+           th:href="${p.pageNumber}+1">[[${p.pageNumber}+1]]</a>
+
+        <a th:href="${response.currentPageNo==response.totalPageNum}?${response.currentPageNo}:${response.currentPageNo}+1" class="bt next">></a>
+
+        <th:block th:if="${response.nextPage}">
+            <a th:href="${response.nextPage.pageNumber}+1" class="bt last">>></a>
+        </th:block>
+    </div>
+    <form id="postForm" method="get">
+        <input type="hidden" name="page" th:value="${response.currentPageNo}">
+        <input type="hidden" name="size" th:value="${response.currentPage.pageSize}">
+        <input type="hidden" name="kw_opt" th:value="${postSearch.kwOpt}">
+        <input type="hidden" name="kw" th:value="${postSearch.kw}">
+    </form>
+</div>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            const pf = $("#postForm");
+
+            $("div.bt_wrap a#writeBtn").click(function(e){
+                pf.attr("action", "/posts/create");
+                pf.submit();
+            });
+
+            $("#pagination a").click(function(e){
+               e.preventDefault();
+               $("input[name=page]").val($(this).attr("href"));
+               pf.submit();
+            });
+
+            $(".board_list div.title a").click(function(e){
+               e.preventDefault();
+               let postId = $(this).attr("href");
+               pf.attr("action", '/posts/'+postId);
+               pf.submit();
+            });
+        });
+    </script>
+</th:block>
 </html>

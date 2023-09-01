@@ -1,27 +1,37 @@
 package com.project.dailylog.api.response;
 
 import com.project.dailylog.api.domain.Post;
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class PostResponse {
 
   private Long id;
   private String title;
   private String userId;
   private String content;
-  private LocalDateTime createdTime;
-  private LocalDateTime lastUpdatedTime;
+  private int count;
+  private String createdTime;
+  private String lastUpdatedTime;
 
   public PostResponse(Post post) {
     this.id = post.getId();
     this.title = post.getTitle();
     this.userId = post.getUserId();
     this.content = post.getContent();
-    this.createdTime = post.getCreatedTime();
-    this.lastUpdatedTime = post.getLastUpdatedTime();
+    this.count = post.getCount();
+    this.createdTime
+        = post.getCreatedTime() != null ?
+          post.getCreatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) :
+          "";
+    this.lastUpdatedTime
+        = post.getLastUpdatedTime() != null ?
+          post.getLastUpdatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) :
+          "";
   }
 
   @Builder

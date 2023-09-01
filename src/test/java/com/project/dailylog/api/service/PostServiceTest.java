@@ -4,13 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.project.dailylog.api.domain.Post;
+import com.project.dailylog.api.exception.InvalidPasswordException;
 import com.project.dailylog.api.exception.PostNotFoundException;
 import com.project.dailylog.api.repository.PostRepository;
 import com.project.dailylog.api.request.PostCreate;
 import com.project.dailylog.api.request.PostEdit;
 import com.project.dailylog.api.request.PostSearch;
 import com.project.dailylog.api.response.PostResponse;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -42,6 +42,7 @@ class PostServiceTest {
     PostCreate postCreate = PostCreate.builder()
         .title("테스트 제목")
         .content("테스트 내용")
+        .password(1234)
         .build();
 
     // when
@@ -70,8 +71,8 @@ class PostServiceTest {
     assertThat(postResponse).isNotNull();
     assertThat(postResponse.getTitle()).isEqualTo(postCreate.getTitle());
     assertThat(postResponse.getContent()).isEqualTo(postCreate.getContent());
-    assertThat(postResponse.getCreatedTime()).isBefore(LocalDateTime.now());
-    assertThat(postResponse.getLastUpdatedTime()).isBefore(LocalDateTime.now());
+    assertThat(postResponse.getCreatedTime()).isNotNull();
+    assertThat(postResponse.getLastUpdatedTime()).isNotNull();
   }
 
   @Test
@@ -90,6 +91,7 @@ class PostServiceTest {
 
     PostSearch postSearch = PostSearch.builder()
         .page(2)
+        .size(10)
         .build();
 
     // when
@@ -110,11 +112,13 @@ class PostServiceTest {
         .title("제목")
         .content("제목")
         .userId("choi")
+        .password(1234)
         .build());
 
     PostEdit postEdit = PostEdit.builder()
         .title("제목(수정)")
         .content("내용(수정)")
+        .password(1234)
         .build();
 
     // when
@@ -137,11 +141,13 @@ class PostServiceTest {
         .title("제목")
         .content("내용")
         .userId("choi")
+        .password(1234)
         .build());
 
     PostEdit postEdit = PostEdit.builder()
         .title(null)
         .content(null)
+        .password(null)
         .build();
 
    // when
@@ -199,5 +205,28 @@ class PostServiceTest {
     // expected
     assertThatThrownBy(() -> postService.delete(1L)).isInstanceOf(PostNotFoundException.class)
         .hasMessageContaining("존재하지 않는 게시글입니다.");
+  }
+
+  @DisplayName("비밀번호가 일치하지 않으면 게시글 수정이 되지 않는다.")
+  @Test
+  void edit_not_matching_password(){
+    // given
+    Post post = Post.builder()
+        .title("제목")
+        .content("내용")
+        .password(1234)
+        .build();
+    postRepository.save(post);
+
+    PostEdit postEdit = PostEdit.builder()
+        .title("수정")
+        .content("수정")
+        .password(12345)
+        .build();
+
+    // expected
+    assertThatThrownBy(() -> postService.edit(post.getId(), postEdit))
+        .isInstanceOf(InvalidPasswordException.class)
+        .hasMessageContaining("비밀번호가 올바르지 않습니다.");
   }
 }

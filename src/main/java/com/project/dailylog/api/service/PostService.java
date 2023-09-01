@@ -2,6 +2,7 @@ package com.project.dailylog.api.service;
 
 import com.project.dailylog.api.domain.Post;
 import com.project.dailylog.api.domain.PostEditor;
+import com.project.dailylog.api.exception.InvalidPasswordException;
 import com.project.dailylog.api.exception.PostNotFoundException;
 import com.project.dailylog.api.repository.PostRepository;
 import com.project.dailylog.api.request.PostCreate;
@@ -42,7 +43,7 @@ public class PostService {
         .collect(Collectors.toList());
   }
 
-  public Page<Post> getListByPage(PostSearch postSearch) {
+  public Page<PostResponse> getListByPage(PostSearch postSearch) {
     return postRepository.findPostsByCondition(postSearch);
   }
 
@@ -50,6 +51,10 @@ public class PostService {
   public PostResponse edit(long postId, PostEdit postEdit) {
     Post post = postRepository.findById(postId)
         .orElseThrow(() -> new PostNotFoundException());
+
+    if(postEdit.getPassword() != null && post.getPassword() != postEdit.getPassword()){
+      throw new InvalidPasswordException();
+    }
 
     PostEditor.PostEditorBuilder postEditorBuilder = post.toEditor();
     PostEditor postEditor = postEditorBuilder
@@ -66,5 +71,12 @@ public class PostService {
     Post post = postRepository.findById(postId)
         .orElseThrow(() -> new PostNotFoundException());
     postRepository.delete(post);
+  }
+
+  @Transactional
+  public void increaseCount(long postId){
+    Post post = postRepository.findById(postId)
+        .orElseThrow(() -> new PostNotFoundException());
+    post.increaseCount();
   }
 }

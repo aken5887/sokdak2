@@ -1,54 +1,61 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>공지사항</title>
-    <link rel="stylesheet" href="/static/css/css.css">
-</head>
-<body>
-    <div class="board_wrap">
-        <div class="board_title">
-            <strong>공지사항</strong>
-            <p>공지사항을 빠르고 정확하게 안내해드립니다.</p>            
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout}">
+
+<div class="board_view_wrap" layout:fragment="content">
+    <div class="board_view">
+        <div class="title" th:text="${response.title}"></div>
+        <div class="info">
+            <dl>
+                <dt>번호</dt>
+                <dd th:text="${response.id}"></dd>
+            </dl>
+            <dl>
+                <dt>글쓴이</dt>
+                <dd th:text="${response.userId}"></dd>
+            </dl>
+            <dl>
+                <dt>날짜</dt>
+                <dd th:text="${response.createdTime}"></dd>
+            </dl>
+            <dl>
+                <dt>조회수</dt>
+                <dd th:text="${response.count}"></dd>
+            </dl>
         </div>
-        <div class="board_view_wrap">
-            <div class="board_view">
-                <div class="title">글 제목이 들어갑니다.</div>
-                <div class="info">
-                    <dl>
-                        <dt>번호</dt>
-                        <dd>1</dd>
-                    </dl>
-                    <dl>
-                        <dt>글쓴이</dt>
-                        <dd>김재중</dd>
-                    </dl>
-                    <dl>
-                        <dt>날짜</dt>
-                        <dd>2023.08.19</dd>
-                    </dl>
-                    <dl>
-                        <dt>조회수</dt>
-                        <dd>45</dd>
-                    </dl>
-                </div>
-                <div class="cont">
-                    글 내용이 들어갑니다<br>
-                    글 내용이 들어갑니다<br>
-                    글 내용이 들어갑니다<br>
-                    글 내용이 들어갑니다<br>
-                    글 내용이 들어갑니다<br>
-                    글 내용이 들어갑니다<br>
-                    글 내용이 들어갑니다<br>
-                    글 내용이 들어갑니다
-                </div>
-            </div>
-            <div class="bt_wrap">
-                <a href="list.html" class="on">목록</a>
-                <a href="edit.html">수정</a>
-            </div>
+        <div class="cont">
+            <p th:utext="${#strings.replace(response.content,'&#10;','&lt;br&gt;')}"></p>
         </div>
     </div>
-</body>
-</html>
+    <div class="bt_wrap">
+        <a href="javascript:void(0);" id="modifyBtn">수정</a>
+        <a href="javascript:void(0);" class="on" id="listBtn">목록</a>
+    </div>
+    <form id="viewForm" th:action="@{/posts}" method="get">
+        <input type="hidden" name="page" th:value="${postSearch.page}">
+        <input type="hidden" name="size" th:value="${postSearch.size}">
+        <input type="hidden" name="kw_opt" th:value="${postSearch.kwOpt}">
+        <input type="hidden" name="kw" th:value="${postSearch.kw}">
+    </form>
+</div>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            let vf = $("#viewForm");
+
+            $("div.bt_wrap #listBtn").click(function(e){
+                e.preventDefault();
+                vf.submit();
+            });
+
+            $("div.bt_wrap #modifyBtn").click(function(e){
+                e.preventDefault();
+                const postId = [[${response.id}]];
+                vf.attr("action", "/posts/edit/"+postId);
+                vf.submit();
+            });
+        });
+    </script>
+</th:block>

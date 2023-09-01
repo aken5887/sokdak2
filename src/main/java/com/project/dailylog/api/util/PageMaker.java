@@ -31,12 +31,11 @@ public class PageMaker<T> {
     this.totalPageNum = result.getTotalPages();
     this.pageList = new ArrayList<>();
     this.calculatePage();
-    log.info("PageMaker : "+ this.toString());
   }
 
   private void calculatePage() {
-    int tempEndPageNo = (int) (Math.ceil(this.currentPageNo / 10.0) * 10);
-    int startPageNo = tempEndPageNo - 9;
+    int tempEndPageNo = (int) (Math.ceil(this.currentPageNo / 5.0) * 5);
+    int startPageNo = tempEndPageNo - 4;
 
     Pageable startPage = this.currentPage;
 
@@ -59,6 +58,6 @@ public class PageMaker<T> {
       startPage = startPage.next();
     }
 
-    this.nextPage = startPage.getPageNumber()+1 < totalPageNum ? startPage :null;
+    this.nextPage = startPage.getPageNumber() < totalPageNum ? startPage :null;
   }
 }

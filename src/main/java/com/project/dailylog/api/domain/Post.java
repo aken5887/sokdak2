@@ -27,18 +27,22 @@ public class Post extends BaseTimeEntity {
   private String content;
   @ColumnDefault("0")
   private int count;
+  @ColumnDefault("0000")
+  private int password;
 
   @Builder
-  public Post(String title, String userId, String content){
+  public Post(String title, String userId, String content, int password){
     this.title = title;
     this.userId = userId;
     this.content = content;
+    this.password = password;
   }
 
   public Post toEntity(PostCreate postCreate){
     this.title = postCreate.getTitle();
-    this.userId = postCreate.getWriter();
+    this.userId = postCreate.getUserId();
     this.content = postCreate.getContent();
+    this.password = postCreate.getPassword()==null? 0000:postCreate.getPassword();
     return this;
   }
 
@@ -53,5 +57,9 @@ public class Post extends BaseTimeEntity {
     this.title = postEditor.getTitle();
     this.content = postEditor.getContent();
     return this;
+  }
+
+  public void increaseCount(){
+    this.count++;
   }
 }
