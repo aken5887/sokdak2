@@ -64,10 +64,10 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom{
   }
 
   private Predicate equalTypeAndKeyword(QPost post, PostSearch postSearch) {
-    String type = postSearch.getKwOpt();
-    if("t".equals(type)){
+    String type = postSearch.getKw_opt();
+    if("title".equals(type)){
       return post.title.contains(postSearch.getKw());
-    }else if("w".equals(type)){
+    }else if("userId".equals(type)){
       return post.userId.contains(postSearch.getKw());
     }
     return null;

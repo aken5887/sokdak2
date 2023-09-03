@@ -6,7 +6,7 @@ let common = {
         const field = $(this).val();
         const title = $(this).attr("title");
         if(field == null || field == ''){
-          alert(title+"값은 필수입니다.");
+          alert(title+"은(는) 필수입니다.");
           $(this).focus();
           vflag = false;
           return false;

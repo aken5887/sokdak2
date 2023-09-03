@@ -19,6 +19,7 @@ import com.project.dailylog.api.repository.PostRepository;
 import com.project.dailylog.api.request.PostCreate;
 import com.project.dailylog.api.request.PostEdit;
 import com.project.dailylog.api.response.PostResponse;
+import com.project.dailylog.api.util.PageMaker;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -316,5 +317,29 @@ class PostControllerTest {
     int afterCount = postRepository.findById(post.getId())
         .orElseThrow(() -> new PostNotFoundException()).getCount();
     assertThat(afterCount).isGreaterThan(0);
+  }
+
+  @DisplayName("title=mymy10 조회시 제목이 mymy10가 포함된 게시글만 조회된다.")
+  @Test
+  void search_test() throws Exception{
+    // given
+    postRepository.saveAll(IntStream.range(0, 20)
+        .mapToObj(i -> Post.builder()
+            .title("mymy-"+i)
+            .content("content")
+            .userId("사용자")
+            .password(1234).build())
+        .collect(Collectors.toList())
+    );
+
+    // expected
+    MvcResult result =
+      this.mockMvc.perform(get("/posts?kw={kw}&kw_opt={kw_opt}", "mymy-10", "title"))
+          .andDo(print())
+          .andExpect(status().isOk())
+          .andReturn();
+
+    PageMaker<PostResponse> response = (PageMaker<PostResponse>) result.getModelAndView().getModel().get("response");
+    assertThat(response.getResult().getContent().get(0).getTitle()).isEqualTo("mymy-10");
   }
 }

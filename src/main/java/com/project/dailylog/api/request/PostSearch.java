@@ -25,17 +25,17 @@ public class PostSearch {
   private String kw_opt;
   private String kw;
   @Builder.Default
-  private Integer direction = 0;
+  private String dir = "desc";
   @Builder.Default
-  private String props = "id";
+  private String dir_props = "id";
 
   public long getOffSet() {
     return (Math.max(1, page) - 1) * Math.min(this.size, DEFAULT_MAX_SIZE);
   }
 
   public Pageable makePageable(){
-    Sort.Direction dir = this.direction==0 ? Direction.DESC : Direction.ASC;
-    return PageRequest.of(this.page-1, this.size, dir, props);
+    Sort.Direction dir = "desc".equals(this.dir) ? Direction.DESC : Direction.ASC;
+    return PageRequest.of(this.page-1, this.size, dir, dir_props);
   }
 
   public Integer getPage() {
@@ -54,11 +54,11 @@ public class PostSearch {
     this.size = (size < DEFAULT_SIZE) || (size > DEFAULT_MAX_SIZE) ? DEFAULT_SIZE:size;
   }
 
-  public String getKwOpt() {
+  public String getKw_opt() {
     return kw_opt;
   }
 
-  public void setKwOpt(String kw_opt) {
+  public void setKw_opt(String kw_opt) {
     this.kw_opt = kw_opt;
   }
 
@@ -70,19 +70,19 @@ public class PostSearch {
     this.kw = kw;
   }
 
-  public Integer getDirection() {
-    return direction;
+  public String getDir() {
+    return dir;
   }
 
-  public void setDirection(Integer direction) {
-    this.direction = direction;
+  public void setDir(String dir) {
+    this.dir = dir;
   }
 
-  public String getProps() {
-    return props;
+  public String getDir_props() {
+    return dir_props;
   }
 
-  public void setProps(String props) {
-    this.props = props;
+  public void setDir_props(String dir_props) {
+    this.dir_props = dir_props;
   }
 }

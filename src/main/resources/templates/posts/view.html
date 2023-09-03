@@ -35,7 +35,7 @@
     <form id="viewForm" th:action="@{/posts}" method="get">
         <input type="hidden" name="page" th:value="${postSearch.page}">
         <input type="hidden" name="size" th:value="${postSearch.size}">
-        <input type="hidden" name="kw_opt" th:value="${postSearch.kwOpt}">
+        <input type="hidden" name="kw_opt" th:value="${postSearch.kw_opt}">
         <input type="hidden" name="kw" th:value="${postSearch.kw}">
     </form>
 </div>

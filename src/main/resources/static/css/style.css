@@ -78,6 +78,28 @@ a {
     border-bottom : 1px solid #999;
 }
 
+.board_list > div.top > div.header {
+    cursor : pointer;
+}
+
+.board_list > div.top > div.header > li {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+}
+
+.board_list > div.top > div.header.asc > li {
+    background: url('../image/sort-arrow-up-16.png') no-repeat;
+}
+
+.board_list > div.top > div.header.desc > li {
+    background: url('../image/sort-arrow-down-16.png') no-repeat;
+}
+
+.board_list > div.top > div.header {
+    cursor : pointer;
+}
+
 .board_list > div:last-child {
     border-bottom : 2px solid #000;
 }
@@ -118,11 +140,52 @@ a {
     width: 10%;
 }
 
+.board_search {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 0;
+}
+
+.board_search a {
+    display: inline-block;
+    min-width: 80px;
+    margin-left: 5px;
+    padding: 10px;
+    border: 1px solid #000;
+    border-radius: 2px;
+    font-size: 1.2rem;
+    background: #000;
+    color: #ffffff;
+}
+
+.board_search input{
+    margin-left: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    width: 20%
+}
+
+.board_search select {
+    box-sizing: border-box;
+    font-size: 1.3rem;
+    line-height: 1.5;
+    font-weight: normal;
+    display: inline-block;
+    padding: 5px;
+    height: 42px;
+    outline: 0;
+    border-width: 1px;
+    border-style: solid;
+    background: #FFF;
+    color: #4b4b4d;
+}
+
 .board_page {
     margin-top: 30px;
     text-align: center;
     font-size: 0;
 }
+
 
 .board_page a {
     display: inline-block;

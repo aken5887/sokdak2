@@ -10,10 +10,13 @@
     <div class="board_list" th:with="result=${response.result}">
         <div class="top">
             <div class="num">번호</div>
-            <div class="title">제목</div>
-            <div class="writer">글쓴이</div>
-            <div class="date">작성일</div>
-            <div class="count">조회</div>
+            <div class="header title" title="title" th:classappend="${postSearch.dir_props} == 'title'?${postSearch.dir}:''">제목<li></li></div>
+            <div class="header writer" title="userId" th:classappend="${postSearch.dir_props} == 'userId'?${postSearch.dir}:''">글쓴이<li></li></div>
+            <div class="header date" title="createdTime" th:classappend="${postSearch.dir_props} == 'createdTime'?${postSearch.dir}:''">작성일<li></li></div>
+            <div class="header count" title="count" th:classappend="${postSearch.dir_props} == 'count'?${postSearch.dir}:''">조회<li></li></div>
+        </div>
+        <div th:if="${#lists.isEmpty(result.content)}">
+            <div th:colspan="5" style="text-align: center; color:#959595;width:100%;">게시물이 없습니다.</div>
         </div>
         <div th:each="arr:${result.content}">
             <div class="num">[[${arr.id}]]</div>
@@ -24,6 +27,16 @@
             <div class="count">[[${arr.count}]]</div>
         </div>
     </div>
+
+    <div class="board_search">
+        <select name="kw_opt" id="kwOpt">
+            <option value="title" th:selected="${postSearch.kw_opt} == 'title'">제목</option>
+            <option value="userId" th:selected="${postSearch.kw_opt} == 'userId'">글쓴이</option>
+        </select>
+        <input type="text" name="kw" title="검색어" class="required" placeholder="검색어를 입력하세요." th:value="${postSearch.kw}"/>
+        <a href="javascript:void(0);" id="searchBtn">검색</a>
+    </div>
+
     <div class="board_page" id="pagination">
         <th:block th:if="${response.prevPage}">
             <a th:href="${response.prevPage.pageNumber}+1" class="bt first" ><<</a>
@@ -44,8 +57,10 @@
     <form id="postForm" method="get">
         <input type="hidden" name="page" th:value="${response.currentPageNo}">
         <input type="hidden" name="size" th:value="${response.currentPage.pageSize}">
-        <input type="hidden" name="kw_opt" th:value="${postSearch.kwOpt}">
+        <input type="hidden" name="kw_opt" th:value="${postSearch.kw_opt}">
         <input type="hidden" name="kw" th:value="${postSearch.kw}">
+        <input type="hidden" name="dir" th:value="${postSearch.dir}">
+        <input type="hidden" name="dir_props" th:value="${postSearch.dir_props}">
     </form>
 </div>
 <th:block layout:fragment="script">
@@ -69,6 +84,26 @@
                let postId = $(this).attr("href");
                pf.attr("action", '/posts/'+postId);
                pf.submit();
+            });
+
+            $(".board_search a#searchBtn").click(function(e){
+               e.preventDefault();
+                $("#postForm input[name=kw_opt]").val($("select[name=kw_opt]").val());
+                $("#postForm input[name=kw]").val($("input[name=kw]").val());
+                $("#postForm input[name=page]").val(1);
+                pf.submit();
+            });
+
+            $("div.board_list div.top div.header").click(function(e){
+                let dir = $("#postForm input[name=dir]");
+                let dirVal = dir.val();
+                if(dirVal == null || dirVal == 'asc'){
+                    $("#postForm input[name=dir]").val('desc');
+                } else {
+                    $("#postForm input[name=dir]").val('asc');
+                }
+                $("#postForm input[name=dir_props]").val($(this).attr("title"));
+                pf.submit();
             });
         });
     </script>
