@@ -6,6 +6,7 @@ import com.project.dailylog.api.request.PostSearch;
 import com.project.dailylog.api.response.PostResponse;
 import com.project.dailylog.api.service.PostService;
 import com.project.dailylog.api.util.PageMaker;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,11 +43,17 @@ public class PostController {
   }
 
   @GetMapping("/posts/{postId}")
-  public String get(@PathVariable Long postId, @ModelAttribute PostSearch postSearch, Model model){
-    postService.increaseCount(postId);
+  public String get(@PathVariable Long postId, @ModelAttribute PostSearch postSearch, Model model, HttpServletRequest req){
+    postService.increaseCount(postId, getClientIp(req));
     PostResponse response = postService.get(postId);
     model.addAttribute("response", response);
     return "/posts/view";
+  }
+
+  private String getClientIp(HttpServletRequest req){
+    String ip = req.getHeader("X-Forwarded-For");
+    if(ip == null) ip = req.getRemoteAddr();
+    return ip;
   }
 
   @GetMapping("/posts/create")

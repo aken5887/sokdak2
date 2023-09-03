@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostService {
 
   private final PostRepository postRepository;
+  private final RedisService redisService;
+  @Value("${custom.cache-store}")
+  private String cacheStore;
 
   public PostResponse save(PostCreate postCreate){
     Post post = new Post().toEntity(postCreate);
@@ -74,9 +78,18 @@ public class PostService {
   }
 
   @Transactional
-  public void increaseCount(long postId){
+  public void increaseCount(long postId, String clientAddress){
     Post post = postRepository.findById(postId)
         .orElseThrow(() -> new PostNotFoundException());
-    post.increaseCount();
+    if("redis".equals(cacheStore)){
+      if(redisService.isFirstIpRequest(clientAddress, postId)){
+        post.increaseCount();
+        redisService.writeClientRequest(clientAddress, postId);
+      }else{
+        log.info("request has duplicated within same address : {}, {}", clientAddress, postId);
+      }
+    }else{
+      post.increaseCount();
+    }
   }
 }

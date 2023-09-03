@@ -20,3 +20,8 @@ spring:
   web:
     resources:
       static-locations: file:src/main/resources/static/
+  redis:
+    host: localhost
+    port: 6379
+custom:
+  cache-store: cookie
