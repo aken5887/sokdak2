@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/layout/layout}">
+      layout:decorate="~{/layout/template}">
 
 <div class="bt_wrap right" layout:fragment="bt_area">
     <a class="on" href="javascript:void(0);" id="writeBtn">등록</a>
@@ -87,11 +87,8 @@
             });
 
             $(".board_search a#searchBtn").click(function(e){
-               e.preventDefault();
-                $("#postForm input[name=kw_opt]").val($("select[name=kw_opt]").val());
-                $("#postForm input[name=kw]").val($("input[name=kw]").val());
-                $("#postForm input[name=page]").val(1);
-                pf.submit();
+                e.preventDefault();
+                fn_search();
             });
 
             $("div.board_list div.top div.header").click(function(e){
@@ -105,7 +102,20 @@
                 $("#postForm input[name=dir_props]").val($(this).attr("title"));
                 pf.submit();
             });
+
+            $("div.board_search input[name=kw]").on("keypress", function(e){
+                if(e.keyCode == 13){
+                    fn_search();
+                }
+            });
         });
+
+        function fn_search(){
+            $("#postForm input[name=kw_opt]").val($("select[name=kw_opt]").val());
+            $("#postForm input[name=kw]").val($("input[name=kw]").val());
+            $("#postForm input[name=page]").val(1);
+            $("#postForm").submit();
+        }
     </script>
 </th:block>
 </html>
