@@ -24,9 +24,9 @@ public class AdminController {
 
   @GetMapping("/admin")
   @ResponseBody
-  public String admin(SessionUser sessionUser){
-    log.info("SessionUser : {}", sessionUser.getUserName());
-    return sessionUser.getUserName();
+  public Long admin(SessionUser sessionUser){
+    log.info("SessionUser : {}", sessionUser.getId());
+    return sessionUser.getId();
   }
 
   @GetMapping("/admin/create")

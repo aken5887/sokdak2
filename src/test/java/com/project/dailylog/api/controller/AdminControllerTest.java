@@ -20,7 +20,7 @@ class AdminControllerTest {
   @Autowired
   MockMvc mockMvc;
 
-  @DisplayName("/admin GET 요청시 accessToken이 null이면 401 오류가 발생한다.")
+  @DisplayName("/admin GET 요청시 헤더에 Authorization이 null이면 401 오류가 발생한다.")
   @Test
   void admin_exception() throws Exception{
     // given
@@ -37,10 +37,9 @@ class AdminControllerTest {
     String accessToken = "12345";
     //expected
     this.mockMvc.perform(get("/admin")
-        .param("accessToken", accessToken)
+        .header("Authorization", accessToken)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().string(accessToken));
-
   }
 }

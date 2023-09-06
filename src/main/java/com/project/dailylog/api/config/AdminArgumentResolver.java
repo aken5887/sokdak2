@@ -19,11 +19,10 @@ public class AdminArgumentResolver implements HandlerMethodArgumentResolver {
   public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
       NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 
-    String accessToken = webRequest.getParameter("accessToken");
-    if(accessToken == null || "".equalsIgnoreCase(accessToken)){
+    String authorization = webRequest.getHeader("Authorization");
+    if(authorization == null || "".equalsIgnoreCase(authorization)){
       throw new UnAuthorizedException();
     }
-    return SessionUser.builder().userName(accessToken).build();
-
+    return SessionUser.builder().id(Long.parseLong(authorization)).build();
   }
 }
