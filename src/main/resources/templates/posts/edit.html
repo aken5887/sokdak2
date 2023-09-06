@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/layout/template}">
-
-<div class="board_write_wrap" layout:fragment="content">
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="/layout/header :: headerFragment"/>
+<body>
+<div class="board_wrap">
+<th:block th:replace="/layout/title :: titleFragment('익명게시판')"/>
+<div class="board_write_wrap">
     <div class="board_write">
         <div class="title">
             <dl>
@@ -29,70 +30,71 @@
         <div class="cont">
             <textarea placeholder="내용입력" name="content" th:text="${response.content}"></textarea>
         </div>
+        </div>
+        <div class="bt_wrap">
+            <a href="javascript:void(0);" class="on" id="saveBtn">저장</a>
+            <a href="javascript:void(0)" id="cancelBtn">취소</a>
+        </div>
+        <form id="editForm" action="" method="get">
+            <input type="hidden" name="page" th:value="${postSearch.page}">
+            <input type="hidden" name="size" th:value="${postSearch.size}">
+            <input type="hidden" name="kw_opt" th:value="${postSearch.kw_opt}">
+            <input type="hidden" name="kw" th:value="${postSearch.kw}">
+        </form>
     </div>
-    <div class="bt_wrap">
-        <a href="javascript:void(0);" class="on" id="saveBtn">저장</a>
-        <a href="javascript:void(0)" id="cancelBtn">취소</a>
-    </div>
-    <form id="editForm" action="" method="get">
-        <input type="hidden" name="page" th:value="${postSearch.page}">
-        <input type="hidden" name="size" th:value="${postSearch.size}">
-        <input type="hidden" name="kw_opt" th:value="${postSearch.kw_opt}">
-        <input type="hidden" name="kw" th:value="${postSearch.kw}">
-    </form>
 </div>
-<th:block layout:fragment="script">
-    <script th:inline="javascript">
-        $(document).ready(function(){
-           const ef = $("#editForm");
-           const postId = [[${response.id}]];
+</body>
+<th:block th:replace="/layout/footer :: footerFragment"/>
+<script th:inline="javascript">
+    $(document).ready(function(){
+       const ef = $("#editForm");
+       const postId = [[${response.id}]];
 
-           $("div.bt_wrap #saveBtn").click(function(e){
-                e.preventDefault();
-                if(common.validate.checkRequired("div.board_write input.required")){
-                    let postEdit   = {};
-                    postEdit.title = $("input[name=title]").val();
-                    postEdit.content = $("textarea[name=content]").val();
-                    postEdit.password = $("input[name=password]").val();
+       $("div.bt_wrap #saveBtn").click(function(e){
+            e.preventDefault();
+            if(common.validate.checkRequired("div.board_write input.required")){
+                let postEdit   = {};
+                postEdit.title = $("input[name=title]").val();
+                postEdit.content = $("textarea[name=content]").val();
+                postEdit.password = $("input[name=password]").val();
 
-                    $.ajax({
-                        url : '/posts/'+postId,
-                        method : 'PATCH',
-                        contentType : 'application/json',
-                        dataType: 'json',
-                        data : JSON.stringify(postEdit),
-                        success : function(response) {
-                            alert("저장에 성공하였습니다.");
-                            ef.attr("action", "/posts/"+postId)
-                            ef.attr("method", "get");
-                            ef.submit();
-                        },
-                        error: function(response) {
-                            let responseJson = response.responseJSON;
-                            let rCode = responseJson.code;
-                            let rMessage = responseJson.message;
+                $.ajax({
+                    url : '/posts/'+postId,
+                    method : 'PATCH',
+                    contentType : 'application/json',
+                    dataType: 'json',
+                    data : JSON.stringify(postEdit),
+                    success : function(response) {
+                        alert("저장에 성공하였습니다.");
+                        ef.attr("action", "/posts/"+postId)
+                        ef.attr("method", "get");
+                        ef.submit();
+                    },
+                    error: function(response) {
+                        let responseJson = response.responseJSON;
+                        let rCode = responseJson.code;
+                        let rMessage = responseJson.message;
 
-                            if(rMessage != null){
-                                alert(rMessage+"(오류코드 : "+rCode+")");
-                            }else{
-                                alert("저장에 실패하였습니다. (오류코드 : "+rCode+")");
-                            }
+                        if(rMessage != null){
+                            alert(rMessage+"(오류코드 : "+rCode+")");
+                        }else{
+                            alert("저장에 실패하였습니다. (오류코드 : "+rCode+")");
                         }
-                    });
-                }
-           });
+                    }
+                });
+            }
+       });
 
-           $("div.bt_wrap #cancelBtn").click(function(e){
-                e.preventDefault();
-                ef.attr("action","/posts/"+postId);
-                ef.submit();
-            });
-
-           $("div.board_write input#password_field").on("keyup paste", function(){
-               let $password = $(this);
-               common.validate.password($password);
-           });
+       $("div.bt_wrap #cancelBtn").click(function(e){
+            e.preventDefault();
+            ef.attr("action","/posts/"+postId);
+            ef.submit();
         });
 
-    </script>
-</th:block>
+       $("div.board_write input#password_field").on("keyup paste", function(){
+           let $password = $(this);
+           common.validate.password($password);
+       });
+    });
+</script>
+</html>

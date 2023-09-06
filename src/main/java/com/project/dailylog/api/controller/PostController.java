@@ -63,7 +63,7 @@ public class PostController {
 
   @PostMapping("/posts")
   @ResponseBody
-  public PostResponse create(@RequestBody @Valid PostCreate postCreate, RedirectAttributes rttr){
+  public PostResponse create(@RequestBody @Valid PostCreate postCreate){
     log.info("PostCreate : {}", postCreate.toString());
     postCreate.validate();
     return  postService.save(postCreate);

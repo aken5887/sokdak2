@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="titleFragment(title)">
+  <div class="board_title" >
+    <a href="javascript:void(0);" onclick="javascript:fn_main();">
+      <strong th:text="${title}">익명 게시판</strong>
+    </a>
+    <p>속닥속닥 익명게시판 입니다.</p>
+  </div>
+</th:block>
+</html>

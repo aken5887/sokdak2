@@ -20,7 +20,7 @@ let common = {
         let passwordLength = passwordInput.length;
         if(passwordLength > 4){
           alert("비밀번호는 4자이상 입력할 수 없습니다.");
-          $password.val("");
+          $password.val(passwordInput.slice(0,4));
         }else{
           let replaceInput = passwordInput.replace(/[^0-9]/g, '');
           if(passwordInput != replaceInput){

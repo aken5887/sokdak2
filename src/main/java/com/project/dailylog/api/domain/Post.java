@@ -29,6 +29,8 @@ public class Post extends BaseTimeEntity {
   private int count;
   @ColumnDefault("0000")
   private int password;
+  @ColumnDefault("0")
+  private int topFixed;
 
   @Builder
   public Post(String title, String userId, String content, int password){
@@ -43,6 +45,7 @@ public class Post extends BaseTimeEntity {
     this.userId = postCreate.getUserId();
     this.content = postCreate.getContent();
     this.password = postCreate.getPassword()==null? 0000:postCreate.getPassword();
+    this.topFixed = postCreate.getTopFixed();
     return this;
   }
 

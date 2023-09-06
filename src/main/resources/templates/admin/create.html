@@ -3,9 +3,20 @@
 <th:block th:replace="/layout/header :: headerFragment"/>
 <body>
 <div class="board_wrap">
-    <th:block th:replace="/layout/title :: titleFragment('익명게시판')"/>
+    <th:block th:replace="/layout/title :: titleFragment('익명게시판[관리자]')"/>
     <div class="board_write_wrap">
         <div class="board_write">
+            <div class="admin">
+                <dl>
+                    <dt>상단 고정</dt>
+                    <dd>
+                        <select name="topFixed">
+                            <option value="2">상단고정</option>
+                            <option value="1">고정해제</option>
+                        </select>
+                    </dd>
+                </dl>
+            </div>
             <div class="title">
                 <dl>
                     <dt>제목</dt>
@@ -53,20 +64,21 @@
             e.preventDefault();
             if(common.validate.checkRequired("div.board_write .required")){
                 let postCreate = {};
+                postCreate.topFixed = $("select[name=topFixed]").val();
                 postCreate.title = $("input[name=title]").val();
                 postCreate.userId = $("input[name=userId]").val();
                 postCreate.password = $("input[name=password]").val();
                 postCreate.content = $("textarea[name=content]").val();
 
                 $.ajax({
-                    url : '/posts',
+                    url : '/admin/posts',
                     method : 'POST',
                     contentType: 'application/json',
                     dataType: 'JSON',
                     data: JSON.stringify(postCreate),
                     success: function(response){
                         alert('저장에 성공하였습니다.');
-                        wf.attr("action", "/posts/"+response.id);
+                        wf.attr("action", "/posts");
                         wf.submit();
                     },
                     error: function(response){
@@ -90,7 +102,7 @@
         });
 
         $("div.board_write input[name=password]").on("keyup paste", function(e){
-           common.validate.password($(this));
+            common.validate.password($(this));
         });
 
         $("div.bt_wrap a#cancelBtn").click(function(e){

@@ -64,16 +64,22 @@
         font-size: 1.2rem;
     }
 
+    .board_write .admin dt,
     .board_write .title dt,
     .board_write .info dt {
        display: none;
     }
 
+    .board_write .admin dd,
     .board_write .title dd,
     .board_write .info dd {
         width: 100%;
     }
-    
+
+    .board_write .admin select {
+        width : 49%;
+    }
+
     .board_write .title input[type="text"],
     .board_write .info input[type="text"],
     .board_write .info input[type="password"] {

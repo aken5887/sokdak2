@@ -8,10 +8,12 @@ public class PostEditor {
 
   private String title;
   private String content;
+  private int topFixed;
 
-  private PostEditor(String title, String content){
+  private PostEditor(String title, String content, int topFixed){
     this.title = title;
     this.content = content;
+    this.topFixed = topFixed;
   }
 
   public static PostEditorBuilder builder(){
@@ -21,6 +23,7 @@ public class PostEditor {
   public static class PostEditorBuilder {
     private String title;
     private String content;
+    private int topFixed;
 
     public PostEditorBuilder title(String title){
       if(!StringUtils.isNullOrEmpty(title)){
@@ -36,8 +39,13 @@ public class PostEditor {
       return this;
     }
 
+    public PostEditorBuilder topFixed(int topFixed){
+      this.topFixed = topFixed;
+      return this;
+    }
+
     public PostEditor build(){
-      return new PostEditor(this.title, this.content);
+      return new PostEditor(this.title, this.content, this.topFixed);
     }
   }
 

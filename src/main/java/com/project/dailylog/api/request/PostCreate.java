@@ -19,6 +19,7 @@ public class PostCreate {
   private String content;
   @NotNull(message="암호는 필수입니다.")
   private Integer password;
+  private int topFixed;
 
   public void validate() {
     if(this.title.contains("테스트")){
