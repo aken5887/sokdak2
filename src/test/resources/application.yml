@@ -14,5 +14,7 @@ spring:
   redis:
     host: localhost
     port: 6379
-custom:
-  cache-store: cookie
+me:
+  store:
+    cache: cookie
+  jwt: true

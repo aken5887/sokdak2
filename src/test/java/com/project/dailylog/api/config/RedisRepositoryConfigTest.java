@@ -16,7 +16,7 @@ class RedisRepositoryConfigTest {
   @Autowired
   private RedisTemplate<String, String> redisTemplate;
 
-  @Value("${custom.cache-store}")
+  @Value("${me.store.cache}")
   private String cacheStore;
 
   @DisplayName("기본 Redis 접속 테스트")

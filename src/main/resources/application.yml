@@ -17,8 +17,10 @@ spring:
   profiles:
     include: db
 
-custom:
-  cache-store: cookie
+me:
+  store:
+    cache: cookie
+  jwt: true
 
 server:
   port: 8090

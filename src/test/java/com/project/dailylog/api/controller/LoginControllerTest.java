@@ -8,16 +8,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.dailylog.api.config.JwtKey;
 import com.project.dailylog.api.domain.Session;
 import com.project.dailylog.api.domain.User;
 import com.project.dailylog.api.repository.SessionRepository;
 import com.project.dailylog.api.repository.UserRepository;
 import com.project.dailylog.api.request.Login;
+import io.jsonwebtoken.Jwts;
 import javax.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -39,6 +42,9 @@ class LoginControllerTest {
 
   @Autowired
   SessionRepository sessionRepository;
+
+  @Value("${me.jwt}")
+  String jwtUse;
 
   @BeforeEach
   void clean() {
@@ -132,8 +138,18 @@ class LoginControllerTest {
     Session session = user.addSession(); // 세션 생성
     userRepository.save(user);
 
+    String cookieValue = "";
+    if("false".equalsIgnoreCase(jwtUse)){
+      cookieValue = session.getAccessToken();
+    }else if("true".equalsIgnoreCase(jwtUse)){
+      cookieValue = Jwts.builder()
+          .setSubject(String.valueOf(session.getId()))
+          .signWith(JwtKey.getKey())
+          .compact();
+    }
+
     // 세션용 쿠키 생성
-    Cookie sessionCookie = new Cookie("SESSION", session.getAccessToken());
+    Cookie sessionCookie = new Cookie("SESSION", cookieValue);
 
     // expected
     this.mockMvc.perform(get("/admin")
@@ -141,7 +157,7 @@ class LoginControllerTest {
           .cookie(sessionCookie)
         )
         .andExpect(status().isOk())
-        .andExpect(content().string(Long.toString(session.getId())));
+        .andExpect(content().string( String.valueOf(session.getId())));
   }
 
   @DisplayName("로그인 후 검증되지 않은 세션값으로 권한이 필요한 페이지에 접속할 수 없다.")

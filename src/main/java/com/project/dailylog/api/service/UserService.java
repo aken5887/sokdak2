@@ -24,4 +24,12 @@ public class UserService {
     Session session = user.addSession();
     return SessionResponse.builder().accessToken(session.getAccessToken()).build();
   }
+
+  @Transactional
+  public User loginUser(Login login){
+    User user = userRepository.findByUserIdAndPassword(login.getUserId(), login.getPassword())
+        .orElseThrow(() -> new InvalidLoginException());
+    user.addSession();
+    return user;
+  }
 }

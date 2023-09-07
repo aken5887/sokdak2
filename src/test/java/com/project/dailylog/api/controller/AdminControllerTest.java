@@ -5,9 +5,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.project.dailylog.api.config.JwtKey;
 import com.project.dailylog.api.domain.Session;
 import com.project.dailylog.api.domain.User;
 import com.project.dailylog.api.repository.UserRepository;
+import io.jsonwebtoken.Jwts;
 import javax.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -59,7 +61,12 @@ class AdminControllerTest {
     Session session = user.addSession();
     userRepository.save(user);
 
-    Cookie sessionCookie = new Cookie("SESSION", session.getAccessToken());
+    String jws = Jwts.builder()
+        .setSubject(String.valueOf(session.getId()))
+        .signWith(JwtKey.getKey())
+        .compact();
+
+    Cookie sessionCookie = new Cookie("SESSION", jws);
 
     //expected
     this.mockMvc.perform(get("/admin")
