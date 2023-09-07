@@ -9,6 +9,10 @@ public class UnAuthorizedException extends CommonException{
     super(MESSAGE);
   }
 
+  public UnAuthorizedException(String inputMessage) {
+    super(inputMessage);
+  }
+
   @Override
   public int getStatusCode() {
     return HttpStatus.UNAUTHORIZED.value();

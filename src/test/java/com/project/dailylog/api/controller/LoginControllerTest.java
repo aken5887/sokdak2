@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +13,7 @@ import com.project.dailylog.api.domain.User;
 import com.project.dailylog.api.repository.SessionRepository;
 import com.project.dailylog.api.repository.UserRepository;
 import com.project.dailylog.api.request.Login;
+import javax.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -117,7 +118,8 @@ class LoginControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(loginStr))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.accessToken").isNotEmpty());
+//        .andExpect(jsonPath("$.accessToken").isNotEmpty());
+        .andExpect(cookie().exists("SESSION"));
   }
 
   @DisplayName("로그인 후 권한이 필요한 페이지에 접속한다.")
@@ -130,9 +132,14 @@ class LoginControllerTest {
     Session session = user.addSession(); // 세션 생성
     userRepository.save(user);
 
+    // 세션용 쿠키 생성
+    Cookie sessionCookie = new Cookie("SESSION", session.getAccessToken());
+
     // expected
     this.mockMvc.perform(get("/admin")
-        .header("Authorization", session.getAccessToken()))
+//        .header("Authorization", session.getAccessToken())
+          .cookie(sessionCookie)
+        )
         .andExpect(status().isOk())
         .andExpect(content().string(Long.toString(session.getId())));
   }
@@ -147,9 +154,12 @@ class LoginControllerTest {
     Session session = user.addSession(); // 세션 생성
     userRepository.save(user);
 
+    Cookie sessionCookie = new Cookie("SESSION", session.getAccessToken()+"-1");
+
     // expected
     this.mockMvc.perform(get("/admin")
-            .header("Authorization", "1234"))
+//            .header("Authorization", "1234"))
+            .cookie(sessionCookie))
         .andExpect(status().isUnauthorized());
   }
 

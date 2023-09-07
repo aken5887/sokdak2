@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.project.dailylog.api.domain.Session;
 import com.project.dailylog.api.domain.User;
 import com.project.dailylog.api.repository.UserRepository;
+import javax.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,9 +59,11 @@ class AdminControllerTest {
     Session session = user.addSession();
     userRepository.save(user);
 
+    Cookie sessionCookie = new Cookie("SESSION", session.getAccessToken());
+
     //expected
     this.mockMvc.perform(get("/admin")
-        .header("Authorization", session.getAccessToken())
+        .cookie(sessionCookie)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().string(Long.toString(session.getId())));
