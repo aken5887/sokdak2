@@ -5,6 +5,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.project.dailylog.api.domain.Session;
+import com.project.dailylog.api.domain.User;
+import com.project.dailylog.api.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,19 @@ class AdminControllerTest {
   @Autowired
   MockMvc mockMvc;
 
+  @Autowired
+  UserRepository userRepository;
+
+  @DisplayName("/admin/interceptor GET 요청시 userId가 null이면 401오류가 발생한다.")
+  @Test
+  void interceptor() throws Exception {
+    // given
+    // expected
+    this.mockMvc.perform(get("/admin/interceptor")
+        .param("userId", ""))
+        .andExpect(status().isUnauthorized());
+  }
+
   @DisplayName("/admin GET 요청시 헤더에 Authorization이 null이면 401 오류가 발생한다.")
   @Test
   void admin_exception() throws Exception{
@@ -30,16 +46,23 @@ class AdminControllerTest {
       .andExpect(status().isUnauthorized());
   }
 
-  @DisplayName("/admin GET 요청시 accessToken을 반환한다.")
+  @DisplayName("/admin GET 요청시 SESSION ID를 반환한다.")
   @Test
   void admin() throws Exception {
     //given
-    String accessToken = "12345";
+    User user = User.builder()
+        .userId("test")
+        .name("test")
+        .password("1234")
+        .build();
+    Session session = user.addSession();
+    userRepository.save(user);
+
     //expected
     this.mockMvc.perform(get("/admin")
-        .header("Authorization", accessToken)
+        .header("Authorization", session.getAccessToken())
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(accessToken));
+        .andExpect(content().string(Long.toString(session.getId())));
   }
 }

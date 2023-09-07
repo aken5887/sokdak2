@@ -1,5 +1,6 @@
 package com.project.dailylog.api.controller;
 
+import com.project.dailylog.api.config.annotation.Auth;
 import com.project.dailylog.api.request.PostCreate;
 import com.project.dailylog.api.request.PostSearch;
 import com.project.dailylog.api.request.SessionUser;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
@@ -22,9 +24,15 @@ public class AdminController {
 
   private final PostService postService;
 
+  @GetMapping("/admin/interceptor")
+  @ResponseBody
+  public String interceptor(@RequestParam String userId){
+    return userId;
+  }
+
   @GetMapping("/admin")
   @ResponseBody
-  public Long admin(SessionUser sessionUser){
+  public Long admin(@Auth SessionUser sessionUser){
     log.info("SessionUser : {}", sessionUser.getId());
     return sessionUser.getId();
   }
