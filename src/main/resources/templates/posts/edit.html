@@ -28,7 +28,9 @@
             </dl>
         </div>
         <div class="cont">
-            <textarea placeholder="내용입력" name="content" th:text="${response.content}"></textarea>
+<!--            <textarea placeholder="내용입력" name="content" th:text="${response.content}"></textarea>-->
+            <textarea name="content" id="content" rows="10" cols="100"
+                      th:utext="${#strings.replace(response.content,'&#10;','&lt;br&gt;')}"></textarea>
         </div>
         </div>
         <div class="bt_wrap">
@@ -49,12 +51,14 @@
     $(document).ready(function(){
        const ef = $("#editForm");
        const postId = [[${response.id}]];
+       let oEditors = [];
 
        $("div.bt_wrap #saveBtn").click(function(e){
             e.preventDefault();
             if(common.validate.checkRequired("div.board_write input.required")){
                 let postEdit   = {};
                 postEdit.title = $("input[name=title]").val();
+                oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
                 postEdit.content = $("textarea[name=content]").val();
                 postEdit.password = $("input[name=password]").val();
 
@@ -95,6 +99,17 @@
            let $password = $(this);
            common.validate.password($password);
        });
+
+        editorLoading();
+
+        function editorLoading(){
+            nhn.husky.EZCreator.createInIFrame({
+                oAppRef: oEditors,
+                elPlaceHolder: "content",
+                sSkinURI: "/smartEditor/SmartEditor2Skin.html",
+                fCreator: "createSEditor2"
+            });
+        }
     });
 </script>
 </html>

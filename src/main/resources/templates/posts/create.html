@@ -29,7 +29,7 @@
                 </dl>
             </div>
             <div class="cont">
-                <textarea name="content" placeholder="내용을 입력하세요."></textarea>
+                <textarea name="content" id="content" rows="10" cols="100"></textarea>
             </div>
         </div>
         <div class="bt_wrap">
@@ -47,57 +47,71 @@
 </body>
 <th:block th:replace="/layout/footer :: footerFragment"/>
 <script th:inline="javascript">
-    $(document).ready(function(){
+    $(document).ready(function() {
         const wf = $("#writeForm");
-        $("div.bt_wrap a#writeBtn").click(function(e){
+        let oEditors = [];
+
+        $("div.bt_wrap a#writeBtn").click(function (e) {
             e.preventDefault();
-            if(common.validate.checkRequired("div.board_write .required")){
+            if (common.validate.checkRequired("div.board_write .required")) {
                 let postCreate = {};
                 postCreate.title = $("input[name=title]").val();
                 postCreate.userId = $("input[name=userId]").val();
                 postCreate.password = $("input[name=password]").val();
+                oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
                 postCreate.content = $("textarea[name=content]").val();
 
                 $.ajax({
-                    url : '/posts',
-                    method : 'POST',
+                    url: '/posts',
+                    method: 'POST',
                     contentType: 'application/json',
                     dataType: 'JSON',
                     data: JSON.stringify(postCreate),
-                    success: function(response){
+                    success: function (response) {
                         alert('저장에 성공하였습니다.');
-                        wf.attr("action", "/posts/"+response.id);
+                        wf.attr("action", "/posts/" + response.id);
                         wf.submit();
                     },
-                    error: function(response){
+                    error: function (response) {
                         console.log(response);
                         const responseJSON = response.responseJSON;
                         const rCode = responseJSON.code;
                         const rMessage = response.message;
                         const rValidation = responseJSON.validation;
 
-                        if(rValidation != null){
+                        if (rValidation != null) {
                             const rKeys = Object.keys(rValidation);
                             alert(rValidation[rKeys[0]]);
-                        } else if(rMessage != null){
-                            alert(rMessage+"(오류코드 : "+rCode+")");
-                        }else{
-                            alert("저장에 실패하였습니다. (오류코드 : "+rCode+")");
+                        } else if (rMessage != null) {
+                            alert(rMessage + "(오류코드 : " + rCode + ")");
+                        } else {
+                            alert("저장에 실패하였습니다. (오류코드 : " + rCode + ")");
                         }
                     }
                 });
             }
         });
 
-        $("div.board_write input[name=password]").on("keyup paste", function(e){
-           common.validate.password($(this));
+        $("div.board_write input[name=password]").on("keyup paste", function (e) {
+            common.validate.password($(this));
         });
 
-        $("div.bt_wrap a#cancelBtn").click(function(e){
+        $("div.bt_wrap a#cancelBtn").click(function (e) {
             e.preventDefault();
             wf.attr("action", "/posts");
             wf.submit();
         });
+
+        editorLoading();
+
+        function editorLoading(){
+            nhn.husky.EZCreator.createInIFrame({
+                oAppRef: oEditors,
+                elPlaceHolder: "content",
+                sSkinURI: "/smartEditor/SmartEditor2Skin.html",
+                fCreator: "createSEditor2"
+            });
+        }
     });
 </script>
 </html>
