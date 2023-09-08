@@ -18,8 +18,7 @@ spring:
     include: db
 
 me:
-  store:
-    cache: cookie
+  cache: cookie
   jwt: true
 
 server:

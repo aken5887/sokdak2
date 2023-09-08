@@ -25,7 +25,7 @@ public class PostService {
 
   private final PostRepository postRepository;
   private final RedisService redisService;
-  @Value("${me.store.cache}")
+  @Value("${me.cache}")
   private String cacheStore;
 
   public PostResponse save(PostCreate postCreate){

@@ -60,6 +60,8 @@ dependencies {
     implementation "io.jsonwebtoken:jjwt-api:${jsonwebtoken}"
     runtimeOnly "io.jsonwebtoken:jjwt-impl:${jsonwebtoken}"
     runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jsonwebtoken}"
+
+    implementation 'org.springframework.boot:spring-boot-configuration-processor'
 }
 
 tasks.named('test') {
