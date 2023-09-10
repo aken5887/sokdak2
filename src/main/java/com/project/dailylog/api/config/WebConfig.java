@@ -15,9 +15,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
   private final SessionRepository sessionRepository;
-
-  @Value("${me.jwt}")
-  private String jwtUse;
+  @Value("${me.jwt}") private String jwtUse;
+  private final AppConfig appConfig;
 
   @Override
   public void addViewControllers(ViewControllerRegistry registry) {
@@ -33,6 +32,6 @@ public class WebConfig implements WebMvcConfigurer {
 
   @Override
   public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-    resolvers.add(new AdminArgumentResolver(sessionRepository, jwtUse));
+    resolvers.add(new AdminArgumentResolver(sessionRepository, appConfig, jwtUse));
   }
 }

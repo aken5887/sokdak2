@@ -8,13 +8,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.dailylog.api.config.JwtKey;
+import com.project.dailylog.api.config.AppConfig;
 import com.project.dailylog.api.domain.Session;
 import com.project.dailylog.api.domain.User;
 import com.project.dailylog.api.repository.SessionRepository;
 import com.project.dailylog.api.repository.UserRepository;
 import com.project.dailylog.api.request.Login;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import java.sql.Date;
+import java.time.LocalDateTime;
+import javax.crypto.SecretKey;
 import javax.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -45,6 +49,9 @@ class LoginControllerTest {
 
   @Value("${me.jwt}")
   String jwtUse;
+
+  @Autowired
+  AppConfig appConfig;
 
   @BeforeEach
   void clean() {
@@ -142,9 +149,13 @@ class LoginControllerTest {
     if("false".equalsIgnoreCase(jwtUse)){
       cookieValue = session.getAccessToken();
     }else if("true".equalsIgnoreCase(jwtUse)){
+      LocalDateTime  exprDateTime = LocalDateTime.now().plusMonths(1L);
+      SecretKey secretKey = Keys.hmacShaKeyFor(appConfig.getJwtKey());
+
       cookieValue = Jwts.builder()
           .setSubject(String.valueOf(session.getId()))
-          .signWith(JwtKey.getKey())
+          .signWith(secretKey)
+          .setExpiration(Date.valueOf(exprDateTime.toLocalDate()))
           .compact();
     }
 

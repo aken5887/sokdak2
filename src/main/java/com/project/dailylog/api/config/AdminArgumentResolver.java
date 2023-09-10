@@ -14,7 +14,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -26,6 +25,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class AdminArgumentResolver implements HandlerMethodArgumentResolver {
 
   private final SessionRepository sessionRepository;
+  private final AppConfig appConfig;
   private final String jwtUse;
 
   @Override
@@ -69,12 +69,10 @@ public class AdminArgumentResolver implements HandlerMethodArgumentResolver {
 
     }else if("true".equalsIgnoreCase(jwtUse)){
       // cookieValue jwt 값
-      log.info("------------- jwtKey : {}", JwtKey.getStrKey());
-      byte[] decodedKey = Base64.decodeBase64(JwtKey.getStrKey());
-
+      log.info("------------- jwtKey : {}", appConfig.getJwtKey());
       try{
         Jws<Claims> claims = Jwts.parserBuilder()
-            .setSigningKey(decodedKey)
+            .setSigningKey(appConfig.getJwtKey())
             .build()
             .parseClaimsJws(cookieValue);
 

@@ -17,3 +17,4 @@ spring:
 me:
   cache: cookie
   jwt: true
+  jwt-key: "IdQxA8ofDz4Zoox/BwxNMKoUkCgJSYWYeMvLANiOpKM="

@@ -1,13 +1,17 @@
 package com.project.dailylog.api.controller;
 
 import com.google.common.net.HttpHeaders;
-import com.project.dailylog.api.config.JwtKey;
+import com.project.dailylog.api.config.AppConfig;
 import com.project.dailylog.api.domain.User;
 import com.project.dailylog.api.request.Login;
 import com.project.dailylog.api.response.SessionResponse;
 import com.project.dailylog.api.service.UserService;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import java.time.Duration;
+import java.util.Calendar;
+import java.util.Date;
+import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
   private final UserService userService;
+  private final AppConfig appConfig;
 
   @Value("${me.jwt}")
   private String storeSession;
@@ -39,12 +44,19 @@ public class LoginController {
     }else if("true".equalsIgnoreCase(storeSession)){
       User user = userService.loginUser(login);
 
+      SecretKey secretKey = Keys.hmacShaKeyFor(appConfig.getJwtKey());
+
+      Calendar cal = Calendar.getInstance();
+      cal.add(Calendar.MONTH, +1);
+      Date exprDate = cal.getTime();
+
       String jws = Jwts.builder()
           .setSubject(String.valueOf(user.getId()))
-          .signWith(JwtKey.getKey())
+          .signWith(secretKey)
+          .setIssuedAt(new Date())
+          .setExpiration(exprDate)
           .compact();
 
-      log.info(" ----- jwtKey : {}", JwtKey.getStrKey());
       responseCookie = responseCookie(jws);
     }
 

@@ -5,11 +5,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.project.dailylog.api.config.JwtKey;
+import com.project.dailylog.api.config.AppConfig;
 import com.project.dailylog.api.domain.Session;
 import com.project.dailylog.api.domain.User;
 import com.project.dailylog.api.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import javax.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,9 @@ class AdminControllerTest {
 
   @Autowired
   UserRepository userRepository;
+
+  @Autowired
+  AppConfig appConfig;
 
   @DisplayName("/admin/interceptor GET 요청시 userId가 null이면 401오류가 발생한다.")
   @Test
@@ -63,7 +67,7 @@ class AdminControllerTest {
 
     String jws = Jwts.builder()
         .setSubject(String.valueOf(session.getId()))
-        .signWith(JwtKey.getKey())
+        .signWith( Keys.hmacShaKeyFor(appConfig.getJwtKey()))
         .compact();
 
     Cookie sessionCookie = new Cookie("SESSION", jws);

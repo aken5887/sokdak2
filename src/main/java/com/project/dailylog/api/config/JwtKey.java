@@ -22,4 +22,10 @@ public class JwtKey {
   public static String getStrKey(){
     return strKey;
   }
+
+  public static void main(String[] args) {
+    Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    byte[] encodedKey = key.getEncoded();
+    System.out.println(Base64.getEncoder().encodeToString(encodedKey));
+  }
 }

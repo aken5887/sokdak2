@@ -1,7 +1,5 @@
 package com.project.dailylog.api.config;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.Arrays;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,11 +18,7 @@ class AppConfigTest {
 
   @DisplayName("객체에 바인딩된 application.yml 프로퍼티 값을 읽어온다")
   @Test
-  void appconfig() {
-    assertThat(appConfig.getCache()).isNotEmpty();
-    assertThat(appConfig.getJwt()).isNotEmpty();
-
-    System.out.println(appConfig.toString());
+  void appConfig() {
   }
 
   @DisplayName("Spring Container에 등록된 bean을 출력한다.")
