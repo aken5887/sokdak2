@@ -78,9 +78,10 @@ public class PostService {
   }
 
   @Transactional
-  public void increaseCount(long postId, String clientAddress){
+  public void increaseCount(long postId, String clientAddress, boolean update){
     Post post = postRepository.findById(postId)
         .orElseThrow(() -> new PostNotFoundException());
+
     if("redis".equals(cacheStore)){
       if(redisService.isFirstIpRequest(clientAddress, postId)){
         post.increaseCount();
@@ -88,7 +89,7 @@ public class PostService {
       }else{
         log.info("request has duplicated within same address : {}, {}", clientAddress, postId);
       }
-    }else{
+    }else if("cookie".equals(cacheStore) && update){
       post.increaseCount();
     }
   }
