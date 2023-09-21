@@ -3,7 +3,7 @@ spring:
     show-sql: true
     defer-datasource-initialization: true
   profiles:
-    include: local
+    include: real
 
 me:
   cache: cookie
