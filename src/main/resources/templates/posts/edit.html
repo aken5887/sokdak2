@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="/layout/header :: headerFragment"/>
+<body>
+<div class="board_wrap">
+<th:block th:replace="/layout/title :: titleFragment('익명게시판')"/>
+<div class="board_write_wrap">
+    <div class="board_write">
+        <div class="title">
+            <dl>
+                <dt>제목</dt>
+                <dd>
+                    <input class="required" type="text" name="title" placeholder="제목 입력" title="제목" th:value="${response.title}">
+                </dd>
+            </dl>
+        </div>
+        <div class="info">
+            <dl>
+                <dt>글쓴이</dt>
+                <dd th:text="${response.userId}"></dd>
+            </dl>
+            <dl>
+                <dt>비밀번호</dt>
+                <dd>
+                    <input class="required" id="password_field" title="비밀번호"
+                           type="password" name="password" placeholder="비밀번호 입력">
+                </dd>
+            </dl>
+        </div>
+        <div class="cont">
+<!--            <textarea placeholder="내용입력" name="content" th:text="${response.content}"></textarea>-->
+            <textarea name="content" id="content" rows="10" cols="100"
+                      th:utext="${#strings.replace(response.content,'&#10;','&lt;br&gt;')}"></textarea>
+        </div>
+        </div>
+        <div class="bt_wrap">
+            <a href="javascript:void(0);" class="on" id="saveBtn">저장</a>
+            <a href="javascript:void(0)" id="cancelBtn">취소</a>
+        </div>
+        <form id="editForm" action="" method="get">
+            <input type="hidden" name="page" th:value="${postSearch.page}">
+            <input type="hidden" name="size" th:value="${postSearch.size}">
+            <input type="hidden" name="kw_opt" th:value="${postSearch.kw_opt}">
+            <input type="hidden" name="kw" th:value="${postSearch.kw}">
+        </form>
+    </div>
+</div>
+</body>
+<th:block th:replace="/layout/footer :: footerFragment"/>
+<script th:inline="javascript">
+    $(document).ready(function(){
+       const ef = $("#editForm");
+       const postId = [[${response.id}]];
+       let oEditors = [];
+
+       $("div.bt_wrap #saveBtn").click(function(e){
+            e.preventDefault();
+            if(common.validate.checkRequired("div.board_write input.required")){
+                let postEdit   = {};
+                postEdit.title = $("input[name=title]").val();
+                oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+                postEdit.content = $("textarea[name=content]").val();
+                postEdit.password = $("input[name=password]").val();
+
+                $.ajax({
+                    url : '/posts/'+postId,
+                    method : 'PATCH',
+                    contentType : 'application/json',
+                    dataType: 'json',
+                    data : JSON.stringify(postEdit),
+                    success : function(response) {
+                        alert("저장에 성공하였습니다.");
+                        ef.attr("action", "/posts/"+postId)
+                        ef.attr("method", "get");
+                        ef.submit();
+                    },
+                    error: function(response) {
+                        let responseJson = response.responseJSON;
+                        let rCode = responseJson.code;
+                        let rMessage = responseJson.message;
+
+                        if(rMessage != null){
+                            alert(rMessage+"(오류코드 : "+rCode+")");
+                        }else{
+                            alert("저장에 실패하였습니다. (오류코드 : "+rCode+")");
+                        }
+                    }
+                });
+            }
+       });
+
+       $("div.bt_wrap #cancelBtn").click(function(e){
+            e.preventDefault();
+            ef.attr("action","/posts/"+postId);
+            ef.submit();
+        });
+
+       $("div.board_write input#password_field").on("keyup paste", function(){
+           let $password = $(this);
+           common.validate.password($password);
+       });
+
+        editorLoading();
+
+        function editorLoading(){
+            nhn.husky.EZCreator.createInIFrame({
+                oAppRef: oEditors,
+                elPlaceHolder: "content",
+                sSkinURI: "/smartEditor/SmartEditor2Skin.html",
+                fCreator: "createSEditor2"
+            });
+        }
+    });
+</script>
+</html>

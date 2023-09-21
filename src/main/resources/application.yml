@@ -1,0 +1,14 @@
+spring:
+  jpa:
+    show-sql: true
+    defer-datasource-initialization: true
+  profiles:
+    include: local
+
+me:
+  cache: cookie
+  jwt: true
+  jwt-key: "IdQxA8ofDz4Zoox/BwxNMKoUkCgJSYWYeMvLANiOpKM="
+
+server:
+  port: 8090
