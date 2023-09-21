@@ -1,11 +1,15 @@
 package com.project.dailylog.api.domain;
 
 import com.project.dailylog.api.request.PostCreate;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,14 +34,17 @@ public class Post extends BaseTimeEntity {
   @ColumnDefault("0000")
   private int password;
   @ColumnDefault("0")
-  private int topFixed;
+  private Integer topFixed;
+  @OneToMany(fetch = FetchType.LAZY)
+  private List<File> files = new ArrayList<>();
 
   @Builder
-  public Post(String title, String userId, String content, int password){
+  public Post(String title, String userId, String content, int password, List<File> files){
     this.title = title;
     this.userId = userId;
     this.content = content;
     this.password = password;
+    this.files = files;
   }
 
   public Post toEntity(PostCreate postCreate){
@@ -64,5 +71,9 @@ public class Post extends BaseTimeEntity {
 
   public void increaseCount(){
     this.count++;
+  }
+
+  public void addFiles(List<File> files){
+    this.files.addAll(files);
   }
 }

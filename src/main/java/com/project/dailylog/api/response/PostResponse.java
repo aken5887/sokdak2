@@ -1,7 +1,9 @@
 package com.project.dailylog.api.response;
 
+import com.project.dailylog.api.domain.File;
 import com.project.dailylog.api.domain.Post;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +19,7 @@ public class PostResponse {
   private int count;
   private String createdTime;
   private String lastUpdatedTime;
+  private List<File> files;
 
   public PostResponse(Post post) {
     this.id = post.getId();
@@ -32,6 +35,7 @@ public class PostResponse {
         = post.getLastUpdatedTime() != null ?
           post.getLastUpdatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) :
           "";
+    this.files = post.getFiles();
   }
 
   @Builder

@@ -6,6 +6,7 @@
     <th:block th:replace="/layout/title :: titleFragment('익명게시판')"/>
     <div class="board_write_wrap">
         <div class="board_write">
+        <form id="postForm" method="POST" enctype="multipart/form-data">
             <div class="title">
                 <dl>
                     <dt>제목</dt>
@@ -31,6 +32,15 @@
             <div class="cont">
                 <textarea name="content" id="content" rows="10" cols="100"></textarea>
             </div>
+            <div class="title">
+                <dl>
+                    <dt>파일업로드</dt>
+                    <dd>
+                        <input type="file" class="" name="files" title="파일업로드">
+                    </dd>
+                </dl>
+            </div>
+        </form>
         </div>
         <div class="bt_wrap">
             <a href="write.html" class="on" id="writeBtn">등록</a>
@@ -60,13 +70,20 @@
                 postCreate.password = $("input[name=password]").val();
                 oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
                 postCreate.content = $("textarea[name=content]").val();
+                postCreate.files = $("input[name=files]").val();
+
+                let postForm = $("#postForm")[0];
+                let postFormData = new FormData(postForm);
 
                 $.ajax({
                     url: '/posts',
                     method: 'POST',
-                    contentType: 'application/json',
-                    dataType: 'JSON',
-                    data: JSON.stringify(postCreate),
+                    // contentType: 'application/json',
+                    // dataType: 'JSON',
+                    // data: JSON.stringify(postCreate),
+                    contentType: false,
+                    processData: false,
+                    data: postFormData,
                     success: function (response) {
                         alert('저장에 성공하였습니다.');
                         wf.attr("action", "/posts/" + response.id);

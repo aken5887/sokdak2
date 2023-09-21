@@ -67,7 +67,6 @@ public class LoginController {
 
   private ResponseCookie responseCookie(String sessionCookieValue){
     return ResponseCookie.from("SESSION", sessionCookieValue)
-        .domain("localhost")
         .path("/")
         .httpOnly(true)
         .secure(false)

@@ -37,4 +37,4 @@ out/
 .vscode/
 
 ## profile ##
-**/src/main/resources/application-db.yml
+**/src/main/resources/application-real.yml

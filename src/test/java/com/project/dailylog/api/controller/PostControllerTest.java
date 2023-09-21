@@ -33,6 +33,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -55,7 +56,7 @@ class PostControllerTest {
   }
 
   @Test
-  @DisplayName("/posts를 JSON객체로 POST요청하면 Status 200을 리턴한다.")
+  @DisplayName("/posts를 요청하면 Status 200을 리턴한다.")
   void create() throws Exception {
     // given
     PostCreate postCreate = PostCreate.builder()
@@ -67,9 +68,7 @@ class PostControllerTest {
     String postCreateStr = objectMapper.writeValueAsString(postCreate);
 
     // expected
-    this.mockMvc.perform(post("/posts")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(postCreateStr))
+    this.mockMvc.perform(createPostRequest("/posts", postCreate))
         .andDo(print())
         .andExpect(status().isOk());
 //        .andExpect(status().is3xxRedirection())
@@ -90,9 +89,7 @@ class PostControllerTest {
     String postCreateStr = objectMapper.writeValueAsString(postCreate);
 
     // expected
-    this.mockMvc.perform(post("/posts")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(postCreateStr))
+    this.mockMvc.perform(createPostRequest("/posts", postCreate))
         .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.code").value("400"))
@@ -112,9 +109,7 @@ class PostControllerTest {
         .build();
     String postCreateStr = objectMapper.writeValueAsString(postCreate);
     // when
-    this.mockMvc.perform(post("/posts")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(postCreateStr))
+      this.mockMvc.perform(createPostRequest("/posts", postCreate))
         .andDo(print())
         .andExpect(status().isOk());
 //        .andExpect(view().name(StringContains.containsString("/posts/")));
@@ -233,11 +228,19 @@ class PostControllerTest {
     Post post = Post.builder()
         .title("제목")
         .content("내용")
+        .password(12345)
         .build();
     postRepository.save(post);
 
+    PostEdit postEdit = PostEdit
+        .builder()
+        .password(12345)
+        .build();
+
     // when
-    this.mockMvc.perform(MockMvcRequestBuilders.delete("/posts/{postId}", post.getId()))
+    this.mockMvc.perform(MockMvcRequestBuilders.delete("/posts/{postId}", post.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(postEdit)))
             .andDo(print())
             .andExpect(status().isOk());
 //            .andExpect(status().is3xxRedirection())
@@ -289,9 +292,7 @@ class PostControllerTest {
    String content = objectMapper.writeValueAsString(postCreate);
 
    // expected
-    this.mockMvc.perform(post("/posts")
-              .contentType(MediaType.APPLICATION_JSON)
-              .content(content))
+    this.mockMvc.perform(createPostRequest("/posts", postCreate))
         .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.validation.title").value("제목엔 '테스트'가 포함될 수 없습니다."));
@@ -341,5 +342,13 @@ class PostControllerTest {
 
     PageMaker<PostResponse> response = (PageMaker<PostResponse>) result.getModelAndView().getModel().get("response");
     assertThat(response.getResult().getContent().get(0).getTitle()).isEqualTo("mymy-10");
+  }
+
+  private MockHttpServletRequestBuilder createPostRequest(String url, PostCreate postCreate){
+    return post(url)
+        .param("title", postCreate.getTitle())
+        .param("userId", postCreate.getUserId())
+        .param("content", postCreate.getContent())
+        .param("password", String.valueOf(postCreate.getPassword()));
   }
 }

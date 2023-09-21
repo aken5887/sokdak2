@@ -28,16 +28,72 @@
             <div class="cont">
                 <p th:utext="${#strings.replace(response.content,'&#10;','&lt;br&gt;')}"></p>
             </div>
+            <div class="file_view">
+                <div class="file_info" th:each="file:${response.files}">
+                    <a class="file_link" th:href="|javascript:fn_download('${file.id}');|" th:text="${file.originalFileName}"></a>
+                </div>
+            </div>
+        </div>
+        <div class="reply_wrap">
+            <div class="reply_title">
+                <strong>댓글목록 <span class="reply_cnt">[💬52]</span></strong>
+            </div>
+            <div class="reply_view_wrap">
+                <div class="reply_view">
+                    <div class="user_info">
+                        <dl>
+                            <dt>글쓴이</dt>
+                            <dd>user01010</dd>
+                        </dl>
+                        <dl>
+                            <dt>시간</dt>
+                            <dd>2023-09-11 18:14</dd>
+                        </dl>
+                        <div class="bt_small_wrap">
+                            <a href="#" class="on">삭제</a>
+                        </div>
+                    </div>
+                    <div class="user_cont">
+                        <p>
+                            ㄲㅈ와 ㅇ퍼ㅅ원 사정은 내 알바가 아님.. 신고는 합당한 사유가 있을때 하는 것이지 무작정 신고하는 건 말이 안됨.
+                        </p>
+                    </div>
+                </div>
+                <div class="reply_view">
+                    <div class="user_info">
+                        <dl>
+                            <dt>글쓴이</dt>
+                            <dd>user20202</dd>
+                        </dl>
+                        <dl>
+                            <dt>시간</dt>
+                            <dd>2023-09-11 19:14</dd>
+                        </dl>
+                        <div class="bt_small_wrap">
+                            <a href="#" class="on">삭제</a>
+                        </div>
+                    </div>
+                    <div class="user_cont">
+                        <p>
+                            ㄲㅈ와 ㅇ퍼ㅅ원 사정은 내 알바가 아님.. 신고는 합당한 사유가 있을때 하는 것이지 무작정 신고하는 건 말이 안됨.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="bt_wrap">
-            <a href="javascript:void(0);" id="modifyBtn">수정</a>
-            <a href="javascript:void(0);" class="on" id="listBtn">목록</a>
+            <a href="javascript:void(0);" id="modifyBtn" class="on">수정</a>
+            <a href="javascript:void(0);" id="deleteBtn" class="warning">삭제</a>
+            <a href="javascript:void(0);" id="listBtn">목록</a>
         </div>
         <form id="viewForm" th:action="@{/posts}" method="get">
             <input type="hidden" name="page" th:value="${postSearch.page}">
             <input type="hidden" name="size" th:value="${postSearch.size}">
             <input type="hidden" name="kw_opt" th:value="${postSearch.kw_opt}">
             <input type="hidden" name="kw" th:value="${postSearch.kw}">
+            <input type="hidden" name="reqType"/>
+        </form>
+        <form id="fileForm" action="" method="get">
         </form>
     </div>
 </div>
@@ -59,6 +115,20 @@
             vf.attr("action", "/posts/edit/"+postId);
             vf.submit();
         });
+
+        $("div.bt_wrap #deleteBtn").click(function(e){
+            e.preventDefault();
+            const postId = [[${response.id}]];
+            $("input[name=reqType]").val("1");
+            vf.attr("action", "/password/"+postId);
+            vf.submit();
+        });
     });
+
+    function fn_download(fileId){
+        let fileDownUrl = '/download/'+fileId;
+        $("#fileForm").attr("action", fileDownUrl);
+        $("#fileForm").submit();
+    }
 </script>
 </html>

@@ -1,9 +1,11 @@
 package com.project.dailylog.api.controller;
 
+import com.project.dailylog.api.exception.InvalidRequestException;
 import com.project.dailylog.api.request.PostCreate;
 import com.project.dailylog.api.request.PostEdit;
 import com.project.dailylog.api.request.PostSearch;
 import com.project.dailylog.api.response.PostResponse;
+import com.project.dailylog.api.service.FileService;
 import com.project.dailylog.api.service.PostService;
 import com.project.dailylog.api.util.PageMaker;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -36,6 +40,7 @@ public class PostController {
   private final PostService postService;
   @Value("${me.cache}")
   private String cache;
+  private final FileService fileService;
 
   @GetMapping("/posts")
   public String list(@ModelAttribute PostSearch postSearch, Model model) {
@@ -102,10 +107,14 @@ public class PostController {
 
   @PostMapping("/posts")
   @ResponseBody
-  public PostResponse create(@RequestBody @Valid PostCreate postCreate){
-    log.info("PostCreate : {}", postCreate.toString());
-    postCreate.validate();
-    return  postService.save(postCreate);
+  public PostResponse create(@Valid PostCreate postCreate, BindingResult bindingResult) {
+    if(bindingResult.hasErrors()){
+      throw new InvalidRequestException(bindingResult);
+    }else{
+      log.info("PostCreate : {}", postCreate.toString());
+      postCreate.validate();
+      return postService.save(postCreate);
+    }
   }
 
   @GetMapping("/posts/edit/{postId}")
@@ -125,11 +134,17 @@ public class PostController {
 
   @DeleteMapping("/posts/{postId}")
   @ResponseBody
-  public void delete(@PathVariable long postId) {
-    postService.delete(postId);
+  public void delete(@PathVariable long postId, @RequestBody PostEdit postEdit) {
+    postService.checkAndDelete(postId, postEdit.getPassword());
   }
 
-  public static void main(String[] args) {
-    System.out.println(Base64.encodeBase64String("VC".getBytes(StandardCharsets.UTF_8)));
+  @GetMapping("/password/{postId}")
+  public String password(
+      @PathVariable long postId,
+      @RequestParam String reqType,
+      @ModelAttribute PostSearch postSearch, Model model){
+    model.addAttribute("postId", postId);
+    model.addAttribute("reqType", reqType);
+    return "/posts/password";
   }
 }

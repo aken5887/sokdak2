@@ -1,11 +1,13 @@
 package com.project.dailylog.api.request;
 
 import com.project.dailylog.api.exception.InvalidRequestException;
+import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 @ToString
 @Builder
@@ -19,10 +21,11 @@ public class PostCreate {
   private String content;
   @NotNull(message="암호는 필수입니다.")
   private Integer password;
-  private int topFixed;
+  private Integer topFixed;
+  private List<MultipartFile> files;
 
   public void validate() {
-    if(this.title.contains("테스트")){
+    if(this.title != null && this.title.contains("테스트")){
         throw InvalidRequestException.builder()
               .field("title")
               .fieldMessage("제목엔 '테스트'가 포함될 수 없습니다.")
