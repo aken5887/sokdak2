@@ -8,7 +8,7 @@ jar {
     enabled = false
 }
 
-group = 'com.project'
+group = 'com.project.sokdak2'
 version = '0.5'
 
 java {

@@ -25,13 +25,21 @@
                     <dd th:text="${response.count}"></dd>
                 </dl>
             </div>
-            <div class="cont">
-                <p th:utext="${#strings.replace(response.content,'&#10;','&lt;br&gt;')}"></p>
-            </div>
             <div class="file_view">
-                <div class="file_info" th:each="file:${response.files}">
-                    <a class="file_link" th:href="|javascript:fn_download('${file.id}');|" th:text="${file.originalFileName}"></a>
-                </div>
+                <ul>
+                    <li class="file_info" th:each="file:${response.files}">
+                        - 첨부파일 :
+                        <p th:text="|${file.originalFileName} (${file.fileSize}kbps)|"></p> -
+                        <a class="file_link" th:href="|javascript:fn_download('${file.id}');|">다운로드</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="cont">
+                <p class="img_view" th:each="file:${response.files}">
+                    <img th:src="|/download/${file.id}|"
+                         th:if="${file.fileExt} == 'png' or ${file.fileExt} == 'jpg' or ${file.fileExt} == 'jpeg'">
+                </p>
+                <p th:utext="${#strings.replace(response.content,'&#10;','&lt;br&gt;')}"></p>
             </div>
         </div>
         <div class="reply_wrap">
@@ -55,7 +63,10 @@
                     </div>
                     <div class="user_cont">
                         <p>
-                            ㄲㅈ와 ㅇ퍼ㅅ원 사정은 내 알바가 아님.. 신고는 합당한 사유가 있을때 하는 것이지 무작정 신고하는 건 말이 안됨.
+                            댓글<br/>
+                            댓글<br/>
+                            댓글<br/>
+                            댓글<br/>
                         </p>
                     </div>
                 </div>
@@ -75,7 +86,10 @@
                     </div>
                     <div class="user_cont">
                         <p>
-                            ㄲㅈ와 ㅇ퍼ㅅ원 사정은 내 알바가 아님.. 신고는 합당한 사유가 있을때 하는 것이지 무작정 신고하는 건 말이 안됨.
+                            댓글<br/>
+                            댓글<br/>
+                            댓글<br/>
+                            댓글<br/>
                         </p>
                     </div>
                 </div>

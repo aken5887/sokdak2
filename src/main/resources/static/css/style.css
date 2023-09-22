@@ -284,11 +284,36 @@ a {
     color: #777;
 }
 
+.board_view .file_view li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eaeaea;
+    font-size: 1.2rem;
+}
+
+.board_view .file_view .file_info p {
+    display: inline-block;
+    font-weight: bold;
+}
+
+.board_view .file_view .file_link {
+    text-decoration: underline;
+}
+
 .board_view .cont{
     padding: 15px;
     border-bottom: 1px solid #000;
     line-height: 170%;
     font-size: 1.4rem;
+}
+
+.board_view .img_view {
+}
+
+.board_view .img_view img{
+    display: block;
+    max-width: 100%;
+    heigth: auto;
+    margin-bottom: 10px;
 }
 
 /** board_write */

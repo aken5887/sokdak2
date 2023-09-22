@@ -34,9 +34,15 @@
             </div>
             <div class="title">
                 <dl>
-                    <dt>파일업로드</dt>
+                    <dt>파일업로드 1</dt>
                     <dd>
-                        <input type="file" class="" name="files" title="파일업로드">
+                        <input type="file" class="file_input" name="files" title="파일업로드">
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>파일업로드 2</dt>
+                    <dd>
+                        <input type="file" class="file_input" name="files" title="파일업로드">
                     </dd>
                 </dl>
             </div>
@@ -59,7 +65,9 @@
 <script th:inline="javascript">
     $(document).ready(function() {
         const wf = $("#writeForm");
-        let oEditors = [];
+        const oEditors = [];
+        const fileMaxSize = [[${@environment.getProperty('spring.servlet.multipart.max-file-size')}]];
+        const maxByteSize = fileMaxSize.replace(/[^0-9]/g, '') * 1024 * 1024;
 
         $("div.bt_wrap a#writeBtn").click(function (e) {
             e.preventDefault();
@@ -111,6 +119,14 @@
 
         $("div.board_write input[name=password]").on("keyup paste", function (e) {
             common.validate.password($(this));
+        });
+
+        $("div.board_wrap input.file_input").on("change", function(e){
+           let fileSize = this.files[0].size; // byte 단위
+            if(fileSize > maxByteSize){
+                alert("파일 사이즈는 "+fileMaxSize+"를 초과할 수 없습니다.");
+                $(this).val("");
+            }
         });
 
         $("div.bt_wrap a#cancelBtn").click(function (e) {

@@ -3,7 +3,11 @@ spring:
     show-sql: true
     defer-datasource-initialization: true
   profiles:
-    include: real
+    include: local
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
 
 me:
   cache: cookie
