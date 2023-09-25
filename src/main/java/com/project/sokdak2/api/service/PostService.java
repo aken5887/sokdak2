@@ -48,11 +48,11 @@ public class PostService {
             .originalFileName(file.getOriginalFilename())
             .fileSize(file.getSize())
             .uploadPath(upload[0])
+            .post(post)
             .build());
       }
     }
     fileRepository.saveAll(files);
-    post.addFiles(files);
 
     return new PostResponse(post);
   }

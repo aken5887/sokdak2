@@ -5,14 +5,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.project.sokdak2.api.domain.File;
 import com.project.sokdak2.api.domain.Post;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import org.hibernate.collection.internal.PersistentBag;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
+//@DataJpaTest
 @SpringBootTest
 class FileRepositoryTest {
 
@@ -36,9 +39,36 @@ class FileRepositoryTest {
     assertThat(fileRepository.count()).isGreaterThan(0L);
   }
 
-  @DisplayName("Post와 File이 동시에 정상저거으로 저장된다.")
+  @DisplayName("Post와 File이 동시에 정상적으로 저장된다.")
+  @Transactional
   @Test
   void test2() {
+    // given
+    Post post = Post.builder()
+        .title("1234")
+        .userId("1234")
+        .password(1234)
+        .build();
+
+    Post savedPost = postRepository.save(post);
+
+    File file = File.builder()
+        .uploadPath(uploadDir)
+        .originalFileName("12345")
+        .realFileName(renameFile(1))
+        .post(post)
+        .build();
+
+    fileRepository.save(file);
+
+    // then
+    assertThat(fileRepository.count()).isGreaterThan(0L);
+    assertThat(file.getPost().getTitle()).isEqualTo(post.getTitle());
+  }
+
+  @DisplayName("Post 객체를 조회할 때 연관 File 객체는 PersistentBag 객체에 래핑되어있다.")
+  @Test
+  void test3() {
     // given
     File file = File.builder()
         .uploadPath(uploadDir)
@@ -52,15 +82,13 @@ class FileRepositoryTest {
         .title("1234")
         .userId("1234")
         .password(1234)
-        .files(Arrays.asList(file))
+        .files(List.of(file))
         .build();
 
-    // when
     postRepository.save(post);
 
-    // then
-    assertThat(fileRepository.count()).isGreaterThan(0L);
-    assertThat(post.getFiles()).isNotNull();
+    Post findPost = postRepository.findById(post.getId()).get();
+    assertThat(findPost.getFiles()).isInstanceOf(PersistentBag.class); //
   }
 
   private String renameFile(long postId){

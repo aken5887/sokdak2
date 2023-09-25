@@ -35,8 +35,10 @@ public class Post extends BaseTimeEntity {
   private int password;
   @ColumnDefault("0")
   private Integer topFixed;
-  @OneToMany(fetch = FetchType.LAZY)
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
   private List<File> files = new ArrayList<>();
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
+  private List<PostReply> replies = new ArrayList<>();
 
   @Builder
   public Post(String title, String userId, String content, int password, List<File> files){
@@ -75,5 +77,9 @@ public class Post extends BaseTimeEntity {
 
   public void addFiles(List<File> files){
     this.files.addAll(files);
+  }
+
+  public void addReplies(List<PostReply> replies){
+    this.replies.addAll(replies);
   }
 }
