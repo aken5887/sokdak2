@@ -39,5 +39,11 @@ public class PostReply extends BaseTimeEntity{
     this.userId = userId;
     this.password = password;
     this.post = post;
+    post.getReplies().add(this);
   }
+
+  public void updatePost(Post post) {
+    this.post = post;
+  }
+
 }

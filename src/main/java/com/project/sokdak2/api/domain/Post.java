@@ -41,12 +41,11 @@ public class Post extends BaseTimeEntity {
   private List<PostReply> replies = new ArrayList<>();
 
   @Builder
-  public Post(String title, String userId, String content, int password, List<File> files){
+  public Post(String title, String userId, String content, int password){
     this.title = title;
     this.userId = userId;
     this.content = content;
     this.password = password;
-    this.files = files;
   }
 
   public Post toEntity(PostCreate postCreate){
@@ -75,11 +74,8 @@ public class Post extends BaseTimeEntity {
     this.count++;
   }
 
-  public void addFiles(List<File> files){
-    this.files.addAll(files);
-  }
-
   public void addReplies(List<PostReply> replies){
     this.replies.addAll(replies);
+    replies.forEach(r -> r.updatePost(this));
   }
 }
