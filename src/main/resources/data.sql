@@ -123,3 +123,5 @@ insert into tb_post (title, content, user_id, created_time, password) values ('�
 내용입니다-1
 내용입니다-31','user-31',now(),'1264');
 update tb_post set password='1234';
+
+insert into tb_user (email, name, password) values ('minu8778@gmail.com', 'minu', 1234);

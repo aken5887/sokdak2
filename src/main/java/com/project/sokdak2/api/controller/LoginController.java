@@ -2,16 +2,23 @@ package com.project.sokdak2.api.controller;
 
 import com.google.common.net.HttpHeaders;
 import com.project.sokdak2.api.config.AppConfig;
-import com.project.sokdak2.api.domain.User;
+import com.project.sokdak2.api.config.annotation.Users;
 import com.project.sokdak2.api.request.Login;
+import com.project.sokdak2.api.request.SessionUser;
 import com.project.sokdak2.api.response.SessionResponse;
 import com.project.sokdak2.api.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Optional;
 import javax.crypto.SecretKey;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,7 +54,7 @@ public class LoginController {
       SessionResponse sessionResponse = userService.login(login);
       responseCookie = responseCookie(sessionResponse.getAccessToken());
     }else if("true".equalsIgnoreCase(storeSession)){
-      User user = userService.loginUser(login);
+      com.project.sokdak2.api.domain.User user = userService.loginUser(login);
 
       SecretKey secretKey = Keys.hmacShaKeyFor(appConfig.getJwtKey());
 
@@ -68,6 +75,23 @@ public class LoginController {
     return ResponseEntity.ok()
         .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
         .build();
+  }
+
+  @GetMapping("/logout")
+  public String logout(@Users SessionUser sessionUser,
+                       HttpServletRequest request, HttpServletResponse response) {
+    Cookie[] cookies = request.getCookies();
+    Optional<Cookie> sessionCookie = Arrays.stream(cookies)
+                  .filter(cookie -> cookie.getName().equals("SESSION"))
+                  .findFirst();
+    if(sessionCookie.isPresent()){
+      Cookie cookieToDelete = sessionCookie.get();
+      cookieToDelete.setMaxAge(0);
+      cookieToDelete.setValue(null);
+      cookieToDelete.setPath("/");
+      response.addCookie(cookieToDelete);
+    }
+    return "redirect:/posts";
   }
 
   private ResponseCookie responseCookie(String sessionCookieValue){

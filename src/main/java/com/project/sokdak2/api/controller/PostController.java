@@ -1,9 +1,11 @@
 package com.project.sokdak2.api.controller;
 
+import com.project.sokdak2.api.config.annotation.Users;
 import com.project.sokdak2.api.exception.InvalidRequestException;
 import com.project.sokdak2.api.request.PostCreate;
 import com.project.sokdak2.api.request.PostEdit;
 import com.project.sokdak2.api.request.PostSearch;
+import com.project.sokdak2.api.request.SessionUser;
 import com.project.sokdak2.api.response.PostResponse;
 import com.project.sokdak2.api.service.FileService;
 import com.project.sokdak2.api.service.PostService;
@@ -43,7 +45,7 @@ public class PostController {
   private final FileService fileService;
 
   @GetMapping("/posts")
-  public String list(@ModelAttribute PostSearch postSearch, Model model) {
+  public String list(@ModelAttribute PostSearch postSearch, Model model, @Users SessionUser sessionUser) {
     Page<PostResponse> postPage = postService.getListByPage(postSearch);
     PageMaker<PostResponse> response = new PageMaker<>(postPage);
     model.addAttribute("posts", postPage.getContent());
@@ -55,8 +57,8 @@ public class PostController {
   }
 
   @GetMapping("/posts/{postId}")
-  public String get(@PathVariable Long postId, @ModelAttribute PostSearch postSearch,
-      Model model, HttpServletRequest req, HttpServletResponse res){
+  public String get(@Users SessionUser sessionUser, @PathVariable Long postId, @ModelAttribute PostSearch postSearch,
+                    Model model, HttpServletRequest req, HttpServletResponse res){
 
     String clientAddress = getClientIp(req);
     boolean update = true;
@@ -101,7 +103,7 @@ public class PostController {
   }
 
   @GetMapping("/posts/create")
-  public String create_page(@ModelAttribute PostSearch postSearch){
+  public String create_page(@Users SessionUser sessionUser, @ModelAttribute PostSearch postSearch){
     return "/posts/create";
   }
 
@@ -118,8 +120,8 @@ public class PostController {
   }
 
   @GetMapping("/posts/edit/{postId}")
-  public String edit_page(@PathVariable long postId,
-      @ModelAttribute PostSearch postSearch, Model model) {
+  public String edit_page(@Users SessionUser sessionUser, @PathVariable long postId,
+                          @ModelAttribute PostSearch postSearch, Model model) {
     PostResponse postResponse = postService.get(postId);
     model.addAttribute("response", postResponse);
     return "/posts/edit";
@@ -140,6 +142,7 @@ public class PostController {
 
   @GetMapping("/password/{postId}")
   public String password(
+      @Users SessionUser sessionUser,
       @PathVariable long postId,
       @RequestParam String reqType,
       @ModelAttribute PostSearch postSearch, Model model){

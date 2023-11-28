@@ -1,6 +1,6 @@
 package com.project.sokdak2.api.controller;
 
-import com.project.sokdak2.api.config.annotation.Auth;
+import com.project.sokdak2.api.config.annotation.Users;
 import com.project.sokdak2.api.request.PostCreate;
 import com.project.sokdak2.api.request.PostSearch;
 import com.project.sokdak2.api.request.SessionUser;
@@ -32,8 +32,7 @@ public class AdminController {
 
   @GetMapping("/admin")
   @ResponseBody
-  public SessionUser admin(@Auth SessionUser sessionUser){
-    log.info("SessionUser : {}", sessionUser.toString());
+  public SessionUser admin(@Users SessionUser sessionUser){
     return sessionUser;
   }
 

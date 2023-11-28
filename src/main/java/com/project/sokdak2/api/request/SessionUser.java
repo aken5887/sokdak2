@@ -1,8 +1,8 @@
 package com.project.sokdak2.api.request;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import com.project.sokdak2.api.domain.Session;
+import com.project.sokdak2.api.domain.User;
+import lombok.*;
 
 @ToString
 @Builder

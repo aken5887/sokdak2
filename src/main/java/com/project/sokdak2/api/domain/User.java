@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+
+import com.project.sokdak2.api.request.SessionUser;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,5 +52,13 @@ public class User extends BaseTimeEntity{
     sessions.add(newSession);
 
     return newSession;
+  }
+
+  public SessionUser toSessionUser(){
+    return SessionUser.builder()
+            .id(this.id)
+            .email(this.email)
+            .name(this.name)
+            .build();
   }
 }

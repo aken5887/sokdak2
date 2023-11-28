@@ -579,5 +579,9 @@ a {
 }
 
 .board_top_right a{
-    margin : 1.5px;
+    margin : 0.5rem;
+}
+
+.board_top_right p{
+    display: inline-block;
 }

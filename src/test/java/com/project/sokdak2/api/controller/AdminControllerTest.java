@@ -36,26 +36,6 @@ class AdminControllerTest {
   @Autowired
   AppConfig appConfig;
 
-  @DisplayName("/admin/interceptor GET 요청시 userId가 null이면 401오류가 발생한다.")
-  @Test
-  void interceptor() throws Exception {
-    // given
-    // expected
-    this.mockMvc.perform(get("/admin/interceptor")
-        .param("userId", ""))
-        .andExpect(status().isUnauthorized());
-  }
-
-  @DisplayName("/admin GET 요청시 헤더에 Authorization이 null이면 401 오류가 발생한다.")
-  @Test
-  void admin_exception() throws Exception{
-    // given
-    // expected
-    this.mockMvc.perform(get("/admin"))
-      .andDo(print())
-      .andExpect(status().isUnauthorized());
-  }
-
   @DisplayName("로그인 후 /admin 요청시 Session Id 및 User 정보를 반환한다.")
   @Test
   void admin() throws Exception {

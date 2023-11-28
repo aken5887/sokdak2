@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:replace="/layout/header :: headerFragment"/>
 <body>
-  <form name="loginForm" id="loginForm" th:action="/login" method="post">
   <div class="password_confirm">
     <h5 class="password_title">
       <strong>로그인</strong>
@@ -10,11 +9,11 @@
     <section>
       <label class="password_field_title">이메일</label>
       <label class="password_field">
-        <input type="text" name="email" class="required" title="이메일"/>
+        <input type="text" name="email" id="email" class="required" title="이메일"/>
       </label>
        <label class="password_field_title">비밀번호</label>
        <label class="password_field">
-         <input type="password" name="password" class="required" title="비밀번호"/>
+         <input type="password" name="password" id="password" class="required" title="비밀번호"/>
        </label>
     </section>
     <div class="bt_wrap">
@@ -22,14 +21,40 @@
       <a href="#" class="" id="cancelBtn">취소</a>
     </div>
   </div>
-</form>
+  <form id="loginForm" method="get">
+  </form>
 </body>
 <th:block th:replace="/layout/footer :: footerFragment"/>
 <script th:inline="javascript">
   $(document).ready(function(){
     $(".bt_wrap #loginBtn").click(function(e){
       if(common.validate.checkRequired(".password_confirm .required")){
-        $("#loginForm").submit();
+        let dataJson = {};
+        dataJson.email = $("#email").val();
+        dataJson.password = $("#password").val();
+
+        $.ajax({
+          url: '/login',
+          method: 'post',
+          contentType: 'application/json',
+          data: JSON.stringify(dataJson),
+          success: function(res){
+            let lf = $("#loginForm");
+            lf.attr("action","/posts");
+            lf.submit();
+          },
+          error: function(res){
+            let responseJson = res.responseJSON;
+            let rCode = responseJson.code;
+            let rMessage = responseJson.message;
+
+            if(rMessage != null){
+              alert(rMessage+"(오류코드 : "+rCode+")");
+            }else{
+              alert("로그인에 실패하였습니다. (오류코드 : "+rCode+")");
+            }
+          }
+        });
       }
     });
 
@@ -38,5 +63,6 @@
       window.history.back();
     });
   });
+
 </script>
 </html>

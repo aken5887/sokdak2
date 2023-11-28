@@ -1,6 +1,6 @@
 package com.project.sokdak2.api.config;
 
-import com.project.sokdak2.api.config.annotation.Auth;
+import com.project.sokdak2.api.config.annotation.Users;
 import com.project.sokdak2.api.domain.Session;
 import com.project.sokdak2.api.domain.User;
 import com.project.sokdak2.api.exception.UnAuthorizedException;
@@ -36,10 +36,10 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
   @Override
   public boolean supportsParameter(MethodParameter parameter) {
     log.info("parameterType : "+ parameter.getParameterType());
-    log.info("parameterAnnotation : "+ parameter.getParameterAnnotation(Auth.class));
+    log.info("parameterAnnotation : "+ parameter.getParameterAnnotation(Users.class));
 
     return parameter.getParameterType().equals(SessionUser.class)
-        && parameter.getParameterAnnotation(Auth.class) != null;
+        && parameter.getParameterAnnotation(Users.class) != null;
   }
 
   @Override
@@ -53,54 +53,51 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     Cookie[] cookies = servletRequest.getCookies();
-    if(cookies == null || cookies.length == 0){
-      throw new UnAuthorizedException("cookie가 존재하지 않습니다.");
-    }
+    if(cookies == null || cookies.length == 0 ){
+      log.info("cookie가 존재하지 않습니다.");
+      return null;
+    }else{
+      Cookie sessionCookie = Arrays.stream(cookies)
+              .filter(cookie -> cookie.getName().equals("SESSION"))
+              .findFirst()
+              .orElseThrow(() -> new UnAuthorizedException());
 
-    Cookie sessionCookie = Arrays.stream(cookies)
-        .filter(cookie -> cookie.getName().equals("SESSION"))
-        .findFirst()
-        .orElseThrow(() -> new UnAuthorizedException());
+      String cookieValue = sessionCookie.getValue();
 
-    String cookieValue = sessionCookie.getValue();
+      if("false".equalsIgnoreCase(jwtUse)){
+        // cookieValue -> accessToken 값
+        // DB를 통한 검증
+        Session findSession = sessionRepository.findByAccessToken(cookieValue)
+                .orElseThrow(() -> new UnAuthorizedException());
+        return findSession.toSessionUser();
+      }else if("true".equalsIgnoreCase(jwtUse)){
+        // cookieValue jwt 값
+        log.info("------------- jwtKey : {}", appConfig.getJwtKey());
+        try{
+          Jws<Claims> claims = Jwts.parserBuilder()
+                  .setSigningKey(appConfig.getJwtKey())
+                  .build()
+                  .parseClaimsJws(cookieValue);
 
-    if("false".equalsIgnoreCase(jwtUse)){
-      // cookieValue -> accessToken 값
-      // DB를 통한 검증
-      Session findSession = sessionRepository.findByAccessToken(cookieValue)
-          .orElseThrow(() -> new UnAuthorizedException());
+          String userId = claims.getBody().getSubject();
+          Date exprDate = claims.getBody().getExpiration();
 
-      return findSession.toSessionUser();
+          if(exprDate == null || exprDate.before(new Date())) {
+            log.error("올바르지 않은 Token 값 입니다.");
+            throw new UnAuthorizedException();
+          }
 
-    }else if("true".equalsIgnoreCase(jwtUse)){
-      // cookieValue jwt 값
-      log.info("------------- jwtKey : {}", appConfig.getJwtKey());
-      try{
-        Jws<Claims> claims = Jwts.parserBuilder()
-            .setSigningKey(appConfig.getJwtKey())
-            .build()
-            .parseClaimsJws(cookieValue);
+          User user = userRepository.findById(Long.parseLong(userId))
+                  .orElseThrow(()-> new UserNotFoundException());
+          SessionUser sessionUser = user.toSessionUser();
+          mavContainer.addAttribute("sessionUser", sessionUser);
 
-        String userId = claims.getBody().getSubject();
-        Date exprDate = claims.getBody().getExpiration();
-
-        if(exprDate == null || exprDate.before(new Date())) {
-          log.error("올바르지 않은 Token 값 입니다.");
-          throw new UnAuthorizedException();
+          return sessionUser;
+        }catch(JwtException e){
+          log.error("JWT Token이 올바르지 않습니다.");
         }
-
-        User user = userRepository.findById(Long.parseLong(userId))
-                .orElseThrow(()-> new UserNotFoundException());
-        Session session = user.addSession();
-        SessionUser sessionUser = session.toSessionUser();
-
-        mavContainer.addAttribute("sessionUser", sessionUser);
-
-        return sessionUser;
-      }catch(JwtException e){
-        log.error("JWT Token이 올바르지 않습니다.");
       }
+      throw new UnAuthorizedException();
     }
-    throw new UnAuthorizedException();
   }
 }
