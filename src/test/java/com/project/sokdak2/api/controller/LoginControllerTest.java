@@ -3,9 +3,7 @@ package com.project.sokdak2.api.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.sokdak2.api.config.AppConfig;
@@ -61,7 +59,6 @@ class LoginControllerTest {
 
   private User getUser() {
     return User.builder()
-        .userId("test")
         .password("1234")
         .name("테스트유저")
         .build();
@@ -69,7 +66,6 @@ class LoginControllerTest {
 
   private Login getLogin(User user){
     return Login.builder()
-        .userId(user.getUserId())
         .password(user.getPassword())
         .build();
   }
@@ -79,7 +75,6 @@ class LoginControllerTest {
   void login() throws Exception{
     // given
     User user = User.builder()
-        .userId("test")
         .password("1234")
         .name("테스트유저")
         .build();
@@ -87,7 +82,6 @@ class LoginControllerTest {
     userRepository.save(user);
 
     Login login = Login.builder()
-        .userId(user.getUserId())
         .password(user.getPassword())
         .build();
 
@@ -142,21 +136,21 @@ class LoginControllerTest {
     User user = getUser();
 
     // when
-    Session session = user.addSession(); // 세션 생성
     userRepository.save(user);
 
     String cookieValue = "";
     if("false".equalsIgnoreCase(jwtUse)){
+      Session session = user.addSession();
       cookieValue = session.getAccessToken();
     }else if("true".equalsIgnoreCase(jwtUse)){
       LocalDateTime  exprDateTime = LocalDateTime.now().plusMonths(1L);
       SecretKey secretKey = Keys.hmacShaKeyFor(appConfig.getJwtKey());
 
       cookieValue = Jwts.builder()
-          .setSubject(String.valueOf(session.getId()))
-          .signWith(secretKey)
-          .setExpiration(Date.valueOf(exprDateTime.toLocalDate()))
-          .compact();
+              .setSubject(String.valueOf(user.getId()))
+              .setExpiration(Date.valueOf(exprDateTime.toLocalDate()))
+              .signWith(secretKey)
+              .compact();
     }
 
     // 세션용 쿠키 생성
@@ -168,7 +162,7 @@ class LoginControllerTest {
           .cookie(sessionCookie)
         )
         .andExpect(status().isOk())
-        .andExpect(content().string( String.valueOf(session.getId())));
+        .andExpect(jsonPath("$.email").value(user.getEmail()));
   }
 
   @DisplayName("로그인 후 검증되지 않은 세션값으로 권한이 필요한 페이지에 접속할 수 없다.")

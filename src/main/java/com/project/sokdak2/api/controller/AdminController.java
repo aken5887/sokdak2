@@ -32,9 +32,9 @@ public class AdminController {
 
   @GetMapping("/admin")
   @ResponseBody
-  public Long admin(@Auth SessionUser sessionUser){
-    log.info("SessionUser : {}", sessionUser.getId());
-    return sessionUser.getId();
+  public SessionUser admin(@Auth SessionUser sessionUser){
+    log.info("SessionUser : {}", sessionUser.toString());
+    return sessionUser;
   }
 
   @GetMapping("/admin/create")

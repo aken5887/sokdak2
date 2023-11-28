@@ -17,13 +17,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
-@RestController
+@Controller
 public class LoginController {
 
   private final UserService userService;
@@ -32,7 +31,13 @@ public class LoginController {
   @Value("${me.jwt}")
   private String storeSession;
 
+  @GetMapping("/login")
+  public String login(){
+    return "/user/login";
+  }
+
   @PostMapping("/login")
+  @ResponseBody
   public ResponseEntity<String> login(@RequestBody Login login) {
     log.info("login : {}", login.toString());
 

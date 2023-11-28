@@ -19,7 +19,7 @@ public class UserService {
 
   @Transactional
   public SessionResponse login(Login login){
-    User user = userRepository.findByUserIdAndPassword(login.getUserId(), login.getPassword())
+    User user = userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword())
         .orElseThrow(() -> new InvalidLoginException());
     Session session = user.addSession();
     return SessionResponse.builder().accessToken(session.getAccessToken()).build();
@@ -27,7 +27,7 @@ public class UserService {
 
   @Transactional
   public User loginUser(Login login){
-    User user = userRepository.findByUserIdAndPassword(login.getUserId(), login.getPassword())
+    User user = userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword())
         .orElseThrow(() -> new InvalidLoginException());
     user.addSession();
     return user;

@@ -26,9 +26,6 @@ public class User extends BaseTimeEntity{
   private long id;
 
   @NotBlank
-  private String userId;
-
-  @NotBlank
   private String name;
 
   @NotBlank
@@ -40,8 +37,7 @@ public class User extends BaseTimeEntity{
   private List<Session> sessions = new ArrayList<>();
 
   @Builder
-  public User(String userId, String name, String password, String email) {
-    this.userId = userId;
+  public User(String name, String password, String email) {
     this.name = name;
     this.password = password;
     this.email = email;

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="/layout/header :: headerFragment"/>
+<body>
+  <form name="loginForm" id="loginForm" th:action="/login" method="post">
+  <div class="password_confirm">
+    <h5 class="password_title">
+      <strong>로그인</strong>
+    </h5>
+    <section>
+      <label class="password_field_title">이메일</label>
+      <label class="password_field">
+        <input type="text" name="email" class="required" title="이메일"/>
+      </label>
+       <label class="password_field_title">비밀번호</label>
+       <label class="password_field">
+         <input type="password" name="password" class="required" title="비밀번호"/>
+       </label>
+    </section>
+    <div class="bt_wrap">
+      <a href="#" class="on" id="loginBtn">로그인</a>
+      <a href="#" class="" id="cancelBtn">취소</a>
+    </div>
+  </div>
+</form>
+</body>
+<th:block th:replace="/layout/footer :: footerFragment"/>
+<script th:inline="javascript">
+  $(document).ready(function(){
+    $(".bt_wrap #loginBtn").click(function(e){
+      if(common.validate.checkRequired(".password_confirm .required")){
+        $("#loginForm").submit();
+      }
+    });
+
+    $(".bt_wrap #cancelBtn").click(function(e){
+      e.preventDefault();
+      window.history.back();
+    });
+  });
+</script>
+</html>

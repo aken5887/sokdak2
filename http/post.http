@@ -1,0 +1,4 @@
+### 테스트 요청
+GET http://localhost:8090/admin
+Content-Type: application/json
+Cookie: SESSEION=1234

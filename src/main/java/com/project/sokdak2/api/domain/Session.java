@@ -39,7 +39,9 @@ public class Session {
 
   public SessionUser toSessionUser(){
     return SessionUser.builder()
-        .id(this.id)
-        .build();
+            .id(this.id)
+            .email(user.getEmail())
+            .name(user.getName())
+            .build();
   }
 }

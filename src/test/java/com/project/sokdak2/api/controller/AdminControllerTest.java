@@ -2,8 +2,7 @@ package com.project.sokdak2.api.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.project.sokdak2.api.config.AppConfig;
 import com.project.sokdak2.api.domain.Session;
@@ -19,6 +18,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -53,30 +56,34 @@ class AdminControllerTest {
       .andExpect(status().isUnauthorized());
   }
 
-  @DisplayName("/admin GET 요청시 SESSION ID를 반환한다.")
+  @DisplayName("로그인 후 /admin 요청시 Session Id 및 User 정보를 반환한다.")
   @Test
   void admin() throws Exception {
     //given
     User user = User.builder()
-        .userId("test")
-        .name("test")
-        .password("1234")
-        .build();
-    Session session = user.addSession();
+            .name("test")
+            .password("1234")
+            .email("user@naver.com")
+            .build();
     userRepository.save(user);
 
+    LocalDate exprDate = LocalDate.now().plusMonths(1L);
+
     String jws = Jwts.builder()
-        .setSubject(String.valueOf(session.getId()))
-        .signWith( Keys.hmacShaKeyFor(appConfig.getJwtKey()))
-        .compact();
+            .setSubject(String.valueOf(user.getId()))
+            .setExpiration(Date.valueOf(exprDate))
+            .signWith( Keys.hmacShaKeyFor(appConfig.getJwtKey()))
+            .compact();
 
     Cookie sessionCookie = new Cookie("SESSION", jws);
 
     //expected
     this.mockMvc.perform(get("/admin")
-        .cookie(sessionCookie)
-        .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk())
-        .andExpect(content().string(Long.toString(session.getId())));
+            .cookie(sessionCookie)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").exists())
+            .andExpect(jsonPath("$.email").value(user.getEmail()))
+            .andExpect(jsonPath("$.name").value(user.getName()));
   }
 }

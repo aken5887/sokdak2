@@ -2,14 +2,18 @@ package com.project.sokdak2.api.config;
 
 import com.project.sokdak2.api.config.annotation.Auth;
 import com.project.sokdak2.api.domain.Session;
+import com.project.sokdak2.api.domain.User;
 import com.project.sokdak2.api.exception.UnAuthorizedException;
+import com.project.sokdak2.api.exception.UserNotFoundException;
 import com.project.sokdak2.api.repository.SessionRepository;
+import com.project.sokdak2.api.repository.UserRepository;
 import com.project.sokdak2.api.request.SessionUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import java.util.Arrays;
+import java.util.Date;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +26,9 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Slf4j
 @RequiredArgsConstructor
-public class AdminArgumentResolver implements HandlerMethodArgumentResolver {
+public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
+  private final UserRepository userRepository;
   private final SessionRepository sessionRepository;
   private final AppConfig appConfig;
   private final String jwtUse;
@@ -76,11 +81,22 @@ public class AdminArgumentResolver implements HandlerMethodArgumentResolver {
             .build()
             .parseClaimsJws(cookieValue);
 
-        String sessionId = claims.getBody().getSubject();
+        String userId = claims.getBody().getSubject();
+        Date exprDate = claims.getBody().getExpiration();
 
-        return SessionUser.builder()
-            .id(Long.parseLong(sessionId))
-            .build();
+        if(exprDate == null || exprDate.before(new Date())) {
+          log.error("올바르지 않은 Token 값 입니다.");
+          throw new UnAuthorizedException();
+        }
+
+        User user = userRepository.findById(Long.parseLong(userId))
+                .orElseThrow(()-> new UserNotFoundException());
+        Session session = user.addSession();
+        SessionUser sessionUser = session.toSessionUser();
+
+        mavContainer.addAttribute("sessionUser", sessionUser);
+
+        return sessionUser;
       }catch(JwtException e){
         log.error("JWT Token이 올바르지 않습니다.");
       }

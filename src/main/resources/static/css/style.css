@@ -5,6 +5,7 @@
 
 html {
     font-size: 10px;
+    font-family: '돋움', Dotum, '굴림', Gulim, Helvetica, Sans-serif, serif;
 }
 
 ul, li {
@@ -552,7 +553,8 @@ a {
     display: block;
 }
 
-.password_field input[type=password]{
+.password_field input[type=password],
+.password_field input[type=text]{
     display: block;
     box-sizing: border-box;
     width: 100%;
@@ -565,4 +567,17 @@ a {
     color: #4b4b4d;
     line-height: 2.5;
     font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.board_top {
+    font-size: 1.4rem;
+}
+
+.board_top_right {
+    text-align: right;
+}
+
+.board_top_right a{
+    margin : 1.5px;
 }
