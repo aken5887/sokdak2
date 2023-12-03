@@ -47,14 +47,12 @@ class FileRepositoryTest {
         .uploadPath(uploadDir)
         .originalFileName("12345")
         .realFileName(renameFile(1))
-        .post(post)
         .build();
 
     fileRepository.save(file);
 
     // then
     assertThat(fileRepository.count()).isGreaterThan(0L);
-    assertThat(file.getPost().getTitle()).isEqualTo(post.getTitle());
     assertThat(post.getFiles().get(0).getOriginalFileName()).isEqualTo(file.getOriginalFileName());
   }
 
@@ -74,11 +72,9 @@ class FileRepositoryTest {
         .uploadPath(uploadDir)
         .originalFileName("12345")
         .realFileName(renameFile(1))
-        .post(post)
         .build();
 
     fileRepository.save(file);
-
 
     assertThat(post.getFiles()).isInstanceOf(PersistentBag.class); //
   }

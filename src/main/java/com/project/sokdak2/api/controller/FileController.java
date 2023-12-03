@@ -23,9 +23,17 @@ public class FileController {
   public ResponseEntity<Resource> downloadFile(@PathVariable Long fileId) throws IOException {
 
     FileResponse fileResponse = fileService.downloadFile(fileId);
+    String originFileName = fileResponse.getFile().getOriginalFileName();
+
+    //브라우저별 한글파일 명 처리
+    String onlyFileName = originFileName.substring(originFileName.lastIndexOf("_") + 1);
+    onlyFileName = new String(onlyFileName.getBytes("UTF-8"), "ISO-8859-1");
+
     HttpHeaders header = new HttpHeaders();
     header.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-    header.setContentDisposition(ContentDisposition.attachment().filename(fileResponse.getFile().getOriginalFileName()).build());
+    header.setContentDisposition(ContentDisposition.attachment()
+            .filename(onlyFileName)
+            .build());
 
     return ResponseEntity.ok()
         .headers(header)

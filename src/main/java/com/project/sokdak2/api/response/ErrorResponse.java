@@ -16,12 +16,12 @@ import lombok.Getter;
 @Getter
 public class ErrorResponse {
 
-  private final int code;
+  private final String code;
   private final String message;
   private final Map<String, Object> validation;
 
   @Builder
-  public ErrorResponse(int code, String message, Map<String, Object> validation) {
+  public ErrorResponse(String code, String message, Map<String, Object> validation) {
     this.code = code;
     this.message = message;
     this.validation = validation;

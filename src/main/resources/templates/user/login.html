@@ -21,7 +21,11 @@
       <a href="#" class="" id="cancelBtn">취소</a>
     </div>
   </div>
-  <form id="loginForm" method="get">
+  <form name="loginForm" id="loginForm" th:action="${param.path}" method="get">
+    <input type="hidden" name="page" th:value="${param.page}">
+    <input type="hidden" name="size" th:value="${param.size}">
+    <input type="hidden" name="kw_opt" th:value="${param.kw_opt}">
+    <input type="hidden" name="kw" th:value="${param.kw}">
   </form>
 </body>
 <th:block th:replace="/layout/footer :: footerFragment"/>
@@ -39,9 +43,7 @@
           contentType: 'application/json',
           data: JSON.stringify(dataJson),
           success: function(res){
-            let lf = $("#loginForm");
-            lf.attr("action","/posts");
-            lf.submit();
+           document.loginForm.submit();
           },
           error: function(res){
             let responseJson = res.responseJSON;
@@ -49,9 +51,9 @@
             let rMessage = responseJson.message;
 
             if(rMessage != null){
-              alert(rMessage+"(오류코드 : "+rCode+")");
+              alert(rMessage);
             }else{
-              alert("로그인에 실패하였습니다. (오류코드 : "+rCode+")");
+              alert("로그인에 실패하였습니다.");
             }
           }
         });

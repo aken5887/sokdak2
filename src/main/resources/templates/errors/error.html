@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="/layout/header :: headerFragment"/>
+<body>
+  <div class="password_confirm">
+    <h5 class="password_title">
+      <strong>에러 페이지</strong>
+    </h5>
+    <h6 class="password_desc">
+      <span class="description">오류가 발생하였습니다.</span>
+    </h6>
+    <section>
+      <div class="alert alert-warning">
+        <p>
+          <span th:text="|오류 코드 : ${error.code}|"></span><br/>
+          <span th:text="|메세지 : ${error.message}|"></span>
+        </p>
+      </div>
+    </section>
+    <div class="bt_wrap">
+      <a href="#" class="on" id="mainBtn">메인으로</a>
+      <a href="#" class="" id="cancelBtn">뒤로가기</a>
+    </div>
+  </div>
+</body>
+<th:block th:replace="/layout/footer :: footerFragment"/>
+<script th:inline="javascript">
+  $(document).ready(function(){
+      $(".bt_wrap #mainBtn").click(function(e){
+        location.href = '/';
+      });
+
+      $(".bt_wrap #cancelBtn").click(function(e){
+        window.history.back();
+      });
+  });
+</script>
+</html>

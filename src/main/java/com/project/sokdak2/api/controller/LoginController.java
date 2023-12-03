@@ -3,6 +3,7 @@ package com.project.sokdak2.api.controller;
 import com.google.common.net.HttpHeaders;
 import com.project.sokdak2.api.config.AppConfig;
 import com.project.sokdak2.api.config.annotation.Users;
+import com.project.sokdak2.api.domain.User;
 import com.project.sokdak2.api.request.Login;
 import com.project.sokdak2.api.request.SessionUser;
 import com.project.sokdak2.api.response.SessionResponse;
@@ -54,12 +55,12 @@ public class LoginController {
       SessionResponse sessionResponse = userService.login(login);
       responseCookie = responseCookie(sessionResponse.getAccessToken());
     }else if("true".equalsIgnoreCase(storeSession)){
-      com.project.sokdak2.api.domain.User user = userService.loginUser(login);
+      User user = userService.loginUser(login);
 
       SecretKey secretKey = Keys.hmacShaKeyFor(appConfig.getJwtKey());
 
       Calendar cal = Calendar.getInstance();
-      cal.add(Calendar.MONTH, +1);
+      cal.add(Calendar.HOUR, +1);
       Date exprDate = cal.getTime();
 
       String jws = Jwts.builder()
@@ -99,7 +100,7 @@ public class LoginController {
         .path("/")
         .httpOnly(true)
         .secure(false)
-        .maxAge(Duration.ofDays(30))
+        .maxAge(Duration.ofDays(1))
         .sameSite("Strict")
         .build();
   }

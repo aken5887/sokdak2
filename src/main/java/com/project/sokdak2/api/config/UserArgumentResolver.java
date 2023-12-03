@@ -14,6 +14,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Optional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -54,15 +55,14 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
     Cookie[] cookies = servletRequest.getCookies();
     if(cookies == null || cookies.length == 0 ){
-      log.info("cookie가 존재하지 않습니다.");
       return null;
     }else{
-      Cookie sessionCookie = Arrays.stream(cookies)
+      Optional<Cookie> sessionCookie = Arrays.stream(cookies)
               .filter(cookie -> cookie.getName().equals("SESSION"))
-              .findFirst()
-              .orElseThrow(() -> new UnAuthorizedException());
+              .findFirst();
 
-      String cookieValue = sessionCookie.getValue();
+      if(sessionCookie.isEmpty()) return null;
+      String cookieValue = sessionCookie.get().getValue();
 
       if("false".equalsIgnoreCase(jwtUse)){
         // cookieValue -> accessToken 값
@@ -84,7 +84,8 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
           if(exprDate == null || exprDate.before(new Date())) {
             log.error("올바르지 않은 Token 값 입니다.");
-            throw new UnAuthorizedException();
+//            throw new UnAuthorizedException();
+            return null;
           }
 
           User user = userRepository.findById(Long.parseLong(userId))
@@ -95,9 +96,11 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
           return sessionUser;
         }catch(JwtException e){
           log.error("JWT Token이 올바르지 않습니다.");
+          return null;
         }
       }
-      throw new UnAuthorizedException();
+//      throw new UnAuthorizedException();
+      return null;
     }
   }
 }

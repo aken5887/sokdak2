@@ -5,6 +5,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Builder
 @Getter
@@ -16,6 +19,11 @@ public class PostEdit {
   private final String userId;
   @NotNull(message="암호는 필수입니다.")
   private final Integer password;
+  private List<MultipartFile> files;
+  private String delChk1;
+  private String delChk2;
+  private Long delFile1;
+  private Long delFile2;
 
   public void validate(){
     if(this.title.contains("테스트")){

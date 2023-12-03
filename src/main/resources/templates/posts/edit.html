@@ -3,8 +3,15 @@
 <th:block th:replace="/layout/header :: headerFragment"/>
 <body>
 <div class="board_wrap">
-<th:block th:replace="/layout/title :: titleFragment('익명게시판')"/>
+<th:block th:replace="/layout/title :: titleFragment('속닥속닥 게시판')"/>
+<form id="editForm" action="" method="get">
+    <input type="hidden" name="page" th:value="${postSearch.page}">
+    <input type="hidden" name="size" th:value="${postSearch.size}">
+    <input type="hidden" name="kw_opt" th:value="${postSearch.kw_opt}">
+    <input type="hidden" name="kw" th:value="${postSearch.kw}">
+</form>
 <div class="board_write_wrap">
+    <form id="postForm" enctype="multipart/form-data">
     <div class="board_write">
         <div class="title">
             <dl>
@@ -32,18 +39,42 @@
             <textarea name="content" id="content" rows="10" cols="100"
                       th:utext="${#strings.replace(response.content,'&#10;','&lt;br&gt;')}"></textarea>
         </div>
+        <div class="file file_view">
+            <dl>
+                <dt>파일업로드 1</dt>
+                <dd>
+                    <input type="file" class="file_input" name="files" title="파일업로드">
+                </dd>
+            </dl>
+            <ul th:if="${file1 != null}">
+                <li class="file_info">
+                    - 첨부파일1 삭제:
+                    <input type="checkbox" name="delChk1" value="1"/>
+                    <p th:text="|${file1.originalFileName} (${file1.fileSize}kbps)|"></p>
+                    <input type="hidden" name="delFile1" th:value="${file1.id}"/>
+                </li>
+            </ul>
+            <dl>
+                <dt>파일업로드 2</dt>
+                <dd>
+                    <input type="file" class="file_input" name="files" title="파일업로드">
+                </dd>
+            </dl>
+            <ul th:if="${file2 != null}">
+                <li class="file_info">
+                    - 첨부파일2 삭제:
+                    <input type="checkbox" name="delChk2" value="1"/>
+                    <p th:text="|${file2.originalFileName} (${file2.fileSize}kbps)|"></p>
+                    <input type="hidden" name="delFile2" th:value="${file2.id}"/>
+                </li>
+            </ul>
         </div>
         <div class="bt_wrap">
             <a href="javascript:void(0);" class="on" id="saveBtn">저장</a>
             <a href="javascript:void(0)" id="cancelBtn">취소</a>
         </div>
-        <form id="editForm" action="" method="get">
-            <input type="hidden" name="page" th:value="${postSearch.page}">
-            <input type="hidden" name="size" th:value="${postSearch.size}">
-            <input type="hidden" name="kw_opt" th:value="${postSearch.kw_opt}">
-            <input type="hidden" name="kw" th:value="${postSearch.kw}">
-        </form>
     </div>
+    </form>
 </div>
 </body>
 <th:block th:replace="/layout/footer :: footerFragment"/>
@@ -62,12 +93,18 @@
                 postEdit.content = $("textarea[name=content]").val();
                 postEdit.password = $("input[name=password]").val();
 
+                let postForm = $("#postForm")[0];
+                let postFormData = new FormData(postForm);
+
                 $.ajax({
                     url : '/posts/'+postId,
                     method : 'PATCH',
-                    contentType : 'application/json',
-                    dataType: 'json',
-                    data : JSON.stringify(postEdit),
+                    // contentType : 'application/json',
+                    // dataType: 'json',
+                    // data : JSON.stringify(postEdit),
+                    contentType: false,
+                    processData: false,
+                    data: postFormData,
                     success : function(response) {
                         alert("저장에 성공하였습니다.");
                         ef.attr("action", "/posts/"+postId)
@@ -75,14 +112,14 @@
                         ef.submit();
                     },
                     error: function(response) {
+                        console.log('response : {}', response);
                         let responseJson = response.responseJSON;
-                        let rCode = responseJson.code;
-                        let rMessage = responseJson.message;
-
-                        if(rMessage != null){
-                            alert(rMessage+"(오류코드 : "+rCode+")");
+                        if(responseJson != null){
+                            let rCode = responseJson.code;
+                            let rMessage = responseJson.message;
+                            alert(rMessage);
                         }else{
-                            alert("저장에 실패하였습니다. (오류코드 : "+rCode+")");
+                            alert("저장에 실패하였습니다.");
                         }
                     }
                 });

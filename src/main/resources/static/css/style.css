@@ -36,6 +36,12 @@ a {
     font-size: 1.4rem;
 }
 
+.board_title p.desc {
+    font-size : 1.2rem;
+    color : #9999;
+    font-weight: bold;
+}
+
 .bt_wrap {
     margin-top: 30px;
     text-align: center;
@@ -353,12 +359,14 @@ a {
 }
 
 .board_write .admin dl,
-.board_write .title dl {
+.board_write .title dl,
+.board_write .file dl{
     font-size: 0;
 }
 
 .board_write .admin dd,
-.board_write .title dd {
+.board_write .title dd,
+.board_write .file dl {
     width: calc(100% - 100px);
 }
 
@@ -398,8 +406,28 @@ a {
     resize: vertical;
 }
 
+.board_write .file dl{
+    margin: 10px;
+}
+
 .board_write .admin {
     border-bottom: 1px dashed #ddd;
+}
+
+.board_write input.sessionUserName {
+    border: none;
+    background: #dcdcdc;
+}
+
+.board_write .file_view li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eaeaea;
+    font-size: 1.2rem;
+}
+
+.board_write .file_view .file_info p {
+    display: inline-block;
+    font-weight: bold;
 }
 
 .reply_wrap {

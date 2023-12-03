@@ -3,7 +3,7 @@
 <th:block th:replace="/layout/header :: headerFragment"/>
 <body>
 <div class="board_wrap">
-    <th:block th:replace="/layout/title :: titleFragment('익명게시판')"/>
+    <th:block th:replace="/layout/title :: titleFragment('속닥속닥 게시판')"/>
     <div class="board_view_wrap">
         <div class="board_view">
             <div class="title" th:text="${response.title}"></div>
@@ -42,59 +42,59 @@
                 <p th:utext="${#strings.replace(response.content,'&#10;','&lt;br&gt;')}"></p>
             </div>
         </div>
-        <div class="reply_wrap">
-            <div class="reply_title">
-                <strong>댓글목록 <span class="reply_cnt">[💬52]</span></strong>
-            </div>
-            <div class="reply_view_wrap">
-                <div class="reply_view">
-                    <div class="user_info">
-                        <dl>
-                            <dt>글쓴이</dt>
-                            <dd>user01010</dd>
-                        </dl>
-                        <dl>
-                            <dt>시간</dt>
-                            <dd>2023-09-11 18:14</dd>
-                        </dl>
-                        <div class="bt_small_wrap">
-                            <a href="#" class="on">삭제</a>
-                        </div>
-                    </div>
-                    <div class="user_cont">
-                        <p>
-                            댓글<br/>
-                            댓글<br/>
-                            댓글<br/>
-                            댓글<br/>
-                        </p>
-                    </div>
-                </div>
-                <div class="reply_view">
-                    <div class="user_info">
-                        <dl>
-                            <dt>글쓴이</dt>
-                            <dd>user20202</dd>
-                        </dl>
-                        <dl>
-                            <dt>시간</dt>
-                            <dd>2023-09-11 19:14</dd>
-                        </dl>
-                        <div class="bt_small_wrap">
-                            <a href="#" class="on">삭제</a>
-                        </div>
-                    </div>
-                    <div class="user_cont">
-                        <p>
-                            댓글<br/>
-                            댓글<br/>
-                            댓글<br/>
-                            댓글<br/>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!--        <div class="reply_wrap">-->
+<!--            <div class="reply_title">-->
+<!--                <strong>댓글목록 <span class="reply_cnt">[💬52]</span></strong>-->
+<!--            </div>-->
+<!--            <div class="reply_view_wrap">-->
+<!--                <div class="reply_view">-->
+<!--                    <div class="user_info">-->
+<!--                        <dl>-->
+<!--                            <dt>글쓴이</dt>-->
+<!--                            <dd>user01010</dd>-->
+<!--                        </dl>-->
+<!--                        <dl>-->
+<!--                            <dt>시간</dt>-->
+<!--                            <dd>2023-09-11 18:14</dd>-->
+<!--                        </dl>-->
+<!--                        <div class="bt_small_wrap">-->
+<!--                            <a href="#" class="on">삭제</a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="user_cont">-->
+<!--                        <p>-->
+<!--                            댓글<br/>-->
+<!--                            댓글<br/>-->
+<!--                            댓글<br/>-->
+<!--                            댓글<br/>-->
+<!--                        </p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="reply_view">-->
+<!--                    <div class="user_info">-->
+<!--                        <dl>-->
+<!--                            <dt>글쓴이</dt>-->
+<!--                            <dd>user20202</dd>-->
+<!--                        </dl>-->
+<!--                        <dl>-->
+<!--                            <dt>시간</dt>-->
+<!--                            <dd>2023-09-11 19:14</dd>-->
+<!--                        </dl>-->
+<!--                        <div class="bt_small_wrap">-->
+<!--                            <a href="#" class="on">삭제</a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="user_cont">-->
+<!--                        <p>-->
+<!--                            댓글<br/>-->
+<!--                            댓글<br/>-->
+<!--                            댓글<br/>-->
+<!--                            댓글<br/>-->
+<!--                        </p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
         <div class="bt_wrap">
             <a href="javascript:void(0);" id="modifyBtn" class="on">수정</a>
             <a href="javascript:void(0);" id="deleteBtn" class="warning">삭제</a>

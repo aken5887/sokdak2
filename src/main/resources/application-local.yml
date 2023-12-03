@@ -17,7 +17,13 @@ spring:
   redis:
     host: localhost
     port: 6379
+  devtools:
+    livereload:
+      enabled: true
+    remote:
+      restart:
+        enabled: true
 
 file:
   upload:
-    dir: C:/upload
+    dir: /Users/choi/Documents/upload

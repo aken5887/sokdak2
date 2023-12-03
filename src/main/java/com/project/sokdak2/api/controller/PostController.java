@@ -1,6 +1,7 @@
 package com.project.sokdak2.api.controller;
 
 import com.project.sokdak2.api.config.annotation.Users;
+import com.project.sokdak2.api.domain.File;
 import com.project.sokdak2.api.exception.InvalidRequestException;
 import com.project.sokdak2.api.request.PostCreate;
 import com.project.sokdak2.api.request.PostEdit;
@@ -11,6 +12,8 @@ import com.project.sokdak2.api.service.FileService;
 import com.project.sokdak2.api.service.PostService;
 import com.project.sokdak2.api.util.PageMaker;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -89,8 +92,8 @@ public class PostController {
       }
     }
 
-    postService.increaseCount(postId, clientAddress, update);
     PostResponse response = postService.get(postId);
+    postService.increaseCount(postId, clientAddress, update);
     model.addAttribute("response", response);
 
     return "/posts/view";
@@ -123,13 +126,16 @@ public class PostController {
   public String edit_page(@Users SessionUser sessionUser, @PathVariable long postId,
                           @ModelAttribute PostSearch postSearch, Model model) {
     PostResponse postResponse = postService.get(postId);
+    AtomicInteger atomicInteger = new AtomicInteger(1);
+    postResponse.getFiles().stream()
+            .forEach(file -> model.addAttribute("file"+atomicInteger.getAndIncrement(), file));
     model.addAttribute("response", postResponse);
     return "/posts/edit";
   }
 
   @PatchMapping("/posts/{postId}")
   @ResponseBody
-  public PostResponse edit(@PathVariable long postId, @RequestBody @Valid PostEdit postEdit, RedirectAttributes rttr){
+  public PostResponse edit(@PathVariable long postId, @Valid PostEdit postEdit){
     postEdit.validate();
     return postService.edit(postId, postEdit);
   }

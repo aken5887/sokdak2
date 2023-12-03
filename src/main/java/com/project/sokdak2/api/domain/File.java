@@ -33,28 +33,12 @@ public class File extends BaseTimeEntity {
 
   private String fileExt;
 
-  // 관계의 주인
-  @ManyToOne
-  @JoinColumn(name="post_id")
-  private Post post;
-
-  public void setPost(Post post){
-    // 기존 관계 제거
-    if(this.post != null){
-      this.post.getFiles().remove(this);
-    }
-    this.post = post;
-    this.post.getFiles().add(this);
-  }
-
   @Builder
-  public File(String uploadPath, String originalFileName, String realFileName, long fileSize, Post post) {
+  public File(String uploadPath, String originalFileName, String realFileName, long fileSize) {
     this.uploadPath = uploadPath;
     this.originalFileName = originalFileName;
     this.realFileName = realFileName;
     this.fileSize = FileUtil.byteToKbytes(fileSize);
     this.fileExt = FileUtil.getFileExt(originalFileName);
-    this.post = post;
-    post.getFiles().add(this);
   }
 }

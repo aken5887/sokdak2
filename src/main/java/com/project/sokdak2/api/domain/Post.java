@@ -29,9 +29,9 @@ public class Post extends BaseTimeEntity {
   private int password;
   @ColumnDefault("0")
   private Integer topFixed;
-  @OneToMany(mappedBy = "post")
+  @OneToMany(cascade=CascadeType.ALL)
   private List<File> files = new ArrayList<>();
-  @OneToMany(mappedBy = "post")
+  @OneToMany
   private List<PostReply> replies = new ArrayList<>();
 
   @Builder
@@ -66,6 +66,10 @@ public class Post extends BaseTimeEntity {
 
   public void increaseCount(){
     this.count++;
+  }
+
+  public void addFiles(List<File> files){
+    this.files.addAll(files);
   }
 
   public void addReplies(List<PostReply> replies){

@@ -3,17 +3,18 @@
 <th:block th:fragment="titleFragment(title)">
   <div class="board_top">
     <div class="board_top_right">
-      <a href="javascript:void(0);" th:if="${sessionUser} == null">회원가입</a>
-      <a href="/login" th:if="${sessionUser} == null">로그인</a>
+      <a href="javascript:alert('준비 중 입니다. 😉')" th:if="${sessionUser} == null">회원가입</a>
+      <a href="javascript:fn_login();" th:if="${sessionUser} == null">로그인</a>
       <p th:if="${sessionUser} != null" th:text="|${sessionUser.name}님 환영합니다.|"></p>
       <a href="/logout" th:if="${sessionUser} != null">로그아웃</a>
     </div>
   </div>
-  <div class="board_title">
+  <div class="board_title" >
     <a href="javascript:void(0);" onclick="javascript:fn_main();">
-      <strong th:text="${title}">익명 게시판</strong>
+      <strong th:text="${title}"></strong>
     </a>
-    <p>속닥속닥 익명게시판 입니다.</p>
+    <p th:if="${sessionUser != null}" th:text="|${sessionUser.name}님 환영합니다.|"></p>
+    <p th:if="${sessionUser == null}">속닥속닥 게시판에 오신걸 환영합니다.</p>
   </div>
 </th:block>
 </html>

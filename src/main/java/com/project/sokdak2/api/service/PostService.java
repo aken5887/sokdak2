@@ -3,7 +3,9 @@ package com.project.sokdak2.api.service;
 import com.project.sokdak2.api.domain.File;
 import com.project.sokdak2.api.domain.Post;
 import com.project.sokdak2.api.domain.PostEditor;
+import com.project.sokdak2.api.exception.FileNotFoundException;
 import com.project.sokdak2.api.exception.InvalidPasswordException;
+import com.project.sokdak2.api.exception.PageNotFoundException;
 import com.project.sokdak2.api.exception.PostNotFoundException;
 import com.project.sokdak2.api.repository.FileRepository;
 import com.project.sokdak2.api.repository.PostRepository;
@@ -42,24 +44,25 @@ public class PostService {
     List<File> files = new ArrayList<>();
     if(postCreate.getFiles() != null){
       for(MultipartFile file:postCreate.getFiles()){
-        String[] upload = fileService.uploadFiles(file);
-        files.add(File.builder()
-            .realFileName(upload[1])
-            .originalFileName(file.getOriginalFilename())
-            .fileSize(file.getSize())
-            .uploadPath(upload[0])
-            .post(post)
-            .build());
+        if(!file.isEmpty()){
+          String[] upload = fileService.uploadFiles(file);
+          files.add(File.builder()
+                  .realFileName(upload[1])
+                  .originalFileName(file.getOriginalFilename())
+                  .fileSize(file.getSize())
+                  .uploadPath(upload[0])
+                  .build());
+        }
       }
     }
-    fileRepository.saveAll(files);
+    post.addFiles(files);
 
     return new PostResponse(post);
   }
 
   public PostResponse get(Long postId) {
     Post post = postRepository.findById(postId)
-        .orElseThrow(() -> new PostNotFoundException());
+        .orElseThrow(() -> new PageNotFoundException());
     return new PostResponse(post);
   }
 
@@ -88,8 +91,38 @@ public class PostService {
         .title(postEdit.getTitle())
         .content(postEdit.getContent())
         .build();
-
     post.edit(postEditor);
+
+    if("1".equals(postEdit.getDelChk1()) || !postEdit.getFiles().get(0).isEmpty()){
+      File file = fileRepository.findById(postEdit.getDelFile1())
+                      .orElseThrow(() -> new FileNotFoundException());
+      fileRepository.delete(file);
+      post.getFiles().remove(file);
+    }
+
+    if("1".equals(postEdit.getDelChk2()) || !postEdit.getFiles().get(1).isEmpty()){
+      File file = fileRepository.findById(postEdit.getDelFile2())
+              .orElseThrow(() -> new FileNotFoundException());
+      fileRepository.delete(file);
+      post.getFiles().remove(file);
+    }
+
+    List<File> files = new ArrayList<>();
+    if(postEdit.getFiles() != null){
+      for(MultipartFile file:postEdit.getFiles()){
+        if(!file.isEmpty()){
+          String[] upload = fileService.uploadFiles(file);
+          files.add(File.builder()
+                  .realFileName(upload[1])
+                  .originalFileName(file.getOriginalFilename())
+                  .fileSize(file.getSize())
+                  .uploadPath(upload[0])
+                  .build());
+        }
+      }
+    }
+
+    post.addFiles(files);
 
     return new PostResponse(post);
   }
@@ -114,7 +147,7 @@ public class PostService {
   @Transactional
   public void increaseCount(long postId, String clientAddress, boolean update){
     Post post = postRepository.findById(postId)
-        .orElseThrow(() -> new PostNotFoundException());
+        .orElseThrow(() -> new PageNotFoundException());
 
     if("redis".equals(cacheStore)){
       if(redisService.isFirstIpRequest(clientAddress, postId)){

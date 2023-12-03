@@ -8,6 +8,17 @@
     function fn_main() {
       window.location.href = '/posts';
     }
+
+    function fn_login() {
+      const frm = document.forms[0];
+      const pathInput = document.createElement("input");
+      pathInput.type = 'hidden';
+      pathInput.name = 'path';
+      pathInput.value = window.location.pathname;
+      frm.action = '/login';
+      frm.appendChild(pathInput);
+      frm.submit();
+    }
   </script>
 </th:block>
 </html>

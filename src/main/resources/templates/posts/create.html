@@ -3,7 +3,13 @@
 <th:block th:replace="/layout/header :: headerFragment"/>
 <body>
 <div class="board_wrap">
-    <th:block th:replace="/layout/title :: titleFragment('익명게시판')"/>
+    <th:block th:replace="/layout/title :: titleFragment('속닥속닥 게시닥')"/>
+    <form id="writeForm" method="get">
+        <input type="hidden" name="page" th:value="${postSearch.page}">
+        <input type="hidden" name="size" th:value="${postSearch.size}">
+        <input type="hidden" name="kw_opt" th:value="${postSearch.kw_opt}">
+        <input type="hidden" name="kw" th:value="${postSearch.kw}">
+    </form>
     <div class="board_write_wrap">
         <div class="board_write">
         <form id="postForm" method="POST" enctype="multipart/form-data">
@@ -19,7 +25,10 @@
                 <dl>
                     <dt>글쓴이</dt>
                     <dd>
-                        <input type="text" class="required" name="userId" title="작성자" placeholder="작성자 입력">
+                        <input th:if="${sessionUser == null}"
+                            type="text" class="required" name="userId" title="작성자" placeholder="작성자 입력">
+                        <input th:if="${sessionUser != null}"
+                            type="text" class="sessionUserName" readonly name="userId" title="작성자" th:value="${sessionUser.name}"/>
                     </dd>
                 </dl>
                 <dl>
@@ -32,7 +41,7 @@
             <div class="cont">
                 <textarea name="content" id="content" rows="10" cols="100"></textarea>
             </div>
-            <div class="title">
+            <div class="file">
                 <dl>
                     <dt>파일업로드 1</dt>
                     <dd>
@@ -52,12 +61,6 @@
             <a href="write.html" class="on" id="writeBtn">등록</a>
             <a href="javascript:void(0);" id="cancelBtn">취소</a>
         </div>
-        <form id="writeForm" method="get">
-            <input type="hidden" name="page" th:value="${postSearch.page}">
-            <input type="hidden" name="size" th:value="${postSearch.size}">
-            <input type="hidden" name="kw_opt" th:value="${postSearch.kw_opt}">
-            <input type="hidden" name="kw" th:value="${postSearch.kw}">
-        </form>
     </div>
 </div>
 </body>
