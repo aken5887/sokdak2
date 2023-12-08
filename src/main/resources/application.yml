@@ -1,9 +1,9 @@
 spring:
   jpa:
     show-sql: true
-    defer-datasource-initialization: true
+    defer-datasource-initialization: false
   profiles:
-    include: local
+    include: local, db
   servlet:
     multipart:
       max-file-size: 10MB
