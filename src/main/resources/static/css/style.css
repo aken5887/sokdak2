@@ -313,6 +313,12 @@ a {
     font-size: 1.4rem;
 }
 
+.board_view .cont ul,
+.board_view .cont li {
+    list-style: square !important;
+    margin: 0.5rem 0.5rem 0.5rem 1rem;
+}
+
 .board_view .img_view {
 }
 

@@ -8,6 +8,10 @@ jar {
     enabled = false
 }
 
+bootJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 group = 'com.project.sokdak2'
 version = '0.5'
 
@@ -62,6 +66,9 @@ dependencies {
     runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jsonwebtoken}"
 
     implementation 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // MariaDB
+    implementation 'org.mariadb.jdbc:mariadb-java-client'
 }
 
 tasks.named('test') {
