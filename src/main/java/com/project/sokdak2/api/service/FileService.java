@@ -55,7 +55,7 @@ public class FileService {
           .file(file)
           .build();
     }else{
-      throw new RuntimeException("파일을 찾을 수 없습니다.");
+      throw new FileNotFoundException();
     }
   }
 }

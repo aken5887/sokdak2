@@ -68,6 +68,10 @@ public class Post extends BaseTimeEntity {
     this.count++;
   }
 
+  public void addFile(File file){
+    this.files.add(file);
+  }
+
   public void addFiles(List<File> files){
     this.files.addAll(files);
   }

@@ -5,9 +5,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.project.sokdak2.api.domain.File;
 import com.project.sokdak2.api.domain.Post;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import org.hibernate.collection.internal.PersistentBag;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +28,7 @@ class FileRepositoryTest {
   @Value("${file.upload.dir}")
   String uploadDir;
 
-  @AfterEach
+  @BeforeEach
   public void cleanup(){
     this.fileRepository.deleteAll();
     this.postRepository.deleteAll();
@@ -41,15 +45,15 @@ class FileRepositoryTest {
         .password(1234)
         .build();
 
-    postRepository.save(post);
-
     File file = File.builder()
-        .uploadPath(uploadDir)
-        .originalFileName("12345")
-        .realFileName(renameFile(1))
-        .build();
+            .uploadPath(uploadDir)
+            .originalFileName("12345")
+            .realFileName(renameFile(1))
+            .build();
 
-    fileRepository.save(file);
+    post.addFile(file);
+
+    postRepository.save(post);
 
     // then
     assertThat(fileRepository.count()).isGreaterThan(0L);

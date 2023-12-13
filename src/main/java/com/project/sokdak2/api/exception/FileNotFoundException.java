@@ -1,8 +1,9 @@
 package com.project.sokdak2.api.exception;
 
+import org.aspectj.weaver.GeneratedReferenceTypeDelegate;
 import org.springframework.http.HttpStatus;
 
-public class FileNotFoundException extends CommonException{
+public class FileNotFoundException extends GeneralException {
 
   private static final String MESSAGE = "지정된 파일을 찾을 수 없습니다.";
 
@@ -12,6 +13,6 @@ public class FileNotFoundException extends CommonException{
 
   @Override
   public int getStatusCode() {
-    return HttpStatus.BAD_REQUEST.value();
+    return HttpStatus.NOT_FOUND.value();
   }
 }

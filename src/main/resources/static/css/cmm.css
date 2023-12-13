@@ -1,0 +1,36 @@
+header {
+    padding: 10px 0; /* 상하 여백 조절 */
+}
+
+/** header */
+header {
+    margin-bottom: 1.2rem;
+}
+
+nav ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: left; /* 메뉴 항목 가운데 정렬 */
+}
+
+nav li{
+    margin-right: 20px; /* 각 메뉴 항목 간격 조절 */
+}
+
+nav a {
+    text-decoration: none;
+    color: #000000; /* 메뉴 항목 텍스트 색상 */
+    font-size: 25px; /* 폰트 크기 조절 */
+    font-weight: bold; /* 폰트 굵기 조절 */
+    display: inline-block;
+}
+
+/* 호버 효과 추가 */
+nav a:hover {
+    color: #009999; /* 호버 시 텍스트 색상 변경 */
+}
+
+nav a.on {
+    color: #009999;
+}

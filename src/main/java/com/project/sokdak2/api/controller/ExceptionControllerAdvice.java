@@ -1,20 +1,17 @@
 package com.project.sokdak2.api.controller;
 
-import com.project.sokdak2.api.exception.CommonException;
-import com.project.sokdak2.api.exception.PageNotFoundException;
+import com.project.sokdak2.api.exception.*;
 import com.project.sokdak2.api.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 @Slf4j
 @ControllerAdvice
-public class ExceptionController {
-    @ExceptionHandler({PageNotFoundException.class})
-    public String notFound(PageNotFoundException e, Model model) {
+public class ExceptionControllerAdvice {
+    @ExceptionHandler(GeneralException.class)
+    public String notFound(GeneralException e, Model model) {
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .code(String.valueOf(e.getStatusCode()))
@@ -25,6 +22,7 @@ public class ExceptionController {
 
         return "/errors/error";
     }
+
 
     @ExceptionHandler(CommonException.class)
     @ResponseBody

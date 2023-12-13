@@ -93,14 +93,14 @@ public class PostService {
         .build();
     post.edit(postEditor);
 
-    if("1".equals(postEdit.getDelChk1()) || !postEdit.getFiles().get(0).isEmpty()){
+    if(postEdit.isFile1Edit(postEdit)){
       File file = fileRepository.findById(postEdit.getDelFile1())
                       .orElseThrow(() -> new FileNotFoundException());
       fileRepository.delete(file);
       post.getFiles().remove(file);
     }
 
-    if("1".equals(postEdit.getDelChk2()) || !postEdit.getFiles().get(1).isEmpty()){
+    if(postEdit.isFile2Edit(postEdit)){
       File file = fileRepository.findById(postEdit.getDelFile2())
               .orElseThrow(() -> new FileNotFoundException());
       fileRepository.delete(file);

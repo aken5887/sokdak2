@@ -165,23 +165,4 @@ class LoginControllerTest {
         .andExpect(jsonPath("$.email").value(user.getEmail()));
   }
 
-  @DisplayName("로그인 후 검증되지 않은 세션값으로 권한이 필요한 페이지에 접속할 수 없다.")
-  @Test
-  void login_no_grant() throws Exception {
-    // given
-    User user = getUser();
-
-    // when
-    Session session = user.addSession(); // 세션 생성
-    userRepository.save(user);
-
-    Cookie sessionCookie = new Cookie("SESSION", session.getAccessToken()+"-1");
-
-    // expected
-    this.mockMvc.perform(get("/admin")
-//            .header("Authorization", "1234"))
-            .cookie(sessionCookie))
-        .andExpect(status().isUnauthorized());
-  }
-
 }

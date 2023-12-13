@@ -8,12 +8,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.sokdak2.api.domain.Post;
+import com.project.sokdak2.api.exception.PageNotFoundException;
 import com.project.sokdak2.api.exception.PostNotFoundException;
 import com.project.sokdak2.api.repository.PostRepository;
 import com.project.sokdak2.api.request.PostCreate;
@@ -24,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.hamcrest.core.StringContains;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -203,12 +203,11 @@ class PostControllerTest {
         .password(1234)
         .build();
 
-    String value = objectMapper.writeValueAsString(postEdit);
-
     // expected
     this.mockMvc.perform(patch("/posts/{postId}", post.getId())
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(value))
+                    .param("title","제목(수정)")
+                    .param("content","내용(수정)")
+                    .param("password","1234"))
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.title").value("제목(수정)"))
@@ -250,13 +249,16 @@ class PostControllerTest {
     assertThat(postRepository.count()).isEqualTo(0);
   }
 
-  @DisplayName("존재하지 않는 게시글을 조회하면 404오류가 발생한다.")
+  @DisplayName("존재하지 않는 게시글을 조회하면 404에러 코드와 함께 /errors 페이지를 리턴된다.")
   @Test
   void get_not_found() throws Exception {
     // expected
     this.mockMvc.perform(get("/posts/1")
-        .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isNotFound());
+                    .contentType(MediaType.TEXT_HTML))
+            .andExpect(status().isOk())
+            .andExpect(model().attribute("error",
+                    hasProperty("code", is("404"))))
+            .andExpect(view().name("/errors/error"));
   }
 
   @DisplayName("존재하지 않는 게시글을 수정하면 404오류가 발생한다.")
@@ -275,7 +277,7 @@ class PostControllerTest {
     this.mockMvc.perform(patch("/posts/1")
             .contentType(MediaType.APPLICATION_JSON)
             .content(content))
-        .andExpect(status().isNotFound());
+        .andExpect(status().isBadRequest());
   }
 
   @DisplayName("게시글 작성시 제목에 '테스트'가 들어가면 400오류가 발생한다.")

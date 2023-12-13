@@ -33,4 +33,18 @@ public class PostEdit {
           .build();
     }
   }
+
+  public boolean isFile1Edit(PostEdit postEdit){
+    if(postEdit.getDelChk1() != null & postEdit.getFiles() != null){
+        return "1".equals(postEdit.getDelChk1()) || !postEdit.getFiles().get(0).isEmpty();
+    }
+    return false;
+  }
+
+  public boolean isFile2Edit(PostEdit postEdit){
+    if(postEdit.getDelChk2() != null & postEdit.getFiles() != null){
+        return "1".equals(postEdit.getDelChk2()) || !postEdit.getFiles().get(1).isEmpty();
+    }
+    return false;
+  }
 }

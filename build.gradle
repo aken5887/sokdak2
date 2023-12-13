@@ -69,6 +69,10 @@ dependencies {
 
     // MariaDB
     implementation 'org.mariadb.jdbc:mariadb-java-client'
+
+    // Encrypt
+    implementation 'org.springframework.security:spring-security-crypto'
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
 }
 
 tasks.named('test') {

@@ -1,20 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="titleFragment(title)">
-  <div class="board_top">
-    <div class="board_top_right">
-      <a href="javascript:alert('준비 중 입니다. 😉')" th:if="${sessionUser} == null">회원가입</a>
-      <a href="javascript:fn_login();" th:if="${sessionUser} == null">로그인</a>
-      <p th:if="${sessionUser} != null" th:text="|${sessionUser.name}님 환영합니다.|"></p>
-      <a href="/logout" th:if="${sessionUser} != null">로그아웃</a>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="/" class="on">속닥속닥</a></li>
+        <li><a href="javascript:void(0);" onclick="javascript:fn_pokedoc();" class="">띠뿌실도감</a></li>
+        <li><a href="/resume">포트폴리오</a></li>
+      </ul>
+    </nav>
+  </header>
+    <div class="board_top" th:if="${title != ''}">
+      <div class="board_top_right">
+        <a href="javascript:alert('준비 중 입니다. 😉')" th:if="${sessionUser} == null">회원가입</a>
+        <a href="javascript:fn_login();" th:if="${sessionUser} == null">로그인</a>
+        <p th:if="${sessionUser} != null" th:text="|${sessionUser.name}님 환영합니다.|"></p>
+        <a href="/logout" th:if="${sessionUser} != null">로그아웃</a>
+      </div>
     </div>
-  </div>
-  <div class="board_title" >
-    <a href="javascript:void(0);" onclick="javascript:fn_main();">
-      <strong th:text="${title}"></strong>
-    </a>
-    <p th:if="${sessionUser != null}" th:text="|${sessionUser.name}님 환영합니다.|"></p>
-    <p th:if="${sessionUser == null}">속닥속닥 게시판에 오신걸 환영합니다.</p>
-  </div>
+    <div class="board_title" th:if="${title != ''}">
+      <a href="javascript:void(0);" onclick="javascript:fn_main();">
+        <strong th:text="${title}"></strong>
+      </a>
+      <p th:if="${sessionUser != null}" th:text="|${sessionUser.name}님 환영합니다.|"></p>
+      <p th:if="${sessionUser == null}">속닥속닥 게시판에 오신걸 환영합니다.</p>
+    </div>
 </th:block>
 </html>

@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.project.sokdak2.api.domain.Post;
 import com.project.sokdak2.api.exception.InvalidPasswordException;
+import com.project.sokdak2.api.exception.PageNotFoundException;
 import com.project.sokdak2.api.exception.PostNotFoundException;
 import com.project.sokdak2.api.repository.PostRepository;
 import com.project.sokdak2.api.request.PostCreate;
@@ -179,12 +180,12 @@ class PostServiceTest {
     assertThat(postRepository.count()).isEqualTo(0);
   }
 
-  @DisplayName("게시글 조회 - PostNotFoundException")
+  @DisplayName("게시글 조회 - PageNotFoundException")
   @Test
   void get_exception2() {
     // expected
-    assertThatThrownBy(() -> postService.get(1L)).isInstanceOf(PostNotFoundException.class)
-        .hasMessageContaining("존재하지 않는 게시글입니다.");
+    assertThatThrownBy(() -> postService.get(1L)).isInstanceOf(PageNotFoundException.class)
+        .hasMessageContaining("페이지를 찾을 수 없습니다.");
   }
 
   @DisplayName("게시글 수정 - PostNotFoundException")
