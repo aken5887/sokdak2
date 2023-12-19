@@ -106,4 +106,18 @@
     .board_title strong {
         font-size: 2.5rem; /*최상위 값(HTML태그)에 값을 곱한 것 = 30px*/
     }
+
+    .board_search input{
+        width: 30%;
+    }
+
+    .board_search a {
+        min-width: 10%;
+    }
+}
+
+@media (max-width: 700px){
+    .bt_wrap a {
+        min-width: 40px;
+    }
 }
