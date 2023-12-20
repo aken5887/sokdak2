@@ -1,23 +1,15 @@
 package com.project.sokdak2.api.controller;
 
 import com.project.sokdak2.api.config.annotation.Users;
-import com.project.sokdak2.api.domain.File;
 import com.project.sokdak2.api.exception.InvalidRequestException;
 import com.project.sokdak2.api.request.PostCreate;
 import com.project.sokdak2.api.request.PostEdit;
 import com.project.sokdak2.api.request.PostSearch;
 import com.project.sokdak2.api.request.SessionUser;
 import com.project.sokdak2.api.response.PostResponse;
-import com.project.sokdak2.api.service.FileService;
 import com.project.sokdak2.api.service.PostService;
+import com.project.sokdak2.api.util.CommonUtil;
 import com.project.sokdak2.api.util.PageMaker;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -26,16 +18,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Controller
@@ -45,7 +35,6 @@ public class PostController {
   private final PostService postService;
   @Value("${me.cache}")
   private String cache;
-  private final FileService fileService;
 
   @GetMapping("/posts")
   public String list(@ModelAttribute PostSearch postSearch, Model model, @Users SessionUser sessionUser) {
@@ -63,7 +52,7 @@ public class PostController {
   public String get(@Users SessionUser sessionUser, @PathVariable Long postId, @ModelAttribute PostSearch postSearch,
                     Model model, HttpServletRequest req, HttpServletResponse res){
 
-    String clientAddress = getClientIp(req);
+    String clientAddress = CommonUtil.getClientIp(req);
     boolean update = true;
 
     if("cookie".equals(cache)){
@@ -97,12 +86,6 @@ public class PostController {
     model.addAttribute("response", response);
 
     return "/posts/view";
-  }
-
-  private String getClientIp(HttpServletRequest req){
-    String ip = req.getRemoteAddr();
-    if(ip == null) ip = req.getHeader("X-Forwarded-For");
-    return ip;
   }
 
   @GetMapping("/posts/create")
