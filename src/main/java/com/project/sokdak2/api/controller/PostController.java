@@ -58,7 +58,7 @@ public class PostController {
     PostResponse response = postService.get(postId);
 
     if(response.getLocked() == 1 &&
-        (postSearch.getPwd() == null || postSearch.getPwd() != response.getPassword())){
+        (postSearch.getPwd() == null || !postSearch.getPwd().equals(response.getPassword()))){
       return "forward:/password/"+postId+"?reqType=2";
     }
 
