@@ -46,6 +46,10 @@
         margin-bottom: 5px;
     }
 
+    .board_view .info dl.updt {
+        margin-bottom: 5px;
+    }
+
     .board_view .info dl::before {
         display: none;
     }
@@ -87,7 +91,7 @@
     }
 
     .board_write .info dl {
-        width: 49%;
+        width: 48%;
     }
 
     .board_write .info dl:first-child{

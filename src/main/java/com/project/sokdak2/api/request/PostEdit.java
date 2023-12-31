@@ -1,12 +1,12 @@
 package com.project.sokdak2.api.request;
 
 import com.project.sokdak2.api.exception.InvalidRequestException;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Builder
@@ -24,6 +24,7 @@ public class PostEdit {
   private String delChk2;
   private Long delFile1;
   private Long delFile2;
+  private Integer locked;
 
   public void validate(){
     if(this.title.contains("테스트")){

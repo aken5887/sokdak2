@@ -28,6 +28,7 @@ public class PostSearch {
   private String dir = "desc";
   @Builder.Default
   private String dir_props = "id";
+  private Integer pwd;
 
   public long getOffSet() {
     return (Math.max(1, page) - 1) * Math.min(this.size, DEFAULT_MAX_SIZE);
@@ -84,5 +85,13 @@ public class PostSearch {
 
   public void setDir_props(String dir_props) {
     this.dir_props = dir_props;
+  }
+
+  public Integer getPwd() {
+    return pwd;
+  }
+
+  public void setPwd(Integer pwd) {
+    this.pwd = pwd;
   }
 }

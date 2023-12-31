@@ -9,10 +9,20 @@
     <input type="hidden" name="size" th:value="${postSearch.size}">
     <input type="hidden" name="kw_opt" th:value="${postSearch.kw_opt}">
     <input type="hidden" name="kw" th:value="${postSearch.kw}">
+    <input type="hidden" name="pwd"/>
 </form>
 <div class="board_write_wrap">
     <form id="postForm" enctype="multipart/form-data">
     <div class="board_write">
+        <div class="locked">
+            <dl>
+                <dt>익명글</dt>
+                <dd>
+                    <input type="checkbox" name="locked" title="게시글 잠금"
+                           th:checked="${response.locked == 1}" value="1">
+                </dd>
+            </dl>
+        </div>
         <div class="title">
             <dl>
                 <dt>제목</dt>
@@ -87,12 +97,8 @@
        $("div.bt_wrap #saveBtn").click(function(e){
             e.preventDefault();
             if(common.validate.checkRequired("div.board_write input.required")){
-                let postEdit   = {};
-                postEdit.title = $("input[name=title]").val();
+                const pwd = $("input[name=password]").val();
                 oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
-                postEdit.content = $("textarea[name=content]").val();
-                postEdit.password = $("input[name=password]").val();
-
                 let postForm = $("#postForm")[0];
                 let postFormData = new FormData(postForm);
 
@@ -107,7 +113,8 @@
                     data: postFormData,
                     success : function(response) {
                         alert("저장에 성공하였습니다.");
-                        ef.attr("action", "/posts/"+postId)
+                        $("input[name=pwd]").val(pwd);
+                        ef.attr("action", "/posts/"+postId);
                         ef.attr("method", "get");
                         ef.submit();
                     },

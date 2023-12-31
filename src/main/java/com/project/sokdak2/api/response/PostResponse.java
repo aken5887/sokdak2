@@ -2,11 +2,12 @@ package com.project.sokdak2.api.response;
 
 import com.project.sokdak2.api.domain.File;
 import com.project.sokdak2.api.domain.Post;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -20,6 +21,8 @@ public class PostResponse {
   private String createdTime;
   private String lastUpdatedTime;
   private List<File> files;
+  private Integer locked;
+  private Integer password;
 
   public PostResponse(Post post) {
     this.id = post.getId();
@@ -36,13 +39,16 @@ public class PostResponse {
           post.getLastUpdatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) :
           "";
     this.files = post.getFiles();
+    this.locked = post.getLocked();
+    this.password = post.getPassword();
   }
 
   @Builder
-  public PostResponse(Long id, String title, String userId, String content) {
+  public PostResponse(Long id, String title, String userId, String content, Integer locked) {
     this.id = id;
     this.title = title.substring(0, Math.min(20, title.length())); // 제목은 20자 제한
     this.userId = userId;
     this.content = content;
+    this.locked = locked;
   }
 }

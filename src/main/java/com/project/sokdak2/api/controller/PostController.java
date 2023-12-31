@@ -1,6 +1,7 @@
 package com.project.sokdak2.api.controller;
 
 import com.project.sokdak2.api.config.annotation.Users;
+import com.project.sokdak2.api.domain.Post;
 import com.project.sokdak2.api.exception.InvalidRequestException;
 import com.project.sokdak2.api.request.PostCreate;
 import com.project.sokdak2.api.request.PostEdit;
@@ -49,8 +50,17 @@ public class PostController {
   }
 
   @GetMapping("/posts/{postId}")
-  public String get(@Users SessionUser sessionUser, @PathVariable Long postId, @ModelAttribute PostSearch postSearch,
+  public String get(@Users SessionUser sessionUser,
+                    @PathVariable Long postId,
+                    @ModelAttribute PostSearch postSearch,
                     Model model, HttpServletRequest req, HttpServletResponse res){
+
+    PostResponse response = postService.get(postId);
+
+    if(response.getLocked() == 1 &&
+        (postSearch.getPwd() == null || postSearch.getPwd() != response.getPassword())){
+      return "forward:/password/"+postId+"?reqType=2";
+    }
 
     String clientAddress = CommonUtil.getClientIp(req);
     boolean update = true;
@@ -80,8 +90,6 @@ public class PostController {
         log.info("request has duplicated within same address : {}, {}", clientAddress, postId);
       }
     }
-
-    PostResponse response = postService.get(postId);
     postService.increaseCount(postId, clientAddress, update);
     model.addAttribute("response", response);
 
@@ -138,5 +146,12 @@ public class PostController {
     model.addAttribute("postId", postId);
     model.addAttribute("reqType", reqType);
     return "/posts/password";
+  }
+
+  @PostMapping("/password/check/{postId}")
+  @ResponseBody
+  public Long checkpassword(@PathVariable long postId, @RequestBody PostEdit postEdit) {
+    Post post = postService.checkPassword(postId, postEdit.getPassword());
+    return post.getId();
   }
 }

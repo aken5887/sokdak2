@@ -291,6 +291,10 @@ a {
     color: #777;
 }
 
+.board_view .info dl.updt {
+    color: #999;
+}
+
 .board_view .file_view li {
     padding: 8px 0;
     border-bottom: 1px solid #eaeaea;
@@ -335,6 +339,12 @@ a {
     border-top: 2px solid #000;
 }
 
+.board_write .locked,
+.board_write .title{
+    border-bottom: 1px dashed #ddd;
+}
+
+.board_write .locked,
 .board_write .admin,
 .board_write .title,
 .board_write .info {
@@ -342,11 +352,12 @@ a {
 }
 
 .board_write .info {
-    border-top: 1px dashed #ddd;
     border-bottom: 1px solid #000;
     font-size: 0;
 }
 
+.board_write .locked dt,
+.board_write .locked dd,
 .board_write .admin dt,
 .board_write .admin dd,
 .board_write .title dt,
@@ -358,16 +369,22 @@ a {
     font-size: 1.4rem;
 }
 
+.board_write .locked dt,
 .board_write .admin dt,
 .board_write .title dt,
 .board_write .info dt {
     width: 100px;
 }
 
+.board_write .locked dl,
 .board_write .admin dl,
 .board_write .title dl,
 .board_write .file dl{
     font-size: 0;
+}
+
+.board_write .title dl dd p{
+    margin-top : 5px;
 }
 
 .board_write .admin dd,
@@ -568,6 +585,13 @@ a {
     background: #fff8d1;
     color: rgba(0,0,0,.5);
     border-color: #fff2ab;
+    margin-bottom: 15px;
+}
+
+.alert-warning2 {
+    background: #c9e0f0;
+    color: rgba(0,0,0,.5);
+    border-color: #c9e0f0;
     margin-bottom: 15px;
 }
 

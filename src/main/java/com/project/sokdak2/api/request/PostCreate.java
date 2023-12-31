@@ -1,13 +1,14 @@
 package com.project.sokdak2.api.request;
 
 import com.project.sokdak2.api.exception.InvalidRequestException;
-import java.util.List;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @ToString
 @Builder
@@ -21,7 +22,7 @@ public class PostCreate {
   private String content;
   @NotNull(message="암호는 필수입니다.")
   private Integer password;
-  private Integer topFixed;
+  private Integer locked;
   private List<MultipartFile> files;
 
   public void validate() {

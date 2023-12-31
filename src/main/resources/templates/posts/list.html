@@ -22,8 +22,11 @@
             </div>
             <div th:each="arr:${result.content}">
                 <div class="num">[[${arr.id}]]</div>
-                <!--                    <div class="title"><a th:href="|/posts/${arr.id}|">[[${arr.title}]]</a></div>-->
-                <div class="title"><a th:href="${arr.id}">[[${arr.title}]]</a></div>
+                <div class="title">
+                    <a th:if="${arr.locked == 1}" th:href="${arr.id}" class="lockedLink">[[${arr.title}]]</a>
+                    <a th:if="${arr.locked != 1}" th:href="${arr.id}" class="normalLink">[[${arr.title}]]</a>
+                    <span th:if="${arr.locked == 1}">🔒</span>
+                </div>
                 <div class="writer">[[${arr.userId}]]</div>
                 <div class="date">[[${arr.createdTime}]]</div>
                 <div class="count">[[${arr.count}]]</div>
@@ -63,6 +66,7 @@
             <input type="hidden" name="kw" th:value="${postSearch.kw}">
             <input type="hidden" name="dir" th:value="${postSearch.dir}">
             <input type="hidden" name="dir_props" th:value="${postSearch.dir_props}">
+            <input type="hidden" name="reqType"/>
         </form>
     </div>
 </div>
@@ -83,7 +87,7 @@
            pf.submit();
         });
 
-        $(".board_list div.title a").click(function(e){
+        $(".board_list div.title a.normalLink").click(function(e){
            e.preventDefault();
            let postId = $(this).attr("href");
            pf.attr("action", '/posts/'+postId);
@@ -111,6 +115,14 @@
             if(e.keyCode == 13){
                 fn_search();
             }
+        });
+
+        $(".board_list div.title a.lockedLink").click(function(e){
+            e.preventDefault();
+            const postId = $(this).attr("href");
+            $("input[name=reqType]").val("2");
+            pf.attr("action", "/password/"+postId);
+            pf.submit();
         });
     });
 
