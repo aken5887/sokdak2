@@ -56,8 +56,13 @@ public class PostController {
                     Model model, HttpServletRequest req, HttpServletResponse res){
 
     PostResponse response = postService.get(postId);
+    String roleCode = "";
+    if(sessionUser != null){
+      roleCode = sessionUser.getRole().getCode();
+    }
 
-    if(response.getLocked() == 1 &&
+    if(!roleCode.equals("ROLE_ADMIN") &&
+        response.getLocked() != null && response.getLocked() == 1 &&
         (postSearch.getPwd() == null || !postSearch.getPwd().equals(response.getPassword()))){
       return "forward:/password/"+postId+"?reqType=2";
     }
@@ -143,6 +148,13 @@ public class PostController {
       @PathVariable long postId,
       @RequestParam String reqType,
       @ModelAttribute PostSearch postSearch, Model model){
+    String roleCode = "";
+    if(sessionUser != null){
+      roleCode = sessionUser.getRole().getCode();
+    }
+    if(reqType.equals("2") && roleCode.equals("ROLE_ADMIN")){
+      return "forward:/posts/"+postId;
+    }
     model.addAttribute("postId", postId);
     model.addAttribute("reqType", reqType);
     return "/posts/password";

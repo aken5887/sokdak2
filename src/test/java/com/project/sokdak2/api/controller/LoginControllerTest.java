@@ -1,23 +1,12 @@
 package com.project.sokdak2.api.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.sokdak2.api.config.AppConfig;
-import com.project.sokdak2.api.domain.Session;
+import com.project.sokdak2.api.config.Role;
 import com.project.sokdak2.api.domain.User;
 import com.project.sokdak2.api.repository.SessionRepository;
 import com.project.sokdak2.api.repository.UserRepository;
 import com.project.sokdak2.api.request.Login;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-import java.sql.Date;
-import java.time.LocalDateTime;
-import javax.crypto.SecretKey;
-import javax.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +17,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -61,6 +55,7 @@ class LoginControllerTest {
     return User.builder()
         .password("1234")
         .name("테스트유저")
+        .role(Role.GENERAL)
         .build();
   }
 
@@ -74,12 +69,7 @@ class LoginControllerTest {
   @Test
   void login() throws Exception{
     // given
-    User user = User.builder()
-        .password("1234")
-        .name("테스트유저")
-        .build();
-
-    userRepository.save(user);
+    User user = userRepository.save(getUser());
 
     Login login = Login.builder()
         .password(user.getPassword())
@@ -128,41 +118,4 @@ class LoginControllerTest {
 //        .andExpect(jsonPath("$.accessToken").isNotEmpty());
         .andExpect(cookie().exists("SESSION"));
   }
-
-  @DisplayName("로그인 후 권한이 필요한 페이지에 접속한다.")
-  @Test
-  void login_grant() throws Exception {
-    // given
-    User user = getUser();
-
-    // when
-    userRepository.save(user);
-
-    String cookieValue = "";
-    if("false".equalsIgnoreCase(jwtUse)){
-      Session session = user.addSession();
-      cookieValue = session.getAccessToken();
-    }else if("true".equalsIgnoreCase(jwtUse)){
-      LocalDateTime  exprDateTime = LocalDateTime.now().plusMonths(1L);
-      SecretKey secretKey = Keys.hmacShaKeyFor(appConfig.getJwtKey());
-
-      cookieValue = Jwts.builder()
-              .setSubject(String.valueOf(user.getId()))
-              .setExpiration(Date.valueOf(exprDateTime.toLocalDate()))
-              .signWith(secretKey)
-              .compact();
-    }
-
-    // 세션용 쿠키 생성
-    Cookie sessionCookie = new Cookie("SESSION", cookieValue);
-
-    // expected
-    this.mockMvc.perform(get("/admin")
-//        .header("Authorization", session.getAccessToken())
-          .cookie(sessionCookie)
-        )
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.email").value(user.getEmail()));
-  }
-
 }

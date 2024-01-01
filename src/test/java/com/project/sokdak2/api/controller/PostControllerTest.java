@@ -1,13 +1,19 @@
 package com.project.sokdak2.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.sokdak2.api.config.AppConfig;
+import com.project.sokdak2.api.config.Role;
 import com.project.sokdak2.api.domain.Post;
+import com.project.sokdak2.api.domain.User;
 import com.project.sokdak2.api.exception.PostNotFoundException;
 import com.project.sokdak2.api.repository.PostRepository;
+import com.project.sokdak2.api.repository.UserRepository;
 import com.project.sokdak2.api.request.PostCreate;
 import com.project.sokdak2.api.request.PostEdit;
 import com.project.sokdak2.api.response.PostResponse;
 import com.project.sokdak2.api.util.PageMaker;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,6 +28,10 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.crypto.SecretKey;
+import javax.servlet.http.Cookie;
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -44,6 +54,12 @@ class PostControllerTest {
 
   @Autowired
   PostRepository postRepository;
+
+  @Autowired
+  UserRepository userRepository;
+
+  @Autowired
+  AppConfig appConfig;
 
   @BeforeEach
   void setup() {
@@ -366,6 +382,80 @@ class PostControllerTest {
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(forwardedUrl(("/password/"+post.getId()+"?reqType=2")));
+  }
+
+  @DisplayName("관리자는 비밀번호 없이 익명글을 읽을 수 있다.")
+  @Test
+  void test7() throws Exception{
+    // given
+    Post post = Post.builder()
+            .title("익명글")
+            .userId("익명 작성자")
+            .password(1234)
+            .locked(1)
+            .build();
+    postRepository.save(post);
+
+    User user = User.builder()
+            .email("abc@test.com")
+            .name("관리자")
+            .password("abcd")
+            .role(Role.ADMIN)
+            .build();
+    userRepository.save(user);
+
+    LocalDateTime exprDate = LocalDateTime.now().plusMonths(1L);
+    SecretKey secretKey = Keys.hmacShaKeyFor(appConfig.getJwtKey());
+    String cookieValue = Jwts.builder()
+            .setSubject(String.valueOf(user.getId()))
+            .setExpiration(Date.valueOf(exprDate.toLocalDate()))
+            .signWith(secretKey)
+            .compact();
+
+    Cookie sessionCookie = new Cookie("SESSION", cookieValue);
+
+    // expected
+    this.mockMvc.perform(get("/posts/{postId}", post.getId())
+                    .cookie(sessionCookie))
+            .andExpect(status().isOk())
+            .andExpect(view().name("/posts/view"));
+  }
+
+  @DisplayName("일반사용자는 비밀번호를 입력해야 익명글을 읽을 수 있다.")
+  @Test
+  void test8() throws Exception{
+    // given
+    Post post = Post.builder()
+            .title("익명글")
+            .userId("익명 작성자")
+            .password(1234)
+            .locked(1)
+            .build();
+    postRepository.save(post);
+
+    User user = User.builder()
+            .email("abcd@test.com")
+            .name("일반")
+            .password("abcd")
+            .role(Role.GENERAL)
+            .build();
+    userRepository.save(user);
+
+    LocalDateTime exprDate = LocalDateTime.now().plusMonths(1L);
+    SecretKey secretKey = Keys.hmacShaKeyFor(appConfig.getJwtKey());
+    String cookieValue = Jwts.builder()
+            .setSubject(String.valueOf(user.getId()))
+            .setExpiration(Date.valueOf(exprDate.toLocalDate()))
+            .signWith(secretKey)
+            .compact();
+
+    Cookie sessionCookie = new Cookie("SESSION", cookieValue);
+
+    // expected
+    this.mockMvc.perform(get("/posts/{postId}", post.getId())
+                    .cookie(sessionCookie))
+            .andExpect(status().isOk())
+            .andExpect(view().name(containsString("/password/"+post.getId())));
   }
 
 }

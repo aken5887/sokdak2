@@ -1,21 +1,16 @@
 package com.project.sokdak2.api.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-
+import com.project.sokdak2.api.config.Role;
 import com.project.sokdak2.api.request.SessionUser;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -35,14 +30,20 @@ public class User extends BaseTimeEntity{
 
   private String email;
 
+  // session을 db에 저장하는 경우에 사용
   @OneToMany(cascade = CascadeType.ALL, mappedBy="user")
   private List<Session> sessions = new ArrayList<>();
 
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private Role role;
+
   @Builder
-  public User(String name, String password, String email) {
+  public User(String name, String password, String email, Role role) {
     this.name = name;
     this.password = password;
     this.email = email;
+    this.role = role;
   }
 
   public Session addSession(){
@@ -59,6 +60,7 @@ public class User extends BaseTimeEntity{
             .id(this.id)
             .email(this.email)
             .name(this.name)
+            .role(this.role)
             .build();
   }
 }

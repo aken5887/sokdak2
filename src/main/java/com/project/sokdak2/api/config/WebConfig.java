@@ -23,17 +23,18 @@ public class WebConfig implements WebMvcConfigurer {
   private final AppConfig appConfig;
   private final VisitsRepository visitsRepository;
 
-  @Override
-  public void addViewControllers(ViewControllerRegistry registry) {
-    registry.addRedirectViewController("/", "/posts");
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+      registry.addRedirectViewController("/", "/posts");
   }
 
-  @Override
-  public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(new VisitsInterceptor(visitsRepository))
-            .addPathPatterns("/**")
-            .excludePathPatterns("/","/js/**", "/css/**", "/image/**","/smartEditor/**");
-  }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+     registry.addInterceptor(new VisitsInterceptor(visitsRepository))
+            .addPathPatterns("/posts/**", "/password/**",
+                            "/download/**", "/resume",
+                            "/login", "/logout");
+    }
 
 
   @Override
