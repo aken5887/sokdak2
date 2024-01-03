@@ -80,7 +80,7 @@ class PostControllerTest {
 
     // expected
     this.mockMvc.perform(createPostRequest("/posts", postCreate))
-        .andDo(print())
+        
         .andExpect(status().isOk());
 //        .andExpect(status().is3xxRedirection())
 //        .andExpect(view().name(StringContains.containsString("/posts/")))
@@ -101,7 +101,7 @@ class PostControllerTest {
 
     // expected
     this.mockMvc.perform(createPostRequest("/posts", postCreate))
-        .andDo(print())
+        
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.code").value("400"))
         .andExpect(jsonPath("$.message").value(StringContains.containsString("잘못된 요청")))
@@ -121,7 +121,7 @@ class PostControllerTest {
     String postCreateStr = objectMapper.writeValueAsString(postCreate);
     // when
       this.mockMvc.perform(createPostRequest("/posts", postCreate))
-        .andDo(print())
+        
         .andExpect(status().isOk());
 //        .andExpect(view().name(StringContains.containsString("/posts/")));
     // then
@@ -142,7 +142,7 @@ class PostControllerTest {
 
     // when
     this.mockMvc.perform(get("/posts/{postId}", post.getId()))
-        .andDo(print())
+        
         .andExpect(status().isOk())
         .andExpect(model()
             .attribute("response", hasProperty("title", is(post.getTitle()))))
@@ -166,7 +166,7 @@ class PostControllerTest {
     MvcResult mvcResult =
       this.mockMvc.perform(get("/posts?page=2")
           .contentType(MediaType.APPLICATION_JSON))
-          .andDo(print())
+          
           .andExpect(status().isOk())
           .andExpect(model().attribute("response", hasProperty("result")))
           .andExpect(model().attribute("posts", hasSize(10)))
@@ -219,7 +219,7 @@ class PostControllerTest {
                     .param("title","제목(수정)")
                     .param("content","내용(수정)")
                     .param("password","1234"))
-        .andDo(print())
+        
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.title").value("제목(수정)"))
         .andExpect(jsonPath("$.content").value("내용(수정)"));
@@ -251,7 +251,7 @@ class PostControllerTest {
     this.mockMvc.perform(MockMvcRequestBuilders.delete("/posts/{postId}", post.getId())
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(postEdit)))
-            .andDo(print())
+            
             .andExpect(status().isOk());
 //            .andExpect(status().is3xxRedirection())
 //            .andExpect(redirectedUrl("/posts"));
@@ -306,7 +306,7 @@ class PostControllerTest {
 
    // expected
     this.mockMvc.perform(createPostRequest("/posts", postCreate))
-        .andDo(print())
+        
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.validation.title").value("제목엔 '테스트'가 포함될 수 없습니다."));
   }
@@ -349,7 +349,7 @@ class PostControllerTest {
     // expected
     MvcResult result =
       this.mockMvc.perform(get("/posts?kw={kw}&kw_opt={kw_opt}", "mymy-10", "title"))
-          .andDo(print())
+          
           .andExpect(status().isOk())
           .andReturn();
 
@@ -379,7 +379,7 @@ class PostControllerTest {
     // expected
     this.mockMvc.perform(get("/posts/{postId}", post.getId())
                     .contentType(MediaType.APPLICATION_JSON))
-            .andDo(print())
+            
             .andExpect(status().isOk())
             .andExpect(forwardedUrl(("/password/"+post.getId()+"?reqType=2")));
   }
@@ -471,7 +471,7 @@ class PostControllerTest {
             .param("userId", "test")
             .param("password", "1234")
             .param("content","1234"))
-            .andDo(print())
+            
             .andExpect(status().isOk());
     //then
     Post post = postRepository.findAll().get(0);
@@ -490,7 +490,7 @@ class PostControllerTest {
                     .param("userId", "test")
                     .param("password", "1234")
                     .param("content",xssContent))
-            .andDo(print())
+            
             .andExpect(status().isOk());
     //then
     Post post = postRepository.findAllByTitle("XSS test2").get(0).get();
