@@ -14,7 +14,7 @@ jobs:
       - uses : actions/checkout@v2
 
       - name : Set up JDK 11
-        uses : actions/steup-java@v1
+        uses : actions/setup-java@v1
         with :
           java-version: 11
 
@@ -30,11 +30,11 @@ jobs:
         run : |
           mkdir -p before-deploy
           cp scripts/*.sh before-deploy/
-          cp appsepc.yml before-deply/
+          cp appspec.yml before-deploy/
           cp build/libs/*.jar before-deploy/
-          cp before-deploy && zip -r before-deply *
+          cp before-deploy && zip -r before-deploy *
           cd ../ && mkdir -p deploy
-          mv before-deploy/before-deploy.zip deploy/sokdak2.zip
+          mv before-deploy/before-deploy.zip deploy/$ZIP_NAME.zip
         shell : bash
 
       - name : Configure AWS credentials
