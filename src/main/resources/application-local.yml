@@ -15,6 +15,11 @@ spring:
       restart:
         enabled: true
 
+me:
+  cache: cookie
+  jwt: true
+  jwt-key: "IdQxA8ofDz4Zoox/BwxNMKoUkCgJSYWYeMvLANiOpKM="
+
 file:
   upload:
     dir: /Users/choi/Documents/upload
