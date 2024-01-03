@@ -1,18 +1,10 @@
 spring:
-  jpa:
-    show-sql: true
-    defer-datasource-initialization: false
   profiles:
-    include: local, db
+    include: db, real
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 50MB
-
-me:
-  cache: cookie
-  jwt: true
-  jwt-key: "IdQxA8ofDz4Zoox/BwxNMKoUkCgJSYWYeMvLANiOpKM="
 
 server:
   port: 8090

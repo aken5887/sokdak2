@@ -1,0 +1,51 @@
+on:
+  push:
+    branches: [master]
+
+env:
+  ZIP_NAME : sokdak2
+  S3_BUCKET_NAME: dohyun-s3-bucket
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses : actions/checkout@v2
+
+      - name : Set up JDK 11
+        uses : actions/steup-java@v1
+        with :
+          java-version: 11
+
+      - name : gradlew 실행 권한 부여
+        run : chmod +x ./gradlew
+        shell : bash
+
+      - name : Build with Gradle
+        run : ./gradlew clean build --info
+        shell : bash
+
+      - name : Make zip file
+        run : |
+          mkdir -p before-deploy
+          cp scripts/*.sh before-deploy/
+          cp appsepc.yml before-deply/
+          cp build/libs/*.jar before-deploy/
+          cp before-deploy && zip -r before-deply *
+          cd ../ && mkdir -p deploy
+          mv before-deploy/before-deploy.zip deploy/sokdak2.zip
+        shell : bash
+
+      - name : Configure AWS credentials
+        uses : aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY3 }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY3 }}
+          aws-region: ap-northeast-2
+
+      - name : Upload to S#
+        run : aws s3 cp --region ap-northeast-2 ./deploy/$ZIP_NAME.zip s3://$S3_BUCKET_NAME/$ZIP_NAME.zip
+
+      - name : CodeDeploy
+        run: aws deploy create-deployment --application-name pokedoc-application  --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name sokdak2-application-group --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$ZIP_NAME.zip

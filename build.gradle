@@ -73,6 +73,9 @@ dependencies {
     // Encrypt
     implementation 'org.springframework.security:spring-security-crypto'
     implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+
+    //lucy
+    implementation 'com.navercorp.lucy:lucy-xss-servlet:2.0.1'
 }
 
 tasks.named('test') {

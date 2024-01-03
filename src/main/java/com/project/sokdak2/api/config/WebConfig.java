@@ -1,11 +1,15 @@
 package com.project.sokdak2.api.config;
 
+import com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter;
 import com.project.sokdak2.api.repository.SessionRepository;
 import com.project.sokdak2.api.repository.UserRepository;
 import com.project.sokdak2.api.repository.VisitsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -40,5 +44,14 @@ public class WebConfig implements WebMvcConfigurer {
   @Override
   public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
     resolvers.add(new UserArgumentResolver(userRepository, sessionRepository, appConfig, jwtUse));
+  }
+
+  @Bean
+  public FilterRegistrationBean<XssEscapeServletFilter> getFilterRegistrationBean() {
+      FilterRegistrationBean<XssEscapeServletFilter> xxRegistrationBean = new FilterRegistrationBean<>();
+      xxRegistrationBean.setFilter(new XssEscapeServletFilter());
+      xxRegistrationBean.setOrder(Ordered.LOWEST_PRECEDENCE);
+      xxRegistrationBean.addUrlPatterns("/*");
+      return xxRegistrationBean;
   }
 }

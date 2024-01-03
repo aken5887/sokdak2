@@ -17,6 +17,40 @@ a {
     color : inherit;
 }
 
+h1, h2, h3 {
+    margin-top : 1.5rem;
+    margin-bottom : 0.75rem;
+}
+
+.board_view .cont{
+    padding: 18px;
+    border-bottom: 1px solid #000;
+    line-height: 170%;
+    font-size: 1.4rem;
+}
+
+.board_view .cont p {
+    display: block;
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+.board_view .cont ul,
+.board_view .cont ol{
+    display: block;
+    list-style-type: disc !important;
+    margin-block-start: 0.75em;
+    margin-block-end: 0.75em;
+    padding-inline-start: 20px;
+}
+
+.board_view .cont li{
+    display: list-item;
+    list-style-type: disc !important;
+}
+
 .board_wrap {
     width: 1000px;
     margin: 100px auto;
@@ -308,19 +342,6 @@ a {
 
 .board_view .file_view .file_link {
     text-decoration: underline;
-}
-
-.board_view .cont{
-    padding: 18px;
-    border-bottom: 1px solid #000;
-    line-height: 170%;
-    font-size: 1.4rem;
-}
-
-.board_view .cont ul,
-.board_view .cont li {
-    list-style: square !important;
-    margin: 0.5rem 0.5rem 0.5rem 1rem;
 }
 
 .board_view .img_view {

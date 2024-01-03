@@ -458,4 +458,42 @@ class PostControllerTest {
             .andExpect(view().name(containsString("/password/"+post.getId())));
   }
 
+  @DisplayName("글 제목에 <script> 태그가 들어가면 escape letter로 치환된다.")
+  @Test
+  void test9() throws Exception{
+    //given
+    String xssTitle = "시작<script>document.cookie</script>끝";
+    String expected = "시작&lt;script&gt;document.cookie&lt;/script&gt;끝";
+    //when
+    this.mockMvc.perform(post("/posts")
+            .contentType(MediaType.MULTIPART_FORM_DATA)
+            .param("title", xssTitle)
+            .param("userId", "test")
+            .param("password", "1234")
+            .param("content","1234"))
+            .andDo(print())
+            .andExpect(status().isOk());
+    //then
+    Post post = postRepository.findAll().get(0);
+    assertThat(post.getTitle()).isEqualTo(expected);
+  }
+
+  @DisplayName("글 내용에 <p>,<h1> 태그가 들어가면 escape letter로 치환되지 않는다..")
+  @Test
+  void test10() throws Exception{
+    //given
+    String xssContent = "<p><b><span style=\"font-size: 14pt;\">제목</span></b></p>\n";
+    //when
+    this.mockMvc.perform(post("/posts")
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
+                    .param("title", "XSS test2")
+                    .param("userId", "test")
+                    .param("password", "1234")
+                    .param("content",xssContent))
+            .andDo(print())
+            .andExpect(status().isOk());
+    //then
+    Post post = postRepository.findAllByTitle("XSS test2").get(0).get();
+    assertThat(post.getContent()).isEqualTo(xssContent);
+  }
 }
