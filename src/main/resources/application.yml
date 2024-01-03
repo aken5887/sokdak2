@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: local, db
+    include: real, db
   servlet:
     multipart:
       max-file-size: 10MB
