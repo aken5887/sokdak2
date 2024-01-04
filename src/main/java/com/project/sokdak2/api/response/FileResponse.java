@@ -1,6 +1,6 @@
 package com.project.sokdak2.api.response;
 
-import com.project.sokdak2.api.domain.File;
+import com.project.sokdak2.api.domain.common.File;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.core.io.Resource;

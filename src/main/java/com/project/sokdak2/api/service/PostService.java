@@ -1,8 +1,8 @@
 package com.project.sokdak2.api.service;
 
-import com.project.sokdak2.api.domain.File;
-import com.project.sokdak2.api.domain.Post;
-import com.project.sokdak2.api.domain.PostEditor;
+import com.project.sokdak2.api.domain.common.File;
+import com.project.sokdak2.api.domain.post.Post;
+import com.project.sokdak2.api.domain.post.PostEditor;
 import com.project.sokdak2.api.exception.FileNotFoundException;
 import com.project.sokdak2.api.exception.InvalidPasswordException;
 import com.project.sokdak2.api.exception.PageNotFoundException;

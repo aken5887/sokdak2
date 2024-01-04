@@ -2,8 +2,8 @@ package com.project.sokdak2.api.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.project.sokdak2.api.domain.Post;
-import com.project.sokdak2.api.domain.PostReply;
+import com.project.sokdak2.api.domain.post.Post;
+import com.project.sokdak2.api.domain.post.PostReply;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;

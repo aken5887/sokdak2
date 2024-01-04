@@ -1,8 +1,9 @@
-package com.project.sokdak2.api.config;
+package com.project.sokdak2.api.config.argumentresolver;
 
+import com.project.sokdak2.api.config.AppConfig;
 import com.project.sokdak2.api.config.annotation.Users;
-import com.project.sokdak2.api.domain.Session;
-import com.project.sokdak2.api.domain.User;
+import com.project.sokdak2.api.domain.user.Session;
+import com.project.sokdak2.api.domain.user.User;
 import com.project.sokdak2.api.exception.UnAuthorizedException;
 import com.project.sokdak2.api.exception.UserNotFoundException;
 import com.project.sokdak2.api.repository.SessionRepository;

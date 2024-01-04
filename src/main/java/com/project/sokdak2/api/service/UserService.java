@@ -1,8 +1,8 @@
 package com.project.sokdak2.api.service;
 
 
-import com.project.sokdak2.api.domain.Session;
-import com.project.sokdak2.api.domain.User;
+import com.project.sokdak2.api.domain.user.Session;
+import com.project.sokdak2.api.domain.user.User;
 import com.project.sokdak2.api.exception.InvalidLoginException;
 import com.project.sokdak2.api.repository.UserRepository;
 import com.project.sokdak2.api.request.Login;

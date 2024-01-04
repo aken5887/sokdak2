@@ -126,3 +126,22 @@ update tb_post set password='1234';
 
 insert into tb_user (email, name, password, role) values ('minu8778@gmail.com', 'minu', 1234, 'ADMIN');
 insert into tb_user (email, name, password, role) values ('minu8558@gmail.com', 'minu2', 1234, 'GENERAL');
+
+insert into tb_visits(ip, uri) values ('127.0.0.1', '/posts/1');
+insert into tb_visits(ip, uri) values ('127.0.0.1', '/posts/1');
+insert into tb_visits(ip, uri) values ('127.0.0.1', '/posts/1');
+insert into tb_visits(ip, uri) values ('127.0.0.1', '/posts/1');
+insert into tb_visits(ip, uri) values ('127.0.0.1', '/posts/1');
+insert into tb_visits(ip, uri) values ('127.0.0.1', '/posts/1');
+insert into tb_visits(ip, uri) values ('127.0.0.1', '/posts/1');
+
+update tb_visits
+set method = 'POST'
+where id = 1;
+
+update tb_visits
+set method = 'GET'
+where method is null;
+
+update tb_visits
+set created_time = '2024-01-02';

@@ -1,6 +1,6 @@
 package com.project.sokdak2.api.service;
 
-import com.project.sokdak2.api.domain.File;
+import com.project.sokdak2.api.domain.common.File;
 import com.project.sokdak2.api.exception.FileNotFoundException;
 import com.project.sokdak2.api.repository.FileRepository;
 import com.project.sokdak2.api.response.FileResponse;

@@ -1,4 +1,4 @@
-package com.project.sokdak2.api.domain;
+package com.project.sokdak2.api.domain.common;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -76,6 +76,9 @@ dependencies {
 
     //lucy
     implementation 'com.navercorp.lucy:lucy-xss-servlet:2.0.1'
+
+    //awaitility
+    testImplementation 'org.awaitility:awaitility:4.2.0'
 }
 
 tasks.named('test') {

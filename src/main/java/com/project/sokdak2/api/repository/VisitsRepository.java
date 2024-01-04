@@ -1,6 +1,6 @@
 package com.project.sokdak2.api.repository;
 
-import com.project.sokdak2.api.domain.Visits;
+import com.project.sokdak2.api.domain.common.Visits;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

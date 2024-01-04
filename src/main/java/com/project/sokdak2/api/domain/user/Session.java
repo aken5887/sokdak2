@@ -1,5 +1,6 @@
-package com.project.sokdak2.api.domain;
+package com.project.sokdak2.api.domain.user;
 
+import com.project.sokdak2.api.domain.user.User;
 import com.project.sokdak2.api.request.SessionUser;
 import java.time.LocalDateTime;
 import java.util.UUID;

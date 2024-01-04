@@ -1,4 +1,4 @@
-package com.project.sokdak2.api.domain;
+package com.project.sokdak2.api.domain.common;
 
 import java.time.LocalDateTime;
 import javax.persistence.EntityListeners;

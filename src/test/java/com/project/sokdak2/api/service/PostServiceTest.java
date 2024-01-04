@@ -3,7 +3,7 @@ package com.project.sokdak2.api.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.project.sokdak2.api.domain.Post;
+import com.project.sokdak2.api.domain.post.Post;
 import com.project.sokdak2.api.exception.InvalidPasswordException;
 import com.project.sokdak2.api.exception.PageNotFoundException;
 import com.project.sokdak2.api.exception.PostNotFoundException;

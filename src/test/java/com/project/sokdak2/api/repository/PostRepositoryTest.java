@@ -1,6 +1,6 @@
 package com.project.sokdak2.api.repository;
 
-import com.project.sokdak2.api.domain.Post;
+import com.project.sokdak2.api.domain.post.Post;
 import com.project.sokdak2.api.request.PostSearch;
 import com.project.sokdak2.api.response.PostResponse;
 import com.project.sokdak2.api.util.PageMaker;

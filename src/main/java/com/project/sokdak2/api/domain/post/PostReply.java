@@ -1,4 +1,4 @@
-package com.project.sokdak2.api.domain;
+package com.project.sokdak2.api.domain.post;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+
+import com.project.sokdak2.api.domain.common.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +17,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Getter
 @Entity(name="tb_reply")
 @NoArgsConstructor
-public class PostReply extends BaseTimeEntity{
+public class PostReply extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

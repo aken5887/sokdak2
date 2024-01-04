@@ -1,4 +1,4 @@
-package com.project.sokdak2.api.config;
+package com.project.sokdak2.api.domain.user;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

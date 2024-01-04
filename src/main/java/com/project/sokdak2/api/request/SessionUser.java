@@ -1,6 +1,6 @@
 package com.project.sokdak2.api.request;
 
-import com.project.sokdak2.api.config.Role;
+import com.project.sokdak2.api.domain.user.Role;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;

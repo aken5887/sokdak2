@@ -1,7 +1,7 @@
 package com.project.sokdak2.api.controller;
 
 import com.project.sokdak2.api.config.annotation.Users;
-import com.project.sokdak2.api.domain.Post;
+import com.project.sokdak2.api.domain.post.Post;
 import com.project.sokdak2.api.exception.InvalidRequestException;
 import com.project.sokdak2.api.request.PostCreate;
 import com.project.sokdak2.api.request.PostEdit;

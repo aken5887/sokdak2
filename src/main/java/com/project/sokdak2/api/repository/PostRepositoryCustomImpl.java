@@ -1,20 +1,21 @@
 package com.project.sokdak2.api.repository;
 
-import com.project.sokdak2.api.domain.Post;
-import com.project.sokdak2.api.domain.QPost;
+import com.project.sokdak2.api.domain.post.Post;
+import com.project.sokdak2.api.domain.post.QPost;
 import com.project.sokdak2.api.request.PostSearch;
 import com.project.sokdak2.api.response.PostResponse;
 import com.project.sokdak2.api.util.QueryDslUtil;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor

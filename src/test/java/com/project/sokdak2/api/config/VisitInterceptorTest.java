@@ -1,6 +1,6 @@
 package com.project.sokdak2.api.config;
 
-import com.project.sokdak2.api.domain.Visits;
+import com.project.sokdak2.api.domain.common.Visits;
 import com.project.sokdak2.api.repository.VisitsRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

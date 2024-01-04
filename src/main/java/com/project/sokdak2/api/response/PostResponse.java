@@ -1,7 +1,7 @@
 package com.project.sokdak2.api.response;
 
-import com.project.sokdak2.api.domain.File;
-import com.project.sokdak2.api.domain.Post;
+import com.project.sokdak2.api.domain.common.File;
+import com.project.sokdak2.api.domain.post.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

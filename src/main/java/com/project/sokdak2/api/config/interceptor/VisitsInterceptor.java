@@ -1,6 +1,6 @@
-package com.project.sokdak2.api.config;
+package com.project.sokdak2.api.config.interceptor;
 
-import com.project.sokdak2.api.domain.Visits;
+import com.project.sokdak2.api.domain.common.Visits;
 import com.project.sokdak2.api.repository.VisitsRepository;
 import com.project.sokdak2.api.util.CommonUtil;
 import lombok.RequiredArgsConstructor;

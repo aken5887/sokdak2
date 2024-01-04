@@ -1,16 +1,17 @@
 package com.project.sokdak2.api.util;
 
-import com.project.sokdak2.api.domain.QPost;
+import com.project.sokdak2.api.domain.post.QPost;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.Expressions;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.ObjectUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 public class QueryDslUtil {

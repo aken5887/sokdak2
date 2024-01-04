@@ -3,7 +3,7 @@ package com.project.sokdak2.api.controller;
 import com.google.common.net.HttpHeaders;
 import com.project.sokdak2.api.config.AppConfig;
 import com.project.sokdak2.api.config.annotation.Users;
-import com.project.sokdak2.api.domain.User;
+import com.project.sokdak2.api.domain.user.User;
 import com.project.sokdak2.api.request.Login;
 import com.project.sokdak2.api.request.SessionUser;
 import com.project.sokdak2.api.response.SessionResponse;

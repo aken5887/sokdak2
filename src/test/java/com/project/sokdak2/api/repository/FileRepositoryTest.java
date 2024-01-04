@@ -2,15 +2,12 @@ package com.project.sokdak2.api.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.project.sokdak2.api.domain.File;
-import com.project.sokdak2.api.domain.Post;
+import com.project.sokdak2.api.domain.common.File;
+import com.project.sokdak2.api.domain.post.Post;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.hibernate.collection.internal.PersistentBag;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

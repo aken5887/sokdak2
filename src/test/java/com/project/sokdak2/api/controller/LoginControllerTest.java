@@ -2,8 +2,8 @@ package com.project.sokdak2.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.sokdak2.api.config.AppConfig;
-import com.project.sokdak2.api.config.Role;
-import com.project.sokdak2.api.domain.User;
+import com.project.sokdak2.api.domain.user.Role;
+import com.project.sokdak2.api.domain.user.User;
 import com.project.sokdak2.api.repository.SessionRepository;
 import com.project.sokdak2.api.repository.UserRepository;
 import com.project.sokdak2.api.request.Login;

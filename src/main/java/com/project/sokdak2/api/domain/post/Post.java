@@ -1,5 +1,7 @@
-package com.project.sokdak2.api.domain;
+package com.project.sokdak2.api.domain.post;
 
+import com.project.sokdak2.api.domain.common.BaseTimeEntity;
+import com.project.sokdak2.api.domain.common.File;
 import com.project.sokdak2.api.request.PostCreate;
 import lombok.Builder;
 import lombok.Getter;

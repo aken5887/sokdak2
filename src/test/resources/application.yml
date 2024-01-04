@@ -22,3 +22,7 @@ me:
 file:
   upload:
     dir: C:/upload
+
+schedules:
+  cron:
+    visits-remove: 0 0 5 * * ?

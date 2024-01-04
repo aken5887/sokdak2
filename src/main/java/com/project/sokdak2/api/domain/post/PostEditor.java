@@ -1,4 +1,4 @@
-package com.project.sokdak2.api.domain;
+package com.project.sokdak2.api.domain.post;
 
 import com.querydsl.core.util.StringUtils;
 import lombok.Getter;

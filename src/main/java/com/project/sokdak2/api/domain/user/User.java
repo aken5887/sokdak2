@@ -1,6 +1,6 @@
-package com.project.sokdak2.api.domain;
+package com.project.sokdak2.api.domain.user;
 
-import com.project.sokdak2.api.config.Role;
+import com.project.sokdak2.api.domain.common.BaseTimeEntity;
 import com.project.sokdak2.api.request.SessionUser;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name="tb_user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends BaseTimeEntity{
+public class User extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,6 @@
 package com.project.sokdak2.api.controller;
 
-import com.project.sokdak2.api.domain.Visits;
+import com.project.sokdak2.api.domain.common.Visits;
 import com.project.sokdak2.api.repository.VisitsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
