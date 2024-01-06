@@ -79,6 +79,9 @@ dependencies {
 
     //awaitility
     testImplementation 'org.awaitility:awaitility:4.2.0'
+
+    // jsop
+    implementation 'org.jsoup:jsoup:1.15.3'
 }
 
 tasks.named('test') {

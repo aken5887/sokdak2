@@ -2,8 +2,8 @@ package com.project.sokdak2.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.sokdak2.api.config.AppConfig;
-import com.project.sokdak2.api.domain.user.Role;
 import com.project.sokdak2.api.domain.post.Post;
+import com.project.sokdak2.api.domain.user.Role;
 import com.project.sokdak2.api.domain.user.User;
 import com.project.sokdak2.api.exception.PostNotFoundException;
 import com.project.sokdak2.api.repository.PostRepository;
@@ -39,7 +39,6 @@ import java.util.stream.IntStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
@@ -493,7 +492,7 @@ class PostControllerTest {
             
             .andExpect(status().isOk());
     //then
-    Post post = postRepository.findAllByTitle("XSS test2").get(0).get();
+    Post post = postRepository.findAllByTitle("XSS test2").get(0);
     assertThat(post.getContent()).isEqualTo(xssContent);
   }
 }
