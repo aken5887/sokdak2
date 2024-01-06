@@ -131,6 +131,7 @@ public class NewsService {
         try {
             JsonNode jsonNode = objectMapper.readTree(jsonString);
             result = jsonNode.get("summary").asText();
+            result = result.replaceAll("<br>","").replaceAll("<br/>","");
         } catch (JsonProcessingException e) {
             log.debug(e.getMessage());
         }
