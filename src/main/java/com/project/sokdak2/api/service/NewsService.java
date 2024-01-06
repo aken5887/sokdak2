@@ -1,6 +1,10 @@
 package com.project.sokdak2.api.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.sokdak2.api.request.NewsArticle;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -8,10 +12,15 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 public class NewsService {
 
@@ -30,6 +39,7 @@ public class NewsService {
                 sbf.append("<li>");
                 sbf.append("<a href='").append(article.getLink()).append("' target='_blank'>").append(article.getTitle()).append("</a>");
                 sbf.append("</li>");
+                sbf.append("<p>").append(article.getSummary()).append("</p>");
                 count++;
             }
             sbf.append("</ul>");
@@ -49,12 +59,22 @@ public class NewsService {
                 if(count != 0) section = "";
                 String title = article.select("div.newspaper_txt_box").text();
                 String link = article.select("a").attr("href");
+                String summary = "";
+
+                String newsNo = link.substring(link.indexOf("/015/")+5, link.indexOf("?"));
+                String urlLink = "https://tts.news.naver.com/article/015/"+newsNo+"/summary?callback=callback";
+                String summaryHtml = getSummaryResponse(urlLink);
+                if(StringUtils.hasText(summaryHtml)){
+                    summary = getSummaryHtml(summaryHtml);
+                }
+
                 if(!StringUtils.hasText(title)){
                     title = article.select("a.article_lst--title_only").text();
                 }
                 NewsArticle newsArticle = NewsArticle.builder()
                         .section(section)
                         .title(title)
+                        .summary(summary)
                         .link(link)
                         .build();
                 newsList.add(newsArticle);
@@ -79,5 +99,41 @@ public class NewsService {
             sbf.append("<p>").append("사유:").append(e.getMessage()).append("</p>");
         }
         return sbf.toString();
+    }
+
+    private static String getSummaryResponse(String urlLink) {
+        StringBuilder sb = new StringBuilder();
+        try{
+            URL obj = new URL(urlLink);
+            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
+            connection.setRequestMethod("GET");
+
+            int responseCode = connection.getResponseCode();
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String inputLine;
+
+            while((inputLine = in.readLine()) != null){
+                sb.append(inputLine);
+            }
+            in.close();
+        }catch(IOException io){
+            log.debug(io.getMessage());
+        }
+        return sb.toString();
+    }
+
+    private static String getSummaryHtml(String summaryHtml) {
+        String result = "";
+        int startIndex = summaryHtml.indexOf("{");
+        int endIndex = summaryHtml.lastIndexOf("}");
+        String jsonString = summaryHtml.substring(startIndex, endIndex+1);
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode jsonNode = objectMapper.readTree(jsonString);
+            result = jsonNode.get("summary").asText();
+        } catch (JsonProcessingException e) {
+            log.debug(e.getMessage());
+        }
+        return result;
     }
 }
