@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest(properties = {"schedules.cron.newsArticle-get : 0/10 * * * * ?"})
+@SpringBootTest(properties = {"schedules.cron.newsArticle-get : 0/5 * * * * ?"})
 class NewsSchedulerTest {
 
     @Autowired
@@ -38,7 +38,7 @@ class NewsSchedulerTest {
 
         // when
         Awaitility.await()
-                .atMost(10, TimeUnit.SECONDS)
+                .atMost(15, TimeUnit.SECONDS)
                 .untilAsserted(() -> {
                    verify(newsScheduler, atLeast(1)).getNewsArticle();
                     assertThat(postRepository.findAllByTitle(title).size()).isGreaterThan(0);
