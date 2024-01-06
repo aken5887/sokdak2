@@ -20,7 +20,7 @@ public class VisitsDao {
         .from(visits)
         .where(visits.createdTime.before(LocalDate.now().minusDays(1L).atStartOfDay())
                 .and(visits.uri.notLike("/resume"))
-                .and(visits.method.eq("GET")))
+                .and((visits.method.eq("GET"))).or(visits.method.eq("HEAD")))
         .fetch();
     }
     public long deleteUselessVisits() {
@@ -28,7 +28,7 @@ public class VisitsDao {
         return this.queryFactory.delete(visits)
                 .where(visits.createdTime.before(LocalDate.now().minusDays(1L).atStartOfDay())
                         .and(visits.uri.notLike("/resume"))
-                        .and(visits.method.eq("GET")))
+                        .and((visits.method.eq("GET"))).or(visits.method.eq("HEAD")))
                 .execute();
     }
 }
