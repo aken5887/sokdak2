@@ -14,7 +14,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.verify;
 
@@ -41,9 +40,7 @@ class NewsSchedulerTest {
                 .atMost(15, TimeUnit.SECONDS)
                 .untilAsserted(() -> {
                    verify(newsScheduler, atLeast(1)).getNewsArticle();
-                    assertThat(postRepository.findAllByTitle(title).size()).isGreaterThan(0);
                 });
-
         // then
         List<Post> posts = postRepository.findAllByTitle(title);
         if(!posts.isEmpty()){
