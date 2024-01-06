@@ -12,5 +12,5 @@ server:
 schedules:
   cron:
     visits-remove: 0 0 5 * * ?
-    newsArticle-get: 0 0 7,12 * * ?
+    newsArticle-get: 0 0 7,12,22 * * ?
 
