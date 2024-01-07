@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -68,6 +69,8 @@ public class PostController {
     }
 
     String clientAddress = CommonUtil.getClientIp(req);
+    HttpSession session = req.getSession();
+    String sessionId = session.getId();
     boolean update = true;
 
     if("cookie".equals(cache)){
@@ -82,7 +85,7 @@ public class PostController {
           }
         }
       }
-      String expectedCookieValue = Base64.encodeBase64String((clientAddress+"-"+postId).getBytes(
+      String expectedCookieValue = Base64.encodeBase64String((sessionId+"-"+clientAddress+"-"+postId).getBytes(
           StandardCharsets.UTF_8));
       if(!cookieValue.equals(expectedCookieValue)){
         Cookie cookie = new Cookie(cookieName, expectedCookieValue);
@@ -92,7 +95,7 @@ public class PostController {
         res.addCookie(cookie);
       }else{
         update = false;
-        log.info("request has duplicated within same address : {}, {}", clientAddress, postId);
+        log.info("request has duplicated within same address : {}, {}, {}", sessionId, clientAddress, postId);
       }
     }
     postService.increaseCount(postId, clientAddress, update);

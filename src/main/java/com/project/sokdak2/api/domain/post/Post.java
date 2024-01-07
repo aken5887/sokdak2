@@ -1,6 +1,5 @@
 package com.project.sokdak2.api.domain.post;
 
-import com.project.sokdak2.api.domain.common.BaseTimeEntity;
 import com.project.sokdak2.api.domain.common.File;
 import com.project.sokdak2.api.request.PostCreate;
 import lombok.Builder;
@@ -9,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name="tb_post")
 @NoArgsConstructor
-public class Post extends BaseTimeEntity {
+public class Post {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +31,8 @@ public class Post extends BaseTimeEntity {
   private int password;
   @ColumnDefault("0")
   private Integer locked;
+  private LocalDateTime createdTime;
+  private LocalDateTime lastUpdatedTime;
   @OneToMany(cascade=CascadeType.ALL)
   private List<File> files = new ArrayList<>();
   @OneToMany
@@ -43,6 +45,7 @@ public class Post extends BaseTimeEntity {
     this.content = content;
     this.password = password;
     this.locked = locked;
+    this.createdTime = LocalDateTime.now();
   }
 
   public Post toEntity(PostCreate postCreate){
@@ -51,6 +54,7 @@ public class Post extends BaseTimeEntity {
     this.content = postCreate.getContent();
     this.password = postCreate.getPassword()==null? 0000:postCreate.getPassword();
     this.locked = postCreate.getLocked();
+    this.createdTime = LocalDateTime.now();
     return this;
   }
 
@@ -65,6 +69,7 @@ public class Post extends BaseTimeEntity {
     this.title = postEditor.getTitle();
     this.content = postEditor.getContent();
     this.locked = postEditor.getLocked();
+    this.lastUpdatedTime = LocalDateTime.now();
     return this;
   }
 

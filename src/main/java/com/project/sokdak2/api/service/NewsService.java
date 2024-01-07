@@ -36,8 +36,8 @@ public class NewsService {
                     sbf.append("<h3>섹션[").append(article.getSection()).append("]</h3>");
                     sbf.append("<ul>");
                 }
-                sbf.append("<li>");
-                sbf.append("<a href='").append(article.getLink()).append("' target='_blank'>").append(article.getTitle()).append("</a>");
+                sbf.append("<li>").append(article.getTitle());
+                sbf.append("<a href='").append(article.getLink()).append("' target='_blank' style='color:#1111df;'> [링크]").append("</a>");
                 sbf.append("</li>");
                 sbf.append("<p>").append(article.getSummary()).append("</p>");
                 count++;
