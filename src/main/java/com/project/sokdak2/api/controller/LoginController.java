@@ -10,23 +10,26 @@ import com.project.sokdak2.api.response.SessionResponse;
 import com.project.sokdak2.api.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import java.time.Duration;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Optional;
-import javax.crypto.SecretKey;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.crypto.SecretKey;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -41,7 +44,7 @@ public class LoginController {
 
   @GetMapping("/login")
   public String login(){
-    return "/user/login";
+    return "/login/login";
   }
 
   @PostMapping("/login")
@@ -93,6 +96,11 @@ public class LoginController {
       response.addCookie(cookieToDelete);
     }
     return "redirect:/posts";
+  }
+
+  @GetMapping("/login/join")
+  public String join() {
+    return "/login/join";
   }
 
   private ResponseCookie responseCookie(String sessionCookieValue){

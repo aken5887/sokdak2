@@ -348,7 +348,6 @@ class PostControllerTest {
     // expected
     MvcResult result =
       this.mockMvc.perform(get("/posts?kw={kw}&kw_opt={kw_opt}", "mymy-10", "title"))
-          
           .andExpect(status().isOk())
           .andReturn();
 

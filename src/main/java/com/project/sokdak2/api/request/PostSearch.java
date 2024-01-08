@@ -1,5 +1,6 @@
 package com.project.sokdak2.api.request;
 
+import com.project.sokdak2.api.domain.post.Category;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class PostSearch {
   @Builder.Default
   private String dir_props = "id";
   private Integer pwd;
+  private Category category;
 
   public long getOffSet() {
     return (Math.max(1, page) - 1) * Math.min(this.size, DEFAULT_MAX_SIZE);
@@ -93,5 +95,13 @@ public class PostSearch {
 
   public void setPwd(Integer pwd) {
     this.pwd = pwd;
+  }
+
+  public Category getCategory() {
+    return category;
+  }
+
+  public void setCategory(Category category) {
+    this.category = category;
   }
 }

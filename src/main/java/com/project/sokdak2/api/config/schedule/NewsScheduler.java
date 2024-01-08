@@ -1,6 +1,7 @@
 package com.project.sokdak2.api.config.schedule;
 
 
+import com.project.sokdak2.api.domain.post.Category;
 import com.project.sokdak2.api.domain.post.Post;
 import com.project.sokdak2.api.repository.PostRepository;
 import com.project.sokdak2.api.service.NewsService;
@@ -29,6 +30,7 @@ public class NewsScheduler {
                     .userId("뉴스정리 봇")
                     .password(9999)
                     .locked(0)
+                    .category(Category.NEWS)
                     .build();
             postRepository.save(post);
         }

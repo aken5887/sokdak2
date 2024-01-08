@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="/layout/header :: headerFragment"/>
+<body>
+  <div class="password_confirm">
+    <h5 class="password_title">
+      <strong>회원가입</strong>
+    </h5>
+    <section class="joinForm">
+      <label class="password_field_title">이메일</label>
+      <label class="password_field">
+        <input type="text" name="email" id="email" class="required" title="이메일" placeholder="아이디(이메일)"/>
+      </label>
+      <label class="warning email required" style="display: none;">이메일을 입력하세요.</label>
+      <label class="warning email invalid" style="display: none;">이미 등록된 메일 주소입니다.</label>
+       <label class="password_field_title">비밀번호</label>
+       <label class="password_field">
+         <input type="password" name="password" id="password" class="required" title="비밀번호" placeholder="비밀번호"/>
+       </label>
+      <label class="warning password required" style="display: none;">비밀번호를 입력하세요.</label>
+      <label class="warning password invalid" style="display: none;">
+        - 영문/숫자/특수문자 2가지 이상 조합 (8~20자)
+        - 3개 이상 연속되거나 동일한 문자/숫자 제외
+      </label>
+      <label class="password_field_title">비밀번호 확인</label>
+      <label class="password_field">
+        <input type="password" name="password2" id="password2" class="required" title="비밀번호 확인" placeholder="비밀번호 확인"/>
+      </label>
+      <label class="warning password2 required" style="display: none;">비밀번호2를 입력하세요.</label>
+      <label class="warning password2" style="display: none;">
+          비밀번호가 일치하지 않습니다.
+      </label>
+      <label class="password_field_title">이름</label>
+      <label class="password_field">
+        <input type="text" name="userId" id="userId" class="required" title="이름" placeholder="이름"/>
+      </label>
+      <label class="warning userId required" style="display: none;">
+        이름을 정확히 입력하세요.
+      </label>
+    </section>
+    <div class="bt_wrap">
+      <a href="#" class="on" id="joinBtn">가입하기</a>
+      <a href="#" class="" id="cancelBtn">취소</a>
+    </div>
+  </div>
+  <form name="loginForm" id="loginForm" th:action="${param.path}" method="get">
+    <input type="hidden" name="page" th:value="${param.page}">
+    <input type="hidden" name="size" th:value="${param.size}">
+    <input type="hidden" name="kw_opt" th:value="${param.kw_opt}">
+    <input type="hidden" name="kw" th:value="${param.kw}">
+  </form>
+</body>
+<th:block th:replace="/layout/footer :: footerFragment"/>
+<script th:inline="javascript">
+  $(document).ready(function(){
+    $(".joinForm input.required").on('change', function(e){
+        let val = $(this).val();
+        let field = $(this).attr("name");
+        console.log('val : ', val, 'field: ', field);
+        if(val === '' || val == null){
+          $("."+field+" required").show();
+        }else{
+          $("."+field+" required").hide();
+        }
+    });
+
+    $(".bt_wrap #joinBtn").click(function(e){
+      e.preventDefault();
+      $(".joinForm input.required").each(function(e){
+        let val = $(this).val();
+        let field = $(this).attr("name");
+        if(val === '' || val == null){
+          console.log('val : ', val, 'field: ', field);
+          $("label.warning."+field+".required").css("display","block");
+        }
+      });
+
+      // if(common.validate.checkRequired(".password_confirm .required")){
+      //   let dataJson = {};
+      //   dataJson.email = $("#email").val();
+      //   dataJson.password = $("#password").val();
+      //
+      //   $.ajax({
+      //     url: '/login',
+      //     method: 'post',
+      //     contentType: 'application/json',
+      //     data: JSON.stringify(dataJson),
+      //     success: function(res){
+      //      document.loginForm.submit();
+      //     },
+      //     error: function(res){
+      //       let responseJson = res.responseJSON;
+      //       let rCode = responseJson.code;
+      //       let rMessage = responseJson.message;
+      //
+      //       if(rMessage != null){
+      //         alert(rMessage);
+      //       }else{
+      //         alert("로그인에 실패하였습니다.");
+      //       }
+      //     }
+      //   });
+      // }
+    });
+
+    $(".bt_wrap #cancelBtn").click(function(e){
+      e.preventDefault();
+      window.history.back();
+    });
+  });
+
+</script>
+</html>

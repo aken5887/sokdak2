@@ -7,6 +7,7 @@ import com.project.sokdak2.api.response.PostResponse;
 import com.project.sokdak2.api.util.QueryDslUtil;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,12 +67,22 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom{
 
   private Predicate equalTypeAndKeyword(QPost post, PostSearch postSearch) {
     String type = postSearch.getKw_opt();
+    BooleanExpression booleanExpression = null;
     if("title".equals(type)){
-      return post.title.contains(postSearch.getKw());
+      booleanExpression = post.title.contains(postSearch.getKw());
     }else if("userId".equals(type)){
-      return post.userId.contains(postSearch.getKw());
+      booleanExpression = post.userId.contains(postSearch.getKw());
     }
-    return null;
+
+    if(postSearch.getCategory() != null){
+      // 여기에 추가
+      if(booleanExpression != null){
+        return booleanExpression.and(post.category.eq(postSearch.getCategory()));
+      }else{
+        return post.category.eq(postSearch.getCategory());
+      }
+    }
+    return booleanExpression;
   }
 
 }

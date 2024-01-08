@@ -21,6 +21,8 @@ public class Post {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  @Enumerated(EnumType.STRING)
+  private Category category;
   private String title;
   private String userId;
   @Lob
@@ -39,13 +41,14 @@ public class Post {
   private List<PostReply> replies = new ArrayList<>();
 
   @Builder
-  public Post(String title, String userId, String content, int password, Integer locked){
+  public Post(String title, String userId, String content, int password, Integer locked, Category category){
     this.title = title;
     this.userId = userId;
     this.content = content;
     this.password = password;
     this.locked = locked;
     this.createdTime = LocalDateTime.now();
+    this.category = category;
   }
 
   public Post toEntity(PostCreate postCreate){
@@ -55,6 +58,7 @@ public class Post {
     this.password = postCreate.getPassword()==null? 0000:postCreate.getPassword();
     this.locked = postCreate.getLocked();
     this.createdTime = LocalDateTime.now();
+    this.category = Category.BBS;
     return this;
   }
 

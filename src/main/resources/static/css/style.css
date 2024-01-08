@@ -122,6 +122,28 @@ h1, h2, h3 {
     border : 1px solid #f8243d !important;
 }
 
+.board_list_nav {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 1.5rem;
+    font-size: 1.6rem;
+    font-weight: bold;
+}
+
+.board_list_nav ul {
+    margin-left: 1.2rem;
+}
+
+.board_list_nav ul li {
+    display: inline-block;
+    width: 50px;
+}
+
+.board_list_nav ul li.on {
+    color: #009999;
+    text-decoration: underline;
+}
+
 .board_list {
     width : 100%;
     border-top: 2px solid #000;
