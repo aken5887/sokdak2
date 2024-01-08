@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<th:block th:fragment="titleFragment(title)">
+<th:block th:fragment="titleFragment(title, categoryCode)">
   <header>
     <nav>
       <ul>
@@ -20,10 +20,13 @@
     </div>
     <div class="board_title" th:if="${title != ''}">
       <a href="javascript:void(0);" onclick="javascript:fn_main();">
-        <strong th:text="${title}"></strong>
+        <strong th:if="${categoryCode == ''}">속닥속닥</strong>
+        <strong th:if="${categoryCode == 'NEWS'}">속닥속닥 뉴스</strong>
+        <strong th:if="${categoryCode == 'BBS'}">속닥속닥 게시판</strong>
       </a>
-      <p th:if="${sessionUser != null}" th:text="|${sessionUser.name}님 환영합니다.|"></p>
-      <p th:if="${sessionUser == null}">속닥속닥 게시판에 오신걸 환영합니다.</p>
+      <p th:if="${categoryCode == ''}" th:text="|속닥속닥에 오신걸 환영합니다.|"></p>
+      <p th:if="${categoryCode == 'BBS'}">일반 게시판에 오신걸 환영합니다. 자유롭게 글을 작성하고 삭제할 수 있습니다.</p>
+      <p th:if="${categoryCode == 'NEWS'}">뉴스 게시판에 오신걸 환영합니다.<br>하루에 1번 매일 오전 7시에 한국경제 요약본이 업데이트 됩니다.</p>
     </div>
 </th:block>
 </html>
