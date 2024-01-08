@@ -31,6 +31,7 @@ public class PostSearch {
   private String dir_props = "id";
   private Integer pwd;
   private Category category;
+  private String categoryCode;
 
   public long getOffSet() {
     return (Math.max(1, page) - 1) * Math.min(this.size, DEFAULT_MAX_SIZE);
@@ -103,5 +104,9 @@ public class PostSearch {
 
   public void setCategory(Category category) {
     this.category = category;
+  }
+
+  public String getCategoryCode() {
+    return this.category != null? category.getCode():"";
   }
 }

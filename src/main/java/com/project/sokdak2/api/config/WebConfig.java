@@ -31,7 +31,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-      registry.addRedirectViewController("/", "/posts");
+      registry.addRedirectViewController("/", "/posts?category=NEWS");
   }
 
     @Override
