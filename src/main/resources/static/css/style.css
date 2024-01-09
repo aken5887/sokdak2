@@ -107,7 +107,7 @@ h1, h2, h3 {
     margin-left: 10px;
     padding: 10px;
     border: 1px solid #000;
-    border-radius: 2px;
+    border-radius: .5em;
     font-size: 1.4rem;
 }
 
@@ -232,7 +232,7 @@ h1, h2, h3 {
     margin-left: 5px;
     padding: 10px;
     border: 1px solid #000;
-    border-radius: 2px;
+    border-radius: .5em;
     font-size: 1.2rem;
     background: #000;
     color: #ffffff;
@@ -242,6 +242,10 @@ h1, h2, h3 {
     margin-left: 5px;
     padding: 10px;
     box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #8e8e8e;
+    border-radius: .5em;
     width: 20%
 }
 
@@ -252,10 +256,12 @@ h1, h2, h3 {
     font-weight: normal;
     display: inline-block;
     padding: 5px;
-    height: 42px;
+    height: 40px;
     outline: 0;
     border-width: 1px;
     border-style: solid;
+    border-color: #8e8e8e;
+    border-radius: .5em;
     background: #FFF;
     color: #4b4b4d;
 }

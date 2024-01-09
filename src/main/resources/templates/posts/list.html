@@ -6,7 +6,7 @@
 <div class="board_wrap">
     <th:block th:replace="/layout/title :: titleFragment('속닥속닥 게시판',${postSearch.categoryCode})"/>
     <div class="bt_wrap right">
-        <a class="on" href="javascript:void(0);" id="writeBtn">등록</a>
+        <a th:if="${postSearch.categoryCode != 'NEWS'}" class="on" href="javascript:void(0);" id="writeBtn">등록</a>
     </div>
     <div class="board_list_wrap">
         <div class="board_list_nav">

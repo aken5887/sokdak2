@@ -112,11 +112,18 @@
     }
 
     .board_search input{
-        width: 30%;
+        width: 35%;
+        height: 40px;
     }
 
     .board_search a {
         min-width: 10%;
+    }
+
+    .board_search select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
     }
 }
 
