@@ -47,7 +47,6 @@ public class Post {
     this.content = content;
     this.password = password;
     this.locked = locked;
-    this.createdTime = LocalDateTime.now();
     this.category = category;
   }
 
@@ -57,8 +56,8 @@ public class Post {
     this.content = postCreate.getContent();
     this.password = postCreate.getPassword()==null? 0000:postCreate.getPassword();
     this.locked = postCreate.getLocked();
-    this.createdTime = LocalDateTime.now();
     this.category = Category.BBS;
+    this.createdTime = LocalDateTime.now();
     return this;
   }
 
