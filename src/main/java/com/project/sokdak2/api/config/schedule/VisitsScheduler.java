@@ -2,6 +2,7 @@ package com.project.sokdak2.api.config.schedule;
 
 
 import com.project.sokdak2.api.domain.common.Visits;
+import com.project.sokdak2.api.domain.post.Category;
 import com.project.sokdak2.api.domain.post.Post;
 import com.project.sokdak2.api.repository.PostRepository;
 import com.project.sokdak2.api.repository.VisitsDao;
@@ -37,6 +38,7 @@ public class VisitsScheduler {
                 .userId("스케쥴 봇")
                 .password(9999)
                 .locked(0)
+                .category(Category.BBS)
                 .build();
         postRepository.save(post);
     }
