@@ -4,14 +4,12 @@ import com.project.sokdak2.api.domain.common.QVisits;
 import com.project.sokdak2.api.domain.common.Visits;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Repository
-public class VisitsDao {
+public class VisitsRepositoryImpl implements VisitsRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     public List<Visits> selectUselessVisits() {

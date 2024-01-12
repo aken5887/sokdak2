@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
-public class PostRepositoryCustomImpl implements PostRepositoryCustom{
+public class PostRepositoryImpl implements PostRepositoryCustom{
 
   private final JPAQueryFactory jpaQueryFactory;
 

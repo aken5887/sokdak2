@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface VisitsRepository extends JpaRepository<Visits, Long> {
+public interface VisitsRepository extends JpaRepository<Visits, Long>, VisitsRepositoryCustom {
     List<Visits> findAllByUriContaining(String uri);
 }
