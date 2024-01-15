@@ -122,7 +122,13 @@ insert into tb_post (title, content, user_id, created_time, password, locked) va
 내용입니다-1
 내용입니다-1
 내용입니다-31','user-31',now(),'1264',1);
-update tb_post set password='1234';
+update tb_post
+set password='1234',
+    category='BBS';
+
+update tb_post
+set category='NEWS'
+where title='제목-31';
 
 insert into tb_user (email, name, password, role) values ('minu8778@gmail.com', 'minu', 1234, 'ADMIN');
 insert into tb_user (email, name, password, role) values ('minu8558@gmail.com', 'minu2', 1234, 'GENERAL');
