@@ -46,7 +46,7 @@ public class PostResponse {
   @Builder
   public PostResponse(Long id, String title, String userId, String content, Integer locked) {
     this.id = id;
-    this.title = title.substring(0, Math.min(20, title.length())); // 제목은 20자 제한
+    this.title = title==null?"":title.substring(0, Math.min(20, title.length())); // 제목은 20자 제한
     this.userId = userId;
     this.content = content;
     this.locked = locked;

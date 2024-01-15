@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: real, db
+    include: real, db, sqs, mail
   servlet:
     multipart:
       max-file-size: 10MB
