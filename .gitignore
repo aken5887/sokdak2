@@ -39,3 +39,6 @@ out/
 ## profile ##
 **/src/main/resources/application-real.yml
 **/src/main/resources/application-db.yml
+**/src/main/resources/application-sqs.yml
+**/src/main/resources/application-mail.yml
+**/src/test/resources/application-secret.yml
