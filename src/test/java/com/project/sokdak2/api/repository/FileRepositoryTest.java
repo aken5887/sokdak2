@@ -1,12 +1,7 @@
 package com.project.sokdak2.api.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.project.sokdak2.api.domain.common.File;
 import com.project.sokdak2.api.domain.post.Post;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.hibernate.collection.internal.PersistentBag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cloud.aws.messaging.listener.SimpleMessageListenerContainer;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 //@DataJpaTest
 @SpringBootTest
@@ -24,6 +26,8 @@ class FileRepositoryTest {
   @Autowired PostRepository postRepository;
   @Value("${file.upload.dir}")
   String uploadDir;
+  @MockBean
+  SimpleMessageListenerContainer simpleMessageListenerContainer;
 
   @BeforeEach
   public void cleanup(){

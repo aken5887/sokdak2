@@ -4,20 +4,24 @@ import com.project.sokdak2.api.domain.post.Post;
 import com.project.sokdak2.api.request.PostSearch;
 import com.project.sokdak2.api.response.PostResponse;
 import com.project.sokdak2.api.util.PageMaker;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cloud.aws.messaging.listener.SimpleMessageListenerContainer;
 import org.springframework.data.domain.Page;
+
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @SpringBootTest
 class PostRepositoryTest {
 
   @Autowired
   PostRepository postRepository;
-
+  @MockBean
+  SimpleMessageListenerContainer simpleMessageListenerContainer;
   @DisplayName("Pageable 객체를 이용해서 조회한다.")
   @Test
   void test() {

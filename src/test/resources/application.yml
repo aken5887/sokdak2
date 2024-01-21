@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: secret
+    active:
   jpa:
     show-sql: true
     defer-datasource-initialization: true
@@ -16,6 +16,32 @@ spring:
   redis:
     host: localhost
     port: 6379
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: test
+    password: test
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
+
+cloud:
+  aws:
+    credentials:
+      access-key: test
+      secret-key: test
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    sqs:
+      queue:
+        name: SokdakQueue.fifo
+        url: https://sqs.ap-northeast-2.amazonaws.com/test/SokdakQueue.fifo
 
 me:
   cache: cookie

@@ -9,6 +9,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cloud.aws.messaging.listener.SimpleMessageListenerContainer;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +24,8 @@ class UserServiceTest {
     UserService userService;
     @Autowired
     UserRepository userRepository;
+    @MockBean
+    SimpleMessageListenerContainer simpleMessageListenerContainer;
 
     @BeforeEach
     void clean(){

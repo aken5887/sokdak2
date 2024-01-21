@@ -10,7 +10,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.cloud.aws.messaging.listener.SimpleMessageListenerContainer;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +33,8 @@ class VisitsSchedulerTest {
     VisitsRepository visitsRepository;
     @SpyBean
     VisitsScheduler visitsScheduler;
+    @MockBean
+    SimpleMessageListenerContainer simpleMessageListenerContainer;
 
     @BeforeEach
     void clean(){

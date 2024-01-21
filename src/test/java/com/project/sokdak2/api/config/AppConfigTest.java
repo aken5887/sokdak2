@@ -1,11 +1,14 @@
 package com.project.sokdak2.api.config;
 
-import java.util.Arrays;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cloud.aws.messaging.listener.SimpleMessageListenerContainer;
 import org.springframework.context.ApplicationContext;
+
+import java.util.Arrays;
 
 @SpringBootTest
 class AppConfigTest {
@@ -15,6 +18,9 @@ class AppConfigTest {
 
   @Autowired
   ApplicationContext applicationContext;
+
+  @MockBean
+  SimpleMessageListenerContainer simpleMessageListenerContainer;
 
   @DisplayName("객체에 바인딩된 application.yml 프로퍼티 값을 읽어온다")
   @Test

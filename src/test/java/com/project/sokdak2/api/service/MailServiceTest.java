@@ -3,14 +3,17 @@ package com.project.sokdak2.api.service;
 import com.project.sokdak2.api.request.MailMessage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cloud.aws.messaging.listener.SimpleMessageListenerContainer;
 
 @SpringBootTest
 class MailServiceTest {
 
-    @Autowired
+    @MockBean
     MailService mailService;
+    @MockBean
+    SimpleMessageListenerContainer simpleMessageListenerContainer;
 
     @DisplayName("메일이 정상적으로 발송 된다.")
     @Test

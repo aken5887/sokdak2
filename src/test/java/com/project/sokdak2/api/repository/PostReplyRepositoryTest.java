@@ -1,18 +1,21 @@
 package com.project.sokdak2.api.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.project.sokdak2.api.domain.post.Post;
 import com.project.sokdak2.api.domain.post.PostReply;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cloud.aws.messaging.listener.SimpleMessageListenerContainer;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class PostReplyRepositoryTest {
@@ -22,7 +25,8 @@ class PostReplyRepositoryTest {
 
   @Autowired
   PostRepository postRepository;
-
+  @MockBean
+  SimpleMessageListenerContainer simpleMessageListenerContainer;
   @AfterEach
   public void cleanup(){
     this.postReplyRepository.deleteAll();

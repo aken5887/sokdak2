@@ -8,7 +8,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.cloud.aws.messaging.listener.SimpleMessageListenerContainer;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,6 +30,9 @@ class NewsSchedulerTest {
 
     @Autowired
     NewsService newsService;
+
+    @MockBean
+    SimpleMessageListenerContainer simpleMessageListenerContainer;
 
     @DisplayName("오늘 뉴스가 없으면 오늘자 뉴스가 등록된다.")
     @Test
