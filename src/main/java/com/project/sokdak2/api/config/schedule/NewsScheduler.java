@@ -1,9 +1,12 @@
 package com.project.sokdak2.api.config.schedule;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.sokdak2.api.domain.post.Category;
 import com.project.sokdak2.api.domain.post.Post;
 import com.project.sokdak2.api.repository.PostRepository;
+import com.project.sokdak2.api.request.MailMessage;
+import com.project.sokdak2.api.service.AwsSQSSender;
 import com.project.sokdak2.api.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,8 +20,9 @@ import java.util.List;
 public class NewsScheduler {
     private final PostRepository postRepository;
     private final NewsService newsService;
+    private final AwsSQSSender sqsSender;
     @Scheduled(cron="${schedules.cron.newsArticle-get}")
-    public void getNewsArticle() {
+    public void getNewsArticle() throws JsonProcessingException {
         String newsContent = newsService.getNewsArticleHtml();
         String title = "["+LocalDate.now()+"] 오늘의 뉴스";
 
@@ -33,6 +37,11 @@ public class NewsScheduler {
                     .category(Category.NEWS)
                     .build();
             postRepository.save(post);
+            MailMessage mailMessage = MailMessage.builder()
+                    .title(title)
+                    .content(newsContent)
+                    .build();
+            sqsSender.sendMessageSendMail(mailMessage);
         }
     }
 }
