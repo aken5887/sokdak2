@@ -4,7 +4,7 @@ on:
 
 env:
   ZIP_NAME : sokdak2
-  S3_BUCKET_NAME: dohyun-s3-bucket
+  S3_BUCKET_NAME: my-sokdak-bucket-2024
 
 jobs:
   build:
@@ -48,4 +48,4 @@ jobs:
         run : aws s3 cp --region ap-northeast-2 ./deploy/$ZIP_NAME.zip s3://$S3_BUCKET_NAME/$ZIP_NAME.zip
 
       - name : CodeDeploy
-        run: aws deploy create-deployment --application-name pokedoc-application  --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name sokdak2-application-group --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$ZIP_NAME.zip
+        run: aws deploy create-deployment --application-name my-appliction-2024  --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name sokdak-web-application-group --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$ZIP_NAME.zip
