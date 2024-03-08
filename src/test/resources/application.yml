@@ -1,5 +1,6 @@
 spring:
   profiles:
+    include:
     active:
   jpa:
     show-sql: true
