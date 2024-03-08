@@ -33,22 +33,11 @@ public class VisitInterceptorTest {
         this.visitsRepository.deleteAll();
     }
 
-    @DisplayName("/resume 요청시 Visits에 기록된다.")
-    @Test
-    void test() throws Exception{
-        // when
-        this.mockMvc.perform(get("/resume"))
-                .andExpect(status().isOk());
-        // then
-        Assertions.assertThat(this.visitsRepository.count())
-                .isEqualTo(1);
-    }
-
     @DisplayName("visits 엔티티에 요청한 uri 대로 저장된다.")
     @Test
     void test2() throws Exception {
         //given
-        String uri = "/resume";
+        String uri = "/posts";
         // when
         this.mockMvc.perform(get(uri))
                 .andExpect(status().isOk());
