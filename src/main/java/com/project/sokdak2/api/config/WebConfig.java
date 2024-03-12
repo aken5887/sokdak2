@@ -26,6 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
   private final UserRepository userRepository;
   private final SessionRepository sessionRepository;
   @Value("${me.jwt}") private String jwtUse;
+  @Value("${spring.profiles.include}") private List<String> profiles;
   private final AppConfig appConfig;
   private final VisitsRepository visitsRepository;
 
@@ -36,12 +37,13 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-     registry.addInterceptor(new VisitsInterceptor(visitsRepository))
-            .addPathPatterns("/posts/**", "/password/**",
+        if(!profiles.contains("local")){
+            registry.addInterceptor(new VisitsInterceptor(visitsRepository))
+                    .addPathPatterns("/posts/**", "/password/**",
                             "/download/**", "/resume",
                             "/login", "/logout");
+        }
     }
-
 
   @Override
   public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {

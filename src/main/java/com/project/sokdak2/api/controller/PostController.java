@@ -44,9 +44,6 @@ public class PostController {
     PageMaker<PostResponse> response = new PageMaker<>(postPage);
     model.addAttribute("posts", postPage.getContent());
     model.addAttribute("response", response);
-
-    log.info("response -> {}", response.toString());
-
     return "/posts/list";
   }
 
@@ -95,7 +92,7 @@ public class PostController {
         res.addCookie(cookie);
       }else{
         update = false;
-        log.info("request has duplicated within same address : {}, {}, {}", sessionId, clientAddress, postId);
+        log.debug("request has duplicated within same address : {}, {}, {}", sessionId, clientAddress, postId);
       }
     }
     postService.increaseCount(postId, clientAddress, update);
@@ -115,7 +112,7 @@ public class PostController {
     if(bindingResult.hasErrors()){
       throw new InvalidRequestException(bindingResult);
     }else{
-      log.info("PostCreate : {}", postCreate.toString());
+      log.debug("PostCreate : {}", postCreate.toString());
       postCreate.validate();
       return postService.save(postCreate);
     }

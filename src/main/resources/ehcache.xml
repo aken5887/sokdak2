@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+    <defaultCache
+            maxElementsInMemory="1000"
+            maxElementsOnDisk="0"
+            eternal="false"
+            timeToIdleSeconds="10"
+            timeToLiveSeconds="10"
+            overflowToDisk="false"
+            diskPersistent="false"
+            memoryStoreEvictionPolicy="LRU"/>
+    <!--
+        maxElementsInMemory
+            - 메모리에 저장할 수 있는 최대 요소 수
+        maxElementsOnDisk
+            - 디스크에 저장할 수 있는 최대 요소 수
+        eternal
+            - 캐시 값이 영원히 유지될지 여부
+         timeToIdleSeconds
+            - 설정된 시간 동안 유후 상태시 갱신
+            - 캐시 데이터가 사용되지 않은 채로 유지되는 최대 시간
+         timeToLiveSeconds
+            - 설정된 시간 동안 유지 후 갱신
+            - 캐시 된 데이터의 전체 수명
+        memoryStoreEvictionPolicy
+            - 메모리가 꽉 찬경우, 데이터 제거 알고리즘
+    -->
+
+    <cache
+        name="PostService.getList"
+        maxElementsInMemory="100"
+        maxElementsOnDisk="0"
+        eternal="false"
+        statistics="false"
+        timeToIdleSeconds="10"
+        timeToLiveSeconds="10"
+        overflowToDisk="false"
+        diskPersistent="false"
+        memoryStoreEvictionPolicy="LRU"/>
+
+    <cache
+            name="PostService.getListByPage"
+            maxElementsInMemory="100"
+            maxElementsOnDisk="0"
+            eternal="false"
+            statistics="false"
+            timeToIdleSeconds="20"
+            timeToLiveSeconds="20"
+            overflowToDisk="false"
+            diskPersistent="false"
+            memoryStoreEvictionPolicy="LRU"/>
+
+    <cache
+            name="PostService.findAll"
+            maxElementsInMemory="20000"
+            maxElementsOnDisk="0"
+            eternal="false"
+            statistics="false"
+            timeToIdleSeconds="60"
+            timeToLiveSeconds="60"
+            overflowToDisk="false"
+            diskPersistent="false"
+            memoryStoreEvictionPolicy="LRU"/>
+</ehcache>

@@ -31,10 +31,10 @@ public class AwsSQSListener {
                     deletionPolicy = SqsMessageDeletionPolicy.NEVER)
     public void listen(@Payload String info, @Headers Map<String, String > headers,
                        Acknowledgment ack) throws IOException {
-        log.info("-------------------------");
-        log.info(" 1. info : {}", info);
-        log.info(" 2. headers : {}", headers);
-        log.info("-------------------------");
+        log.debug("-------------------------");
+        log.debug(" 1. info : {}", info);
+        log.debug(" 2. headers : {}", headers);
+        log.debug("-------------------------");
         String messageGroupId = headers.get("MessageGroupId");
 
         System.out.println(headers.get("MessageGroupId"));
@@ -49,7 +49,7 @@ public class AwsSQSListener {
                 List<String> emails = userService.findUserEmails();
                 MailMessage mailMessage = objectMapper.readValue(info.getBytes(), MailMessage.class);
                 for(String email:emails) {
-                    log.info("Valid Email : {}", email);
+                    log.debug("Valid Email : {}", email);
                     mailMessage.updateEmail(email);
                     mailService.sendMail(mailMessage);
                 }

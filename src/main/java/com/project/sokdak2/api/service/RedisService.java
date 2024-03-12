@@ -16,7 +16,7 @@ public class RedisService {
 
   public boolean isFirstIpRequest(String clientAddress, Long postId){
     String key = generateKey(clientAddress, postId);
-    log.info("user key : {}", key);
+    log.debug("user key : {}", key);
     if(redisTemplate.hasKey(key)){
       return false;
     }
@@ -25,7 +25,7 @@ public class RedisService {
 
   public void writeClientRequest(String clientAddress, Long postId){
     String key = generateKey(clientAddress, postId);
-    log.info("user key : {}", key);
+    log.debug("user key : {}", key);
 
     redisTemplate.opsForValue().set(key, true);
     redisTemplate.expire(key, expiredDurationSec, TimeUnit.SECONDS);

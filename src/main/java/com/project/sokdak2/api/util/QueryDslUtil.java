@@ -25,7 +25,7 @@ public class QueryDslUtil {
    */
   public static OrderSpecifier<?> getSortedColumn(Order order, Path<?> parent, String fieldName){
     Path<Object> fieldPath = Expressions.path(Object.class, parent, fieldName);
-    log.info("fieldPath : {}", fieldPath);
+    log.debug("fieldPath : {}", fieldPath);
     return new OrderSpecifier(order, fieldPath);
   }
 

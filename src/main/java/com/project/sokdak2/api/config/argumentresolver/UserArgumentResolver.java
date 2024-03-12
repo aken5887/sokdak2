@@ -37,8 +37,8 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
   @Override
   public boolean supportsParameter(MethodParameter parameter) {
-    log.info("parameterType : "+ parameter.getParameterType());
-    log.info("parameterAnnotation : "+ parameter.getParameterAnnotation(Users.class));
+    log.debug("parameterType : "+ parameter.getParameterType());
+    log.debug("parameterAnnotation : "+ parameter.getParameterAnnotation(Users.class));
 
     return parameter.getParameterType().equals(SessionUser.class)
         && parameter.getParameterAnnotation(Users.class) != null;
@@ -73,7 +73,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
         return findSession.toSessionUser();
       }else if("true".equalsIgnoreCase(jwtUse)){
         // cookieValue jwt 값
-        log.info("------------- jwtKey : {}", appConfig.getJwtKey());
+        log.debug("------------- jwtKey : {}", appConfig.getJwtKey());
         try{
           Jws<Claims> claims = Jwts.parserBuilder()
                   .setSigningKey(appConfig.getJwtKey())

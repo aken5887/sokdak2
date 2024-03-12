@@ -1,6 +1,5 @@
 package com.project.sokdak2.api.controller;
 
-import com.google.common.net.HttpHeaders;
 import com.project.sokdak2.api.config.AppConfig;
 import com.project.sokdak2.api.config.annotation.Users;
 import com.project.sokdak2.api.domain.user.User;
@@ -13,6 +12,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -50,7 +50,7 @@ public class LoginController {
   @PostMapping("/login")
   @ResponseBody
   public ResponseEntity<String> login(@RequestBody Login login) {
-    log.info("login : {}", login.toString());
+    log.debug("login : {}", login.toString());
 
     ResponseCookie responseCookie = null;
 

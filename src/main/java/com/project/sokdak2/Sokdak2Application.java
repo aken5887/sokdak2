@@ -9,7 +9,13 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 // 설정 클래스가 활성화되면, 해당 클래스가 스프링 빈으로 자동 등록됩니다.
 @EnableConfigurationProperties(AppConfig.class)
-@SpringBootApplication
+@SpringBootApplication(
+        exclude = {
+                org.springframework.cloud.aws.autoconfigure.context.ContextInstanceDataAutoConfiguration.class,
+                org.springframework.cloud.aws.autoconfigure.context.ContextStackAutoConfiguration.class,
+                org.springframework.cloud.aws.autoconfigure.context.ContextRegionProviderAutoConfiguration.class
+        }
+)
 public class Sokdak2Application {
   public static void main(String[] args) {
     SpringApplication.run(Sokdak2Application.class, args);
