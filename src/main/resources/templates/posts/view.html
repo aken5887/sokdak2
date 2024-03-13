@@ -41,11 +41,12 @@
                 </ul>
             </div>
             <div class="cont">
-                <p class="img_view" th:each="file:${response.files}">
-                    <img th:src="|/download/${file.id}|"
-                         th:if="${file.fileExt} == 'png' or ${file.fileExt} == 'jpg' or ${file.fileExt} == 'jpeg'">
-                </p>
-                <p th:utext="${#strings.replace(response.content,'&#10;','&lt;br&gt;')}"></p>
+<!--                <div class="img_view" th:each="file:${response.files}">-->
+<!--                    <img th:src="|/download/${file.id}|"-->
+<!--                         th:if="${file.fileExt} == 'png' or ${file.fileExt} == 'jpg' or ${file.fileExt} == 'jpeg'">-->
+<!--                </div>-->
+                <div id="viewer">
+                </div>
             </div>
         </div>
 <!--        <div class="reply_wrap">-->
@@ -124,6 +125,11 @@
 <script th:inline="javascript">
     $(document).ready(function(){
         let vf = $("#viewForm");
+        const viewer = toastui.Editor.factory({
+            el: document.querySelector('#viewer'),
+            viewer: true,
+            initialValue: [[${response.content}]]
+        });
 
         $("div.bt_wrap #listBtn").click(function(e){
             e.preventDefault();

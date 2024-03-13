@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
@@ -30,10 +28,6 @@ public class User extends BaseTimeEntity {
 
   private String email;
 
-  // session을 db에 저장하는 경우에 사용
-  @OneToMany(cascade = CascadeType.ALL, mappedBy="user")
-  private List<Session> sessions = new ArrayList<>();
-
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private Role role;
@@ -44,15 +38,6 @@ public class User extends BaseTimeEntity {
     this.password = password;
     this.email = email;
     this.role = role;
-  }
-
-  public Session addSession(){
-    Session newSession = Session.builder()
-        .user(this)
-        .build();
-    sessions.add(newSession);
-
-    return newSession;
   }
 
   public SessionUser toSessionUser(){

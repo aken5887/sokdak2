@@ -51,7 +51,7 @@ me:
 
 file:
   upload:
-    dir: C:/upload
+    dir: /Users/choi/Documents/upload
 
 schedules:
   cron:

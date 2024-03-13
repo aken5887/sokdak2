@@ -3,7 +3,6 @@ package com.project.sokdak2.api.config;
 import com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter;
 import com.project.sokdak2.api.config.argumentresolver.UserArgumentResolver;
 import com.project.sokdak2.api.config.interceptor.VisitsInterceptor;
-import com.project.sokdak2.api.repository.SessionRepository;
 import com.project.sokdak2.api.repository.UserRepository;
 import com.project.sokdak2.api.repository.VisitsRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,6 @@ import java.util.List;
 public class WebConfig implements WebMvcConfigurer {
 
   private final UserRepository userRepository;
-  private final SessionRepository sessionRepository;
   @Value("${me.jwt}") private String jwtUse;
   @Value("${spring.profiles.include}") private List<String> profiles;
   private final AppConfig appConfig;
@@ -47,7 +45,7 @@ public class WebConfig implements WebMvcConfigurer {
 
   @Override
   public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-    resolvers.add(new UserArgumentResolver(userRepository, sessionRepository, appConfig, jwtUse));
+    resolvers.add(new UserArgumentResolver(userRepository, appConfig, jwtUse));
   }
 
   @Bean

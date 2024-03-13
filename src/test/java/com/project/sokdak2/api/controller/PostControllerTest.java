@@ -12,8 +12,6 @@ import com.project.sokdak2.api.request.PostCreate;
 import com.project.sokdak2.api.request.PostEdit;
 import com.project.sokdak2.api.response.PostResponse;
 import com.project.sokdak2.api.util.PageMaker;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,10 +28,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.crypto.SecretKey;
 import javax.servlet.http.Cookie;
-import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -407,15 +402,7 @@ class PostControllerTest {
             .build();
     userRepository.save(user);
 
-    LocalDateTime exprDate = LocalDateTime.now().plusMonths(1L);
-    SecretKey secretKey = Keys.hmacShaKeyFor(appConfig.getJwtKey());
-    String cookieValue = Jwts.builder()
-            .setSubject(String.valueOf(user.getId()))
-            .setExpiration(Date.valueOf(exprDate.toLocalDate()))
-            .signWith(secretKey)
-            .compact();
-
-    Cookie sessionCookie = new Cookie("SESSION", cookieValue);
+    Cookie sessionCookie = new Cookie("SESSION", String.valueOf(user.getId()));
 
     // expected
     this.mockMvc.perform(get("/posts/{postId}", post.getId())
@@ -444,15 +431,7 @@ class PostControllerTest {
             .build();
     userRepository.save(user);
 
-    LocalDateTime exprDate = LocalDateTime.now().plusMonths(1L);
-    SecretKey secretKey = Keys.hmacShaKeyFor(appConfig.getJwtKey());
-    String cookieValue = Jwts.builder()
-            .setSubject(String.valueOf(user.getId()))
-            .setExpiration(Date.valueOf(exprDate.toLocalDate()))
-            .signWith(secretKey)
-            .compact();
-
-    Cookie sessionCookie = new Cookie("SESSION", cookieValue);
+    Cookie sessionCookie = new Cookie("SESSION", String.valueOf(user.getId()));
 
     // expected
     this.mockMvc.perform(get("/posts/{postId}", post.getId())

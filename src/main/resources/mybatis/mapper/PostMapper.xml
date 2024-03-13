@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.sokdak2.api.mapper.PostMapper">
+
+    <select id="selectAllPosts" resultType="com.project.sokdak2.api.response.PostResponse">
+        SELECT *
+        FROM TB_POST
+        LIMIT 5000;
+    </select>
+</mapper>
