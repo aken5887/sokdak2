@@ -14,6 +14,7 @@
 </form>
 <div class="board_write_wrap">
     <form id="postForm" enctype="multipart/form-data">
+    <input type="hidden" name="content" id="content"/>
     <div class="board_write">
         <div class="locked">
             <dl>
@@ -45,10 +46,7 @@
                 </dd>
             </dl>
         </div>
-        <div class="cont">
-<!--            <textarea placeholder="내용입력" name="content" th:text="${response.content}"></textarea>-->
-            <textarea name="content" id="content" rows="10" cols="100"
-                      th:utext="${#strings.replace(response.content,'&#10;','&lt;br&gt;')}"></textarea>
+        <div class="cont" id="editor">
         </div>
         <div class="file file_view">
             <dl>
@@ -87,21 +85,30 @@
     </div>
     </form>
 </div>
+</div>
 </body>
 <th:block th:replace="/layout/footer :: footerFragment"/>
 <script th:inline="javascript">
     $(document).ready(function(){
-       const ef = $("#editForm");
-       const postId = [[${response.id}]];
-       let oEditors = [];
+        const ef = $("#editForm");
+        const postId = [[${response.id}]];
+        const Editor = toastui.Editor;
+        const editor = new Editor({
+            el: document.querySelector('#editor'),
+            height: '600px',
+            initialEditType: 'markdown',
+            previewStyle: 'vertical',
+            initialValue: [[${response.content}]]
+        });
 
        $("div.bt_wrap #saveBtn").click(function(e){
             e.preventDefault();
             if(common.validate.checkRequired("div.board_write input.required")){
                 const pwd = $("input[name=password]").val();
-                oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+                $("#content").val(editor.getMarkdown());
                 let postForm = $("#postForm")[0];
                 let postFormData = new FormData(postForm);
+                // oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
 
                 $.ajax({
                     url : '/posts/'+postId,
@@ -145,16 +152,16 @@
            common.validate.password($password);
        });
 
-        editorLoading();
-
-        function editorLoading(){
-            nhn.husky.EZCreator.createInIFrame({
-                oAppRef: oEditors,
-                elPlaceHolder: "content",
-                sSkinURI: "/smartEditor/SmartEditor2Skin.html",
-                fCreator: "createSEditor2"
-            });
-        }
+        // editorLoading();
+        //
+        // function editorLoading(){
+        //     nhn.husky.EZCreator.createInIFrame({
+        //         oAppRef: oEditors,
+        //         elPlaceHolder: "content",
+        //         sSkinURI: "/smartEditor/SmartEditor2Skin.html",
+        //         fCreator: "createSEditor2"
+        //     });
+        // }
     });
 </script>
 </html>

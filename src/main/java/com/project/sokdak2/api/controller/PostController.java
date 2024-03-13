@@ -55,7 +55,7 @@ public class PostController {
 
     PostResponse response = postService.get(postId);
     String roleCode = "";
-    if(sessionUser != null){
+    if(sessionUser != null && sessionUser.getRole() != null){
       roleCode = sessionUser.getRole().getCode();
     }
 

@@ -13,7 +13,7 @@
       <div class="board_top_right">
         <a href="javascript:alert('준비 중 입니다. 😉')" th:if="${sessionUser} == null">회원가입</a>
         <a href="javascript:fn_login();" th:if="${sessionUser} == null">로그인</a>
-        <span style="font-weight: bold;" th:if="${sessionUser} != null" th:text="|${sessionUser.name}(${sessionUser.role.name})|"></span>
+<!--        <span style="font-weight: bold;" th:if="${sessionUser} != null" th:text="|${sessionUser.name}(${sessionUser.role.name})|"></span>-->
         <a href="/logout" th:if="${sessionUser} != null">로그아웃</a>
       </div>
     </div>

@@ -54,7 +54,7 @@ h1, h2, h3 {
 
 .board_view .cont li{
     display: list-item;
-    list-style-type: disc !important;
+    /*list-style-type: disc !important;*/
 }
 
 .board_view .cont ul > li > ul {
@@ -388,8 +388,8 @@ h1, h2, h3 {
 
 .board_view .img_view img{
     display: block;
-    max-width: 100%;
-    heigth: auto;
+    max-width: 90%;
+    max-height: 90%;
     margin-bottom: 10px;
 }
 

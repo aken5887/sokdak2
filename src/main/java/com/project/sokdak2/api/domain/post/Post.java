@@ -35,8 +35,10 @@ public class Post {
   private Integer locked;
   private LocalDateTime createdTime;
   private LocalDateTime lastUpdatedTime;
-  @OneToMany(cascade=CascadeType.ALL)
+
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   private List<File> files = new ArrayList<>();
+
   @OneToMany
   private List<PostReply> replies = new ArrayList<>();
 

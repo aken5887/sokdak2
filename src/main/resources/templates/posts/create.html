@@ -15,6 +15,7 @@
     <div class="board_write_wrap">
         <div class="board_write">
         <form id="postForm" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="content" id="content"/>
             <div class="locked">
                 <dl>
                     <dt>익명글</dt>
@@ -44,12 +45,11 @@
                 <dl>
                     <dt>비밀번호</dt>
                     <dd>
-                        <input type="password" class="required" name="password" title="게시글 암호" placeholder="게시글 암호 입력">
+                        <input type="password" class="required" name="password" id="password" title="게시글 암호" placeholder="게시글 암호 입력">
                     </dd>
                 </dl>
             </div>
-            <div class="cont">
-                <textarea name="content" id="content" rows="10" cols="100"></textarea>
+            <div class="cont" id="editor">
             </div>
             <div class="file">
                 <dl>
@@ -78,24 +78,25 @@
 <script th:inline="javascript">
     $(document).ready(function() {
         const wf = $("#writeForm");
-        const oEditors = [];
         const fileMaxSize = [[${@environment.getProperty('spring.servlet.multipart.max-file-size')}]];
         const maxByteSize = fileMaxSize.replace(/[^0-9]/g, '') * 1024 * 1024;
+
+        const Editor = toastui.Editor;
+        const editor = new Editor({
+            el: document.querySelector('#editor'),
+            height: '600px',
+            initialEditType: 'markdown',
+            previewStyle: 'vertical',
+            initialValue: ''
+        });
 
         $("div.bt_wrap a#writeBtn").click(function (e) {
             e.preventDefault();
             if (common.validate.checkRequired("div.board_write .required")) {
-                let postCreate = {};
-                postCreate.title = $("input[name=title]").val();
-                postCreate.userId = $("input[name=userId]").val();
-                postCreate.password = $("input[name=password]").val();
-                oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
-                postCreate.content = $("textarea[name=content]").val();
-                postCreate.files = $("input[name=files]").val();
-
+                $("#content").val(editor.getMarkdown());
                 let postForm = $("#postForm")[0];
                 let postFormData = new FormData(postForm);
-
+                const password = $("#password").val();
                 $.ajax({
                     url: '/posts',
                     method: 'POST',
@@ -107,7 +108,7 @@
                     data: postFormData,
                     success: function (response) {
                         alert('저장에 성공하였습니다.');
-                        $("input[name=pwd]").val(postCreate.password);
+                        $("input[name=pwd]").val(password);
                         wf.attr("action", "/posts/" + response.id);
                         wf.submit();
                     },

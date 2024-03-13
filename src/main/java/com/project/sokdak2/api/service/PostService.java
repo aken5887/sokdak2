@@ -1,5 +1,6 @@
 package com.project.sokdak2.api.service;
 
+import com.project.sokdak2.api.config.annotation.Timer;
 import com.project.sokdak2.api.domain.common.File;
 import com.project.sokdak2.api.domain.post.Post;
 import com.project.sokdak2.api.domain.post.PostEditor;
@@ -7,6 +8,7 @@ import com.project.sokdak2.api.exception.FileNotFoundException;
 import com.project.sokdak2.api.exception.InvalidPasswordException;
 import com.project.sokdak2.api.exception.PageNotFoundException;
 import com.project.sokdak2.api.exception.PostNotFoundException;
+import com.project.sokdak2.api.mapper.PostMapper;
 import com.project.sokdak2.api.repository.FileRepository;
 import com.project.sokdak2.api.repository.PostRepository;
 import com.project.sokdak2.api.request.PostCreate;
@@ -16,6 +18,7 @@ import com.project.sokdak2.api.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +39,7 @@ public class PostService {
   private String cacheStore;
   private final FileService fileService;
   private final FileRepository fileRepository;
+  private final PostMapper postMapper;
 
   @Transactional
   public PostResponse save(PostCreate postCreate) {
@@ -61,21 +65,27 @@ public class PostService {
     return new PostResponse(post);
   }
 
+  @Timer
+//  @Cacheable(value="PostService.getListByPage"
+//          , key="#ps.getCategory()+'-'+#ps.getPage()+'-'+#ps.getSize()+'-'+#ps.getKw()+'-'+#ps.getKw_opt()"
+//          , condition = "#ps.getPage() <= 6")
+  public Page<PostResponse> getListByPage(PostSearch ps) {
+    return postRepository.findPostsByCondition(ps);
+  }
+
   public PostResponse get(Long postId) {
     Post post = postRepository.findById(postId)
         .orElseThrow(() -> new PageNotFoundException());
     return new PostResponse(post);
   }
 
+  @Timer
+  @Cacheable(value="PostService.getList")
   public List<PostResponse> getList(PostSearch postSearch) {
     return postRepository.findAllByPage(postSearch)
         .stream()
         .map(PostResponse::new)
         .collect(Collectors.toList());
-  }
-
-  public Page<PostResponse> getListByPage(PostSearch postSearch) {
-    return postRepository.findPostsByCondition(postSearch);
   }
 
   @Transactional
@@ -159,7 +169,7 @@ public class PostService {
         post.increaseCount();
         redisService.writeClientRequest(clientAddress, postId);
       }else{
-        log.info("request has duplicated within same address : {}, {}", clientAddress, postId);
+        log.debug("request has duplicated within same address : {}, {}", clientAddress, postId);
       }
     }else if("cookie".equals(cacheStore) && update){
       post.increaseCount();
