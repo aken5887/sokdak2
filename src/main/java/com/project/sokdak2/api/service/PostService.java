@@ -66,9 +66,10 @@ public class PostService {
   }
 
   @Timer
-//  @Cacheable(value="PostService.getListByPage"
-//          , key="#ps.getCategory()+'-'+#ps.getPage()+'-'+#ps.getSize()+'-'+#ps.getKw()+'-'+#ps.getKw_opt()"
-//          , condition = "#ps.getPage() <= 6")
+  @Cacheable(cacheNames="getPostListByPage"
+          , cacheManager = "ehCacheManager"
+          , key="#ps.getCategory()+'-'+#ps.getPage()+'-'+#ps.getSize()+'-'+#ps.getKw()+'-'+#ps.getKw_opt()"
+          , condition = "#ps.getPage() <= 6")
   public Page<PostResponse> getListByPage(PostSearch ps) {
     return postRepository.findPostsByCondition(ps);
   }
@@ -80,7 +81,7 @@ public class PostService {
   }
 
   @Timer
-  @Cacheable(value="PostService.getList")
+  @Cacheable(cacheNames="getPostList", cacheManager = "ehCacheManager")
   public List<PostResponse> getList(PostSearch postSearch) {
     return postRepository.findAllByPage(postSearch)
         .stream()

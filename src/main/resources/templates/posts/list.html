@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://ultraq.net.nz/thymeleaf/layout">
-<th:block th:replace="/layout/header :: headerFragment"/>
+<th:block th:replace="~{/layout/header :: headerFragment}"/>
 <body>
 <div class="board_wrap">
-    <th:block th:replace="/layout/title :: titleFragment('속닥속닥 게시판',${postSearch.categoryCode})"/>
+    <th:block th:replace="~{/layout/title :: titleFragment('속닥속닥 게시판',${postSearch.categoryCode})}"/>
     <div class="bt_wrap right">
         <a th:if="${postSearch.categoryCode == 'BBS'}" class="on" href="javascript:void(0);" id="writeBtn">등록</a>
     </div>
@@ -79,7 +79,7 @@
     </div>
 </div>
 </body>
-<th:block th:replace="/layout/footer :: footerFragment"/>
+<th:block th:replace="~{/layout/footer :: footerFragment}"/>
 <script th:inline="javascript">
     $(document).ready(function(){
         const pf = $("#postForm");

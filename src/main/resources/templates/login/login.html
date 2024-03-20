@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<th:block th:replace="/layout/header :: headerFragment"/>
+<th:block th:replace="~{/layout/header :: headerFragment}"/>
 <body>
   <div class="password_confirm">
     <h5 class="password_title">
@@ -28,7 +28,7 @@
     <input type="hidden" name="kw" th:value="${param.kw}">
   </form>
 </body>
-<th:block th:replace="/layout/footer :: footerFragment"/>
+<th:block th:replace="~{/layout/footer :: footerFragment}"/>
 <script th:inline="javascript">
   $(document).ready(function(){
     $(".bt_wrap #loginBtn").click(function(e){

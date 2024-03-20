@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html  xmlns:th="http://www.thymeleaf.org">
-<th:block th:replace="/layout/header :: headerFragment"/>
+<th:block th:replace="~{/layout/header :: headerFragment}"/>
 <body>
 <div class="board_wrap">
-    <th:block th:replace="/layout/title :: titleFragment('익명게시판[관리자]')"/>
+    <th:block th:replace="~{/layout/title :: titleFragment('익명게시판[관리자]')}"/>
     <div class="board_write_wrap">
         <div class="board_write">
             <div class="admin">
@@ -56,7 +56,7 @@
     </div>
 </div>
 </body>
-<th:block th:replace="/layout/footer :: footerFragment"/>
+<th:block th:replace="~{/layout/footer :: footerFragment}"/>
 <script th:inline="javascript">
     $(document).ready(function(){
         const wf = $("#writeForm");

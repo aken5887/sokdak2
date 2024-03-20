@@ -2,15 +2,13 @@ package com.project.sokdak2.api.service;
 
 
 import com.project.sokdak2.api.request.MailMessage;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.spring5.SpringTemplateEngine;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
 
 @Slf4j
@@ -18,7 +16,6 @@ import javax.mail.internet.MimeMessage;
 @Service
 public class MailService {
     private final JavaMailSender mailSender;
-    private final SpringTemplateEngine springTemplateEngine;
 
     public void sendMail(MailMessage message) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();

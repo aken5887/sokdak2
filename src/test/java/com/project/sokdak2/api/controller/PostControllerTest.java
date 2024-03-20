@@ -26,9 +26,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.Cookie;
+import jakarta.servlet.http.Cookie;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -66,6 +67,7 @@ class PostControllerTest {
   }
 
   @Test
+  @Transactional
   @DisplayName("/posts를 요청하면 Status 200을 리턴한다.")
   void create() throws Exception {
     // given
@@ -87,6 +89,7 @@ class PostControllerTest {
   }
 
   @Test
+  @Transactional
   @DisplayName("/posts POST 요청시 title과 userId는 필수 값이다.")
   void create2() throws Exception {
     // given

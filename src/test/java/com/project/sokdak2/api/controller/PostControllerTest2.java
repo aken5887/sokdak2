@@ -17,6 +17,7 @@ import org.springframework.cloud.aws.messaging.listener.SimpleMessageListenerCon
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,6 +40,7 @@ public class PostControllerTest2 {
         postRepository.deleteAll();
     }
     @DisplayName("category가 NEWS인 경우만 조회된다.")
+    @Transactional
     @Test
     void test() throws Exception {
         //given
@@ -84,6 +86,7 @@ public class PostControllerTest2 {
     }
 
     @DisplayName("category가 null인 경우 모두 조회된다.")
+    @Transactional
     @Test
     void test2() throws Exception {
         //given
@@ -114,7 +117,8 @@ public class PostControllerTest2 {
 
         //when
         MvcResult mvcResult =
-                this.mockMvc.perform(MockMvcRequestBuilders.get("/posts"))
+                this.mockMvc.perform(MockMvcRequestBuilders.get("/posts")
+                                .param("category", ""))
                         .andExpect(status().isOk())
                         .andReturn();
 

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<th:block th:replace="/layout/header :: headerFragment"/>
+<th:block th:replace="~{/layout/header :: headerFragment}"/>
 <body>
 <div class="board_wrap">
-<th:block th:replace="/layout/title :: titleFragment('속닥속닥 게시판',${postSearch.categoryCode})"/>
+<th:block th:replace="~{/layout/title :: titleFragment('속닥속닥 게시판',${postSearch.categoryCode})}"/>
 <form id="editForm" action="" method="get">
     <input type="hidden" name="page" th:value="${postSearch.page}">
     <input type="hidden" name="size" th:value="${postSearch.size}">
@@ -87,7 +87,7 @@
 </div>
 </div>
 </body>
-<th:block th:replace="/layout/footer :: footerFragment"/>
+<th:block th:replace="~{/layout/footer :: footerFragment}"/>
 <script th:inline="javascript">
     $(document).ready(function(){
         const ef = $("#editForm");

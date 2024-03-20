@@ -1,6 +1,6 @@
 package com.project.sokdak2.api.util;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class CommonUtil {
 
