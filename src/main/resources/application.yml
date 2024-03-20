@@ -5,6 +5,9 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 50MB
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
 
 server:
   port: 8090
@@ -14,3 +17,7 @@ schedules:
     visits-remove: 0 0 5 * * ?
     newsArticle-get: 0 20 7,12,23 * * ?
 
+
+# mybatis
+mybatis:
+  mapper-locations: mybatis/mapper/**/*.xml

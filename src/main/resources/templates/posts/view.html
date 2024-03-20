@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<th:block th:replace="/layout/header :: headerFragment"/>
+<th:block th:replace="~{/layout/header :: headerFragment}"/>
 <body>
 <div class="board_wrap">
-    <th:block th:replace="/layout/title :: titleFragment('속닥속닥 게시판',${postSearch.categoryCode})"/>
+    <th:block th:replace="~{/layout/title :: titleFragment('속닥속닥 게시판',${postSearch.categoryCode})}"/>
     <div class="board_view_wrap">
         <div class="board_view">
             <div class="title" th:if="${response.locked == 1}" th:text="|${response.title}🔒|"></div>
@@ -121,7 +121,7 @@
 </div>
 </body>
 
-<th:block th:replace="/layout/footer :: footerFragment"/>
+<th:block th:replace="~{/layout/footer :: footerFragment}"/>
 <script th:inline="javascript">
     $(document).ready(function(){
         let vf = $("#viewForm");

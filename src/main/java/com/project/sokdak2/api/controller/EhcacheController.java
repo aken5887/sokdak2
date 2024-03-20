@@ -1,14 +1,14 @@
 package com.project.sokdak2.api.controller;
 
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
-import net.sf.ehcache.Ehcache;
-import net.sf.ehcache.Element;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.ehcache.EhCacheCache;
+import org.springframework.cache.jcache.JCacheCache;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.cache.Cache;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,37 +23,25 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class EhcacheController {
-    private final CacheManager cacheManager;
+    @Resource(name="ehCacheManager")
+    private CacheManager cacheManager;
 
     @GetMapping("/ehcache")
     public Object findAll() {
         List<Map<String, List<String>>> result
                 = cacheManager.getCacheNames().stream()
                 .map(cacheName -> {
-                    EhCacheCache cache = (EhCacheCache) cacheManager.getCache(cacheName);
-                    Ehcache ehcache = cache.getNativeCache();
+                    JCacheCache cache = (JCacheCache) cacheManager.getCache(cacheName);
+                    Cache<Object, Object> jCache = cache.getNativeCache();
                     Map<String, List<String>> entry = new HashMap<>();
-
-                    ehcache.getKeys().forEach(key -> {
-                        Element element = ehcache.get(key);
-                        String str = "";
-                        if(element != null){
-//                            if(element.getObjectValue() instanceof PageImpl){
-//                                Page<PostResponse> p = (Page<PostResponse>) element.getObjectValue();
-//                                StringBuilder sb = new StringBuilder();
-//                                sb.append("cacheName : ").append(cacheName).append(",");
-//                                sb.append("key : ").append(element.getObjectKey()).append(" -> ");
-//                                for(PostResponse post:p.getContent()){
-//                                    sb.append(post.toString()).append(",");
-//                                }
-//                                str = sb.toString();
-//                            } else {
-                               str = element.toString();
-//                            }
+                    for(Cache.Entry<Object, Object> etr: jCache){
+                        Object value = etr.getValue();
+                        if(value != null){
+                            String str = value.toString();
                             entry.computeIfAbsent(cacheName, k-> new ArrayList<>())
                                     .add(str);
                         }
-                    });
+                    }
                     return entry;
                 }).collect(Collectors.toList());
 
