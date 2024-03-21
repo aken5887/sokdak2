@@ -125,6 +125,7 @@
                 $("#postForm input[name=dir]").val('asc');
             }
             $("#postForm input[name=dir_props]").val($(this).attr("title"));
+            pf.attr("action", "");
             pf.submit();
         });
 
