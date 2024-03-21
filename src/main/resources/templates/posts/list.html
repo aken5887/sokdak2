@@ -117,6 +117,7 @@
         });
 
         $("div.board_list div.top div.header").click(function(e){
+            e.preventDefault();
             let dir = $("#postForm input[name=dir]");
             let dirVal = dir.val();
             if(dirVal == null || dirVal == 'asc'){

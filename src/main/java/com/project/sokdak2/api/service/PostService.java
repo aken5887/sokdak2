@@ -68,7 +68,8 @@ public class PostService {
   @Timer
   @Cacheable(cacheNames="getPostListByPage"
           , cacheManager = "ehCacheManager"
-          , key="#ps.getCategory()+'-'+#ps.getPage()+'-'+#ps.getSize()+'-'+#ps.getKw()+'-'+#ps.getKw_opt()"
+          , key="#ps.getCategory()+'-'+#ps.getPage()+'-'+#ps.getSize()+'-'+#ps.getKw()" +
+          "+'-'+#ps.getKw_opt()+'-'+#ps.getDir()+'-'+#ps.getDir_props()"
           , condition = "#ps.getPage() <= 6")
   public Page<PostResponse> getListByPage(PostSearch ps) {
     return postRepository.findPostsByCondition(ps);
