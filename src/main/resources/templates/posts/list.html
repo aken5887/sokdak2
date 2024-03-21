@@ -117,6 +117,7 @@
         });
 
         $("div.board_list div.top div.header").click(function(e){
+            e.preventDefault();
             let dir = $("#postForm input[name=dir]");
             let dirVal = dir.val();
             if(dirVal == null || dirVal == 'asc'){
@@ -125,6 +126,7 @@
                 $("#postForm input[name=dir]").val('asc');
             }
             $("#postForm input[name=dir_props]").val($(this).attr("title"));
+            pf.attr("action", "");
             pf.submit();
         });
 
