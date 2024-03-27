@@ -98,7 +98,30 @@
             height: '600px',
             initialEditType: 'markdown',
             previewStyle: 'vertical',
-            initialValue: [[${response.content}]]
+            initialValue: [[${response.content}]],
+            placeholder: '내용을 입력해 해주세요.',
+            hooks: {
+                async addImageBlobHook(blob, callback) { // 이미지 업로드 로직
+                    // 1. 에디터에 업로드한 이미지를 FormData 객체에 저장
+                    const formData = new FormData;
+                    formData.append('image', blob);
+
+                    const response = await fetch('/tui-editor/image-upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const filename = await response.text();
+                    if(filename == 'error'){
+                        alert('이미지 업로드 중 오류가 발생하였습니다.');
+                    } else {
+                        console.log('filename : ', filename);
+                        // addImageBlobHook의 callback 함수를 통해, 디스크에 저장된 이미지를 에디터에 랜더링
+                        const imageUrl = `/tui-editor/image-print?filename=${filename}`;
+                        callback(imageUrl, 'image alt attribute');
+                    }
+                }
+            }
         });
 
        $("div.bt_wrap #saveBtn").click(function(e){
