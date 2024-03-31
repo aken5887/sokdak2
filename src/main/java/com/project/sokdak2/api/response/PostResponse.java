@@ -5,6 +5,8 @@ import com.project.sokdak2.api.domain.post.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -47,12 +49,11 @@ public class PostResponse {
     this.password = post.getPassword();
 
     if(this.content != null && !this.content.isEmpty()){
+      /** 1. 섬네일 이미지 추출 **/
       // 정규 표현식 패턴 생성
       Pattern pattern = Pattern.compile("!\\[image alt attribute\\]\\((.*?)\\.(jpg|png|jpeg)\\)");
-
       // 패턴과 일치하는 문자열 찾기
       Matcher matcher = pattern.matcher(this.content);
-
       // 이미지 주소 출력
       while (matcher.find()) {
         String imageUrl = matcher.group(1) + "." + matcher.group(2);
@@ -60,9 +61,20 @@ public class PostResponse {
         break;
       }
 
-      this.contentPreview = this.content.replaceAll("<[^>]*>|[^a-zA-Z0-9\\s]", "");
-      if(contentPreview.length() > 120){
-        this.contentPreview = this.contentPreview.substring(0, 120) + "...";
+      /** 2. 내용 미리보기 추출 */
+      this.contentPreview = this.content;
+      // 이미지 주소를 추출할 정규식 패턴
+      String patternString = "(!\\[.*?\\]\\(.*?\\.(jpg|jpeg|png)\\))";
+      pattern = Pattern.compile(patternString);
+      matcher = pattern.matcher(this.contentPreview);
+      // 매칭된 패턴을 제거하여 결과 문자열 생성
+      this.contentPreview = matcher.replaceAll("");
+      // html 태그 제거
+      this.contentPreview = Jsoup.clean(this.contentPreview, Safelist.none());
+      // markdown 문법 제거
+      this.contentPreview = this.contentPreview.replaceAll("[*#-]","");
+      if(contentPreview.length() > 60){
+        this.contentPreview = this.contentPreview.substring(0, 60) + "...";
       }
     }
   }

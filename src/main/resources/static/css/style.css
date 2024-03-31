@@ -112,14 +112,15 @@ h1, h2, h3 {
 }
 
 .bt_wrap a.on {
-    background: #000;
-    color : #fff; 
+    background: #009999;
+    color : #fff;
+    border : 1px solid #009999 !important;
 }
 
 .bt_wrap a.warning {
-    background: #f8243d;
+    background: #009999;
     color : #fff;
-    border : 1px solid #f8243d !important;
+    border : 1px solid #009999 !important;
 }
 
 .board_list_nav {

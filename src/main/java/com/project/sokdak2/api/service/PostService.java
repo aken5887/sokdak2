@@ -70,7 +70,7 @@ public class PostService {
           , cacheManager = "ehCacheManager"
           , key="#ps.getCategory()+'-'+#ps.getPage()+'-'+#ps.getSize()+'-'+#ps.getKw()" +
           "+'-'+#ps.getKw_opt()+'-'+#ps.getDir()+'-'+#ps.getDir_props()"
-          , condition = "#ps.getPage() <= 6")
+          , condition = "#ps.getPage() <= 6 && #ps.category == 'NEWS'")
   public Page<PostResponse> getListByPage(PostSearch ps) {
     return postRepository.findPostsByCondition(ps);
   }
