@@ -75,6 +75,8 @@
 </div>
 </body>
 <th:block th:replace="~{/layout/footer :: footerFragment}"/>
+<script th:inline="javascript" type="text/javascript"
+        th:src="@{/tuiEditor/toastui-editor-all.min.js}"></script>
 <script th:inline="javascript">
     $(document).ready(function() {
         const wf = $("#writeForm");
