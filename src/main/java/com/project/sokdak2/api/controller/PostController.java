@@ -51,7 +51,8 @@ public class PostController {
   public String get(@Users SessionUser sessionUser,
                     @PathVariable Long postId,
                     @ModelAttribute PostSearch postSearch,
-                    Model model, HttpServletRequest req, HttpServletResponse res){
+                    Model model, HttpServletRequest req,
+                    HttpServletResponse res){
 
     PostResponse response = postService.get(postId);
     String roleCode = "";

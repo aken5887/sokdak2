@@ -2,7 +2,6 @@ package com.project.sokdak2.api.request;
 
 import com.project.sokdak2.api.domain.post.Category;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.domain.PageRequest;
@@ -10,24 +9,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class PostSearch {
 
   private static final int DEFAULT_SIZE = 10;
-  private static final int DEFAULT_MAX_SIZE = 50;
+  private static final int DEFAULT_MAX_SIZE = 1000;
 
-  @Builder.Default
   private Integer page = 1;
-  @Builder.Default
   private Integer size = DEFAULT_SIZE;
   private String kw_opt;
   private String kw;
-  @Builder.Default
   private String dir = "desc";
-  @Builder.Default
   private String dir_props = "id";
   private Integer pwd;
   private Category category;
@@ -55,7 +49,7 @@ public class PostSearch {
   }
 
   public void setSize(Integer size) {
-    this.size = (size < DEFAULT_SIZE) || (size > DEFAULT_MAX_SIZE) ? DEFAULT_SIZE:size;
+    this.size = (size < 1) || (size > DEFAULT_MAX_SIZE) ? DEFAULT_SIZE:size;
   }
 
   public String getKw_opt() {

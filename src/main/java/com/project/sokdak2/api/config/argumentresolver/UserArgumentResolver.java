@@ -2,11 +2,11 @@ package com.project.sokdak2.api.config.argumentresolver;
 
 import com.project.sokdak2.api.config.AppConfig;
 import com.project.sokdak2.api.config.annotation.Users;
-import com.project.sokdak2.api.domain.user.User;
 import com.project.sokdak2.api.exception.UnAuthorizedException;
-import com.project.sokdak2.api.exception.UserNotFoundException;
 import com.project.sokdak2.api.repository.UserRepository;
 import com.project.sokdak2.api.request.SessionUser;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -14,11 +14,6 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -51,16 +46,17 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     if(cookies == null || cookies.length == 0 ){
       return null;
     }else {
-        Optional<Cookie> sessionCookie = Arrays.stream(cookies)
-                .filter(cookie -> cookie.getName().equals("SESSION"))
-                .findFirst();
-        if (sessionCookie.isEmpty()) return null;
-        String userId = sessionCookie.get().getValue();
-        User user = userRepository.findById(Long.parseLong(userId))
-                .orElseThrow(() -> new UserNotFoundException());
-        SessionUser sessionUser = user.toSessionUser();
-        mavContainer.addAttribute("sessionUser", sessionUser);
-        return sessionUser;
+//        Optional<Cookie> sessionCookie = Arrays.stream(cookies)
+//                .filter(cookie -> cookie.getName().equals("SESSION"))
+//                .findFirst();
+//        if (sessionCookie.isEmpty()) return null;
+//        String userId = sessionCookie.get().getValue();
+//        User user = userRepository.findById(Long.parseLong(userId))
+//                .orElseThrow(() -> new UserNotFoundException());
+//        SessionUser sessionUser = user.toSessionUser();
+//        mavContainer.addAttribute("sessionUser", sessionUser);
+//        return sessionUser;
+        return null;
     }
   }
 }

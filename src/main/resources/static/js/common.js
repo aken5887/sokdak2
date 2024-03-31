@@ -1,4 +1,10 @@
 let common = {
+  isNotEmpty : function(value){
+    if(value == null || value === '' || value === undefined){
+      return false;
+    }
+    return true;
+  },
   validate : {
     checkRequired : function(className){
       let vflag = true;

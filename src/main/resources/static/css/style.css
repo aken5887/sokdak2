@@ -700,6 +700,20 @@ h1, h2, h3 {
     margin : 0.5rem;
 }
 
+.board_top_right a {
+    padding : 0.7rem;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1.5px solid;
+    background-color: #009999;
+    color : #ffffff;
+    margin: 0.1rem;
+}
+
+.board_top_right a:hover {
+    transform: scale(1.1);
+}
+
 .board_top_right p{
     display: inline-block;
 }
