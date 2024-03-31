@@ -6,16 +6,24 @@
     <h5 class="password_title">
       <strong>로그인</strong>
     </h5>
+    <form name="lgForm" id="lgForm" method="post" th:action="@{/login}">
     <section>
-      <label class="password_field_title">이메일</label>
-      <label class="password_field">
-        <input type="text" name="email" id="email" class="required" title="이메일"/>
-      </label>
-       <label class="password_field_title">비밀번호</label>
-       <label class="password_field">
-         <input type="password" name="password" id="password" class="required" title="비밀번호"/>
-       </label>
+        <label class="password_field_title">이메일</label>
+        <label class="password_field">
+          <input type="text" name="email" id="email" class="required" title="이메일"/>
+        </label>
+        <label class="password_field_title">비밀번호</label>
+        <label class="password_field">
+          <input type="password" name="password" id="password" class="required" title="비밀번호"/>
+        </label>
+        <label class="password_field_title">
+          자동로그인&nbsp;
+          <input type="checkbox" name="remember" id="remember" class="" title="자동로그인체크"/>
+        </label>
+        <label class="password_field">
+        </label>
     </section>
+    </form>
     <div class="bt_wrap">
       <a href="#" class="on" id="loginBtn">로그인</a>
       <a href="#" class="" id="cancelBtn">취소</a>
@@ -31,32 +39,36 @@
 <th:block th:replace="~{/layout/footer :: footerFragment}"/>
 <script th:inline="javascript">
   $(document).ready(function(){
+      const err = [[${param.error}]];
+      if(err != '' && err != null){
+          alert(err);
+      }
     $(".bt_wrap #loginBtn").click(function(e){
       if(common.validate.checkRequired(".password_confirm .required")){
         let dataJson = {};
         dataJson.email = $("#email").val();
         dataJson.password = $("#password").val();
-
-        $.ajax({
-          url: '/login',
-          method: 'post',
-          contentType: 'application/json',
-          data: JSON.stringify(dataJson),
-          success: function(res){
-           document.loginForm.submit();
-          },
-          error: function(res){
-            let responseJson = res.responseJSON;
-            let rCode = responseJson.code;
-            let rMessage = responseJson.message;
-
-            if(rMessage != null){
-              alert(rMessage);
-            }else{
-              alert("로그인에 실패하였습니다.");
-            }
-          }
-        });
+        $("#lgForm").submit();
+        // $.ajax({
+        //   url: '/login',
+        //   method: 'post',
+        //   contentType: 'application/json',
+        //   data: JSON.stringify(dataJson),
+        //   success: function(res){
+        //    document.loginForm.submit();
+        //   },
+        //   error: function(res){
+        //     let responseJson = res.responseJSON;
+        //     let rCode = responseJson.code;
+        //     let rMessage = responseJson.message;
+        //
+        //     if(rMessage != null){
+        //       alert(rMessage);
+        //     }else{
+        //       alert("로그인에 실패하였습니다.");
+        //     }
+        //   }
+        // });
       }
     });
 

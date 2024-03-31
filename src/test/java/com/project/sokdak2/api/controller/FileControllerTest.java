@@ -28,7 +28,6 @@ class FileControllerTest {
     void download_exception() throws Exception {
         // expected
         this.mockMvc.perform(MockMvcRequestBuilders.get("/download/1"))
-                
                 .andExpect(status().isOk())
                 .andExpect(view().name("/errors/error"))
                 .andExpect(model().attribute("error", hasProperty("code", is("404"))));

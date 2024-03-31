@@ -9,13 +9,13 @@
         <a th:if="${postSearch.categoryCode == 'BBS'}" class="on" href="javascript:void(0);" id="writeBtn">등록</a>
     </div>
     <div class="board_list_wrap">
-        <div class="board_list_nav">
-            <ul>
-                <li class="category none"><a href="javascript:void(0);" onclick="fn_category();">전체</a></li>
-                <li class="category news"><a href="javascript:void(0);" onclick="fn_category('NEWS');">뉴스</a></li>
-                <li class="category bbs"><a href="javascript:void(0);" onclick="fn_category('BBS');">게시판</a></li>
-            </ul>
-        </div>
+<!--        <div class="board_list_nav">-->
+<!--            <ul>-->
+<!--                <li class="category none"><a href="javascript:void(0);" onclick="fn_category();">전체</a></li>-->
+<!--                <li class="category news"><a href="javascript:void(0);" onclick="fn_category('NEWS');">뉴스</a></li>-->
+<!--                <li class="category bbs"><a href="javascript:void(0);" onclick="fn_category('BBS');">게시판</a></li>-->
+<!--            </ul>-->
+<!--        </div>-->
         <div class="board_list" th:with="result=${response.result}">
             <div class="top">
                 <div class="num">번호</div>

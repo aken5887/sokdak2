@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Getter
 @NoArgsConstructor
@@ -23,6 +25,8 @@ public class PostResponse {
   private List<File> files;
   private Integer locked;
   private Integer password;
+  private String thumbnailImage;
+  private String contentPreview;
 
   public PostResponse(Post post) {
     this.id = post.getId();
@@ -41,6 +45,26 @@ public class PostResponse {
     this.files = post.getFiles();
     this.locked = post.getLocked();
     this.password = post.getPassword();
+
+    if(this.content != null && !this.content.isEmpty()){
+      // 정규 표현식 패턴 생성
+      Pattern pattern = Pattern.compile("!\\[image alt attribute\\]\\((.*?)\\.(jpg|png|jpeg)\\)");
+
+      // 패턴과 일치하는 문자열 찾기
+      Matcher matcher = pattern.matcher(this.content);
+
+      // 이미지 주소 출력
+      while (matcher.find()) {
+        String imageUrl = matcher.group(1) + "." + matcher.group(2);
+        this.thumbnailImage = imageUrl;
+        break;
+      }
+
+      this.contentPreview = this.content.replaceAll("<[^>]*>|[^a-zA-Z0-9\\s]", "");
+      if(contentPreview.length() > 120){
+        this.contentPreview = this.contentPreview.substring(0, 120) + "...";
+      }
+    }
   }
 
   @Builder
@@ -51,4 +75,9 @@ public class PostResponse {
     this.content = content;
     this.locked = locked;
   }
+
+  public void updateThumbnail(String thumbnailImage){
+    this.thumbnailImage = thumbnailImage;
+  }
+
 }

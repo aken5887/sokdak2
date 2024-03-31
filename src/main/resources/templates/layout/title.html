@@ -1,31 +1,32 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <th:block th:fragment="titleFragment(title, categoryCode)">
   <header>
     <nav>
       <ul>
-        <li><a href="/" class="on">속닥속닥</a></li>
+        <li><a href="/blog" th:class="${categoryCode == 'NEWS'? '':'on'}">블로그</a></li>
+        <li><a href="/posts?category=NEWS" th:class="${categoryCode == 'NEWS'? 'on':''}">뉴스레터</a></li>
         <li><a href="javascript:void(0);" onclick="javascript:fn_pokedoc();" class="">띠뿌실도감</a></li>
       </ul>
     </nav>
   </header>
     <div class="board_top" th:if="${title != ''}">
       <div class="board_top_right">
-        <a href="javascript:alert('준비 중 입니다. 😉')" th:if="${sessionUser} == null">회원가입</a>
-        <a href="javascript:fn_login();" th:if="${sessionUser} == null">로그인</a>
-<!--        <span style="font-weight: bold;" th:if="${sessionUser} != null" th:text="|${sessionUser.name}(${sessionUser.role.name})|"></span>-->
-        <a href="/logout" th:if="${sessionUser} != null">로그아웃</a>
+        <a href="javascript:fn_write();" th:if="${categoryCode == 'BBS'}" class="write-btn" title="글쓰기">글쓰기</a>
+        <a href="javascript:fn_signup();" sec:authorize="isAnonymous()">회원가입</a>
+        <a href="javascript:fn_login();" sec:authorize="isAnonymous()">로그인</a>
+<!--        <span style="font-weight: bold; color: #3333cc;" sec:authorize="isAuthenticated()" sec:authentication="principal.username"></span>-->
+        <a th:href="@{/logout}" sec:authorize="isAuthenticated()">로그아웃</a>
       </div>
     </div>
     <div class="board_title" th:if="${title != ''}">
       <a href="javascript:void(0);" onclick="javascript:fn_main();">
-        <strong th:if="${categoryCode == ''}">속닥속닥</strong>
-        <strong th:if="${categoryCode == 'NEWS'}">속닥속닥 뉴스</strong>
-        <strong th:if="${categoryCode == 'BBS'}">속닥속닥 게시판</strong>
+<!--        <strong th:if="${categoryCode == ''}">속닥속닥</strong>-->
+        <strong th:if="${categoryCode == 'NEWS'}">속닥속닥 뉴스레터</strong>
+<!--        <strong th:if="${categoryCode == 'BBS'}">속닥속닥 게시판</strong>-->
       </a>
-      <p th:if="${categoryCode == ''}" th:text="|속닥속닥에 오신걸 환영합니다.|"></p>
-      <p th:if="${categoryCode == 'BBS'}">일반 게시판에 오신걸 환영합니다.<br> 자유롭게 글을 작성하고 삭제할 수 있습니다.</p>
-      <p th:if="${categoryCode == 'NEWS'}">뉴스 게시판에 오신걸 환영합니다.(회원 전용 메일링 제공)<br>매일 오전 7시에 한국경제신문 요약본이 업데이트 됩니다.</p>
+        <p th:if="${categoryCode == ''}" th:text="|속닥속닥에 오신걸 환영합니다.|"></p>
+        <p th:if="${categoryCode == 'NEWS'}">뉴스 게시판에 오신걸 환영합니다.(회원 전용 메일링 제공)<br>매일 오전 7시에 한국경제신문 요약본이 업데이트 됩니다.</p>
     </div>
 </th:block>
 </html>

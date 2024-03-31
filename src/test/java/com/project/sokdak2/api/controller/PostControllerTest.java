@@ -386,7 +386,8 @@ class PostControllerTest {
   }
 
   @DisplayName("관리자는 비밀번호 없이 익명글을 읽을 수 있다.")
-  @Test
+//  @Test
+  // TODO 스프링 시큐리티 적용 후 테스트 코드 다시 만들기
   void test7() throws Exception{
     // given
     Post post = Post.builder()

@@ -27,7 +27,7 @@
         <input type="password" name="password2" id="password2" class="required" title="비밀번호 확인" placeholder="비밀번호 확인"/>
       </label>
       <label class="warning password2 required" style="display: none;">비밀번호2를 입력하세요.</label>
-      <label class="warning password2" style="display: none;">
+      <label class="warning password2 notMatched" style="display: none;">
           비밀번호가 일치하지 않습니다.
       </label>
       <label class="password_field_title">이름</label>
@@ -53,28 +53,42 @@
 <th:block th:replace="~{/layout/footer :: footerFragment}"/>
 <script th:inline="javascript">
   $(document).ready(function(){
-    $(".joinForm input.required").on('change', function(e){
-        let val = $(this).val();
-        let field = $(this).attr("name");
-        console.log('val : ', val, 'field: ', field);
-        if(val === '' || val == null){
-          $("."+field+" required").show();
-        }else{
-          $("."+field+" required").hide();
+    $("#password2").on('change', function(e){
+        const password1 = $("#password").val();
+        const password2 = $(this).val();
+        if(common.isNotEmpty(password2)) $("label.password2.required").css('display','none');
+        if(common.isNotEmpty(password1)){
+          if(password1 != password2){
+            console.log("not matched");
+            $("label.notMatched").css("display", "block");
+          } else {
+            $("label.notMatched").css("display", "none");
+          }
         }
     });
 
     $(".bt_wrap #joinBtn").click(function(e){
       e.preventDefault();
+
+      let validForm = true;
       $(".joinForm input.required").each(function(e){
         let val = $(this).val();
         let field = $(this).attr("name");
         if(val === '' || val == null){
-          console.log('val : ', val, 'field: ', field);
           $("label.warning."+field+".required").css("display","block");
+          validForm = false;
+        } else {
+          $("label.warning."+field+".required").css("display","none");
         }
       });
 
+      if($("label.notMatched").css('display') === 'block'){
+        validForm = false;
+      }
+
+      if(validForm){
+
+      }
       // if(common.validate.checkRequired(".password_confirm .required")){
       //   let dataJson = {};
       //   dataJson.email = $("#email").val();

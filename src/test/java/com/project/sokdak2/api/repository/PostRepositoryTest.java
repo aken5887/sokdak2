@@ -35,10 +35,8 @@ class PostRepositoryTest {
                 .build())
             .collect(Collectors.toList())
     );
-    PostSearch postSearch = PostSearch.builder()
-        .page(1)
-        .size(10)
-        .build();
+
+    PostSearch postSearch = new PostSearch();
 
     // when
     Page<PostResponse> result = postRepository.findPostsByCondition(postSearch);

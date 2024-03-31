@@ -22,6 +22,17 @@
       frm.submit();
     }
 
+    function fn_signup() {
+      const frm = document.forms[0];
+      const pathInput = document.createElement("input");
+      pathInput.type = 'hidden';
+      pathInput.name = 'path';
+      pathInput.value = window.location.pathname;
+      frm.action = '/signup';
+      frm.appendChild(pathInput);
+      frm.submit();
+    }
+
     function fn_pokedoc(){
       window.location.href = 'http://pokedoc2.site';
     }

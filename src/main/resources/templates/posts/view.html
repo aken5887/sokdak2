@@ -133,6 +133,12 @@
 
         $("div.bt_wrap #listBtn").click(function(e){
             e.preventDefault();
+            let category = [[${postSearch.category}]];
+            if(category === 'BBS'){
+                vf.attr('action', '/blog');
+            } else {
+                vf.attr('action', '/posts');
+            }
             vf.submit();
         });
 
