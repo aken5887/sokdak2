@@ -169,7 +169,12 @@
 
         $("div.bt_wrap a#cancelBtn").click(function (e) {
             e.preventDefault();
-            wf.attr("action", "/posts");
+            let category = [[${postSearch.category}]];
+            if(category === 'BBS'){
+                wf.attr("action", "/blog");
+            } else {
+                wf.attr("action", "/posts");
+            }
             wf.submit();
         });
     });

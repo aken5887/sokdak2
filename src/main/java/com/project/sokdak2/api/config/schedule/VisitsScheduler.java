@@ -38,7 +38,7 @@ public class VisitsScheduler {
                 .userId("스케쥴 봇")
                 .password(9999)
                 .locked(0)
-                .category(Category.BBS)
+                .category(Category.BATCH)
                 .build();
         postRepository.save(post);
     }

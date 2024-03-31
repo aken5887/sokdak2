@@ -6,6 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Category {
-    NEWS("NEWS"), BBS("BBS");
+    NEWS("NEWS"), BBS("BBS"), BATCH("BATCH");
     private final String code;
 }
