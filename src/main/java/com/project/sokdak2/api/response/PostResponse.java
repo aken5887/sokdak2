@@ -38,11 +38,11 @@ public class PostResponse {
     this.count = post.getCount();
     this.createdTime
         = post.getCreatedTime() != null ?
-          post.getCreatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) :
+          post.getCreatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) :
           "";
     this.lastUpdatedTime
         = post.getLastUpdatedTime() != null ?
-          post.getLastUpdatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) :
+          post.getLastUpdatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) :
           "";
     this.files = post.getFiles();
     this.locked = post.getLocked();

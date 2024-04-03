@@ -21,11 +21,11 @@
                     <dt>작성일</dt>
                     <dd th:text="${response.createdTime}"></dd>
                 </dl>
-                <dl th:if="${not #strings.isEmpty(response.lastUpdatedTime) and
-                        not #strings.equals(response.lastUpdatedTime, response.createdTime)}" class="updt">
-                    <dt>수정일</dt>
-                    <dd th:text="${response.lastUpdatedTime}"></dd>
-                </dl>
+<!--                <dl th:if="${not #strings.isEmpty(response.lastUpdatedTime) and-->
+<!--                        not #strings.equals(response.lastUpdatedTime, response.createdTime)}" class="updt">-->
+<!--                    <dt>수정일</dt>-->
+<!--                    <dd th:text="${response.lastUpdatedTime}"></dd>-->
+<!--                </dl>-->
                 <dl>
                     <dt>조회수</dt>
                     <dd th:text="${response.count}"></dd>
