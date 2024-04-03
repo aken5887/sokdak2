@@ -12,6 +12,7 @@ import com.project.sokdak2.api.request.PostCreate;
 import com.project.sokdak2.api.request.PostEdit;
 import com.project.sokdak2.api.response.PostResponse;
 import com.project.sokdak2.api.util.PageMaker;
+import jakarta.servlet.http.Cookie;
 import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +30,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
-import jakarta.servlet.http.Cookie;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -209,19 +209,13 @@ class PostControllerTest {
         .password(1234)
         .build();
     postRepository.save(post);
-
-    PostEdit postEdit = PostEdit.builder()
-        .title("제목(수정)")
-        .content("내용(수정)")
-        .password(1234)
-        .build();
-
     // expected
-    this.mockMvc.perform(patch("/posts/{postId}", post.getId())
+    this.mockMvc.perform(patch("/posts")
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
+                    .param("id", post.getId().toString())
                     .param("title","제목(수정)")
                     .param("content","내용(수정)")
                     .param("password","1234"))
-        
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.title").value("제목(수정)"))
         .andExpect(jsonPath("$.content").value("내용(수정)"));
@@ -279,6 +273,7 @@ class PostControllerTest {
   void edit_not_found() throws Exception {
     // given
     PostEdit postEdit = PostEdit.builder()
+        .id(1L)
         .title("제목")
         .content("내용")
         .password(1234)
@@ -287,7 +282,7 @@ class PostControllerTest {
     String content = objectMapper.writeValueAsString(postEdit);
 
     // expected
-    this.mockMvc.perform(patch("/posts/1")
+    this.mockMvc.perform(patch("/posts")
             .contentType(MediaType.APPLICATION_JSON)
             .content(content))
         .andExpect(status().isBadRequest());
