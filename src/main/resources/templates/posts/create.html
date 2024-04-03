@@ -39,8 +39,8 @@
                         <input sec:authorize="isAnonymous()"
                             type="text" class="required" name="userId" title="작성자" placeholder="작성자 입력">
                         <input sec:authorize="isAuthenticated()"
-                            type="hidden" class="sessionUserName" readonly name="userId" title="작성자" sec:authentication="principal.username"
-                            th:value="${#authentication.name}"/>
+                            type="hidden" class="sessionUserName" readonly name="userId" title="작성자" sec:authentication="principal.name"
+                            th:value="${#authentication.principal.name}"/>
                     </dd>
                 </dl>
                 <dl>

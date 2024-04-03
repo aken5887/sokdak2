@@ -18,9 +18,11 @@ public class UserPrincipal extends User implements Serializable {
     private static final long serialVersionUID = 1L;
     private Long id;
     private String username;
+    private String name;
     public UserPrincipal(com.project.sokdak2.api.domain.user.User user){
         super(user.getEmail(), user.getPassword(), List.of(new SimpleGrantedAuthority("ADMIN")));
         this.id = user.getId();
-        this.username = user.getName();
+        this.username = user.getEmail();
+        this.name = user.getName();
     }
 }

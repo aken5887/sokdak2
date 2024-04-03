@@ -2,7 +2,6 @@ package com.project.sokdak2.api.config.security;
 
 import com.project.sokdak2.api.domain.user.User;
 import com.project.sokdak2.api.domain.user.UserPrincipal;
-import com.project.sokdak2.api.exception.UserNotFoundException;
 import com.project.sokdak2.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -53,7 +53,7 @@ public class WebSecurityConfig {
     public UserDetailsService userDetailsService(UserRepository userRepository) {
         return username -> {
             User user = userRepository.findUserByEmail(username)
-                    .orElseThrow(() -> new UserNotFoundException());
+                    .orElseThrow(() -> new UsernameNotFoundException("사용자 정보를 찾을 수 없습니다."));
             return new UserPrincipal(user);
         };
     }

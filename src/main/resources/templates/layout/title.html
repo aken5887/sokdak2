@@ -15,7 +15,7 @@
         <a href="javascript:fn_write();" th:if="${categoryCode == 'BBS'}" class="write-btn" title="글쓰기">글쓰기</a>
         <a href="javascript:fn_signup();" sec:authorize="isAnonymous()">회원가입</a>
         <a href="javascript:fn_login();" sec:authorize="isAnonymous()">로그인</a>
-<!--        <span style="font-weight: bold; color: #3333cc;" sec:authorize="isAuthenticated()" sec:authentication="principal.username"></span>-->
+<!--        <span style="font-weight: bold; color: #3333cc;" sec:authorize="isAuthenticated()" sec:="principal.username"></span>-->
         <a th:href="@{/logout}" sec:authorize="isAuthenticated()">로그아웃</a>
       </div>
     </div>

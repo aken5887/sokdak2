@@ -100,7 +100,7 @@
             data: JSON.stringify(dataJson),
             success: function(res){
               $("#rscode").val('s');
-              $("#loginForm").attr("action", "/login");
+              $("#loginForm").attr("action", "/user/login");
               $("#loginForm").submit();
             },
             error: function(res){
