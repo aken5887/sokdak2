@@ -15,6 +15,7 @@
 <div class="board_write_wrap">
     <form id="postForm" enctype="multipart/form-data">
     <input type="hidden" name="content" id="content"/>
+    <input type="hidden" name="id" id="id" th:value="${response.id}"/>
     <div class="board_write">
         <div class="locked">
             <dl>
@@ -136,7 +137,7 @@
                 // oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
 
                 $.ajax({
-                    url : '/posts/'+postId,
+                    url : '/posts',
                     method : 'PATCH',
                     // contentType : 'application/json',
                     // dataType: 'json',

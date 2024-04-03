@@ -130,11 +130,11 @@ public class PostController {
     return "/posts/edit";
   }
 
-  @PatchMapping("/posts/{postId}")
+  @PatchMapping("/posts")
   @ResponseBody
-  public PostResponse edit(@PathVariable long postId, @Valid PostEdit postEdit){
+  public PostResponse edit(@Valid PostEdit postEdit){
     postEdit.validate();
-    return postService.edit(postId, postEdit);
+    return postService.edit(postEdit.getId(), postEdit);
   }
 
   @DeleteMapping("/posts/{postId}")
