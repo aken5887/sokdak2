@@ -6,7 +6,7 @@
     <h5 class="password_title">
       <strong>로그인</strong>
     </h5>
-    <form name="lgForm" id="lgForm" method="post" th:action="@{/login}">
+    <form name="lgForm" id="lgForm" method="post" th:action="@{/user/login}">
     <section>
         <label class="password_field_title">이메일</label>
         <label class="password_field">
@@ -39,10 +39,17 @@
 <th:block th:replace="~{/layout/footer :: footerFragment}"/>
 <script th:inline="javascript">
   $(document).ready(function(){
-      const err = [[${param.error}]];
-      if(err != '' && err != null){
-          alert(err);
+      const errorCode = [[${param.errorCode}]];
+      const rscode = [[${param.rscode}]];
+
+      if(rscode == 's'){
+          alert('회원가입에 성공하셨습니다.')
       }
+
+      if(errorCode != null){
+          alert('이메일과 비밀번호가 잘못되었습니다.');
+      }
+
     $(".bt_wrap #loginBtn").click(function(e){
       if(common.validate.checkRequired(".password_confirm .required")){
         let dataJson = {};

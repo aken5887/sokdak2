@@ -26,6 +26,7 @@ public class PostSearch {
   private Integer pwd;
   private Category category;
   private String categoryCode;
+  private String searchUserId;
 
   public long getOffSet() {
     return (Math.max(1, page) - 1) * Math.min(this.size, DEFAULT_MAX_SIZE);
@@ -102,5 +103,13 @@ public class PostSearch {
 
   public String getCategoryCode() {
     return this.category != null? category.getCode():"";
+  }
+
+  public String getSearchUserId() {
+    return searchUserId;
+  }
+
+  public void setSearchUserId(String searchUserId) {
+    this.searchUserId = searchUserId;
   }
 }

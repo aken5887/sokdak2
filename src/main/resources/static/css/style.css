@@ -132,12 +132,17 @@ h1, h2, h3 {
 }
 
 .board_list_nav ul {
-    margin-left: 1.2rem;
+    padding-left: 1rem;
 }
 
 .board_list_nav ul li {
     display: inline-block;
-    width: 50px;
+    margin-right: 1.5rem;
+}
+
+.board_list_nav ul li:hover{
+    transform: scale(1.1);
+    color: #009999;
 }
 
 .board_list_nav ul li.on {
@@ -424,7 +429,9 @@ h1, h2, h3 {
 .board_write .title dt,
 .board_write .title dd,
 .board_write .info dt,
-.board_write .info dd {
+.board_write .info dd,
+.board_write .file dt,
+.board_write .file dd {
     display: inline-block;
     vertical-align: middle;
     font-size: 1.4rem;
@@ -433,7 +440,9 @@ h1, h2, h3 {
 .board_write .locked dt,
 .board_write .admin dt,
 .board_write .title dt,
-.board_write .info dt {
+.board_write .info dt,
+.board_write .file dt,
+.board_write .file dd{
     width: 100px;
 }
 
@@ -658,6 +667,10 @@ h1, h2, h3 {
 
 .alert-warning p {
     color: #AA3510;
+}
+
+label.password_field {
+    display: block;
 }
 
 .password_field_title {

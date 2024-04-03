@@ -51,12 +51,13 @@ public class PostResponse {
     if(this.content != null && !this.content.isEmpty()){
       /** 1. 섬네일 이미지 추출 **/
       // 정규 표현식 패턴 생성
-      Pattern pattern = Pattern.compile("!\\[image alt attribute\\]\\((.*?)\\.(jpg|png|jpeg)\\)");
+      String regex = "\\[(image(?: alt attribute)?)\\]\\s*\\((.*?)\\.(jpg|png|jpeg)";
+      Pattern pattern = Pattern.compile(regex);
       // 패턴과 일치하는 문자열 찾기
       Matcher matcher = pattern.matcher(this.content);
       // 이미지 주소 출력
       while (matcher.find()) {
-        String imageUrl = matcher.group(1) + "." + matcher.group(2);
+        String imageUrl = matcher.group(2) + "." + matcher.group(3);
         this.thumbnailImage = imageUrl;
         break;
       }
@@ -91,5 +92,4 @@ public class PostResponse {
   public void updateThumbnail(String thumbnailImage){
     this.thumbnailImage = thumbnailImage;
   }
-
 }

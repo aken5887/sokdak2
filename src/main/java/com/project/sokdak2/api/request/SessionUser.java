@@ -10,7 +10,9 @@ import lombok.ToString;
 @Getter
 public class SessionUser {
   private Long id;
+  private String userId;
   private String name;
   private String email;
+  private String password;
   private Role role;
 }

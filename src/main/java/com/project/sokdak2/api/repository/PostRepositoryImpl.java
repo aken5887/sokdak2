@@ -82,6 +82,16 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
         return post.category.eq(postSearch.getCategory());
       }
     }
+
+    if(postSearch.getSearchUserId() != null){
+      // 여기에 추가
+      if(booleanExpression != null){
+        return booleanExpression.and(post.userId.eq(postSearch.getSearchUserId()));
+      }else{
+        return post.userId.eq(postSearch.getSearchUserId());
+      }
+    }
+
     return booleanExpression;
   }
 

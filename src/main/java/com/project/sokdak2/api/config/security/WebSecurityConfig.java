@@ -1,4 +1,4 @@
-package com.project.sokdak2.api.config;
+package com.project.sokdak2.api.config.security;
 
 import com.project.sokdak2.api.domain.user.User;
 import com.project.sokdak2.api.domain.user.UserPrincipal;
@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 /**
  * author         : choi
@@ -23,18 +24,20 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity(debug = false)
 public class WebSecurityConfig {
     private final UserRepository userRepository;
+    private final SimpleUrlAuthenticationFailureHandler failureHandler;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests((request) -> request
                 .requestMatchers("/css/**", "/js/**", "/image/**","/favicon.ico").permitAll()
                 .requestMatchers("/smartEditor/**","/tuiEditor/**","/tui-editor/**").permitAll()
-                .requestMatchers("/","/posts/**", "/login", "/error", "/signup","/blog/**", "/password/**","/download/**").permitAll()
+                .requestMatchers("/","/posts/**","/error", "/user/**","/blog/**", "/password/**","/download/**").permitAll()
                 .anyRequest().authenticated())
                 .formLogin((form) -> form
-                        .loginPage("/login")
+                        .loginPage("/user/login")
                         .usernameParameter("email")
                         .passwordParameter("password")
                         .defaultSuccessUrl("/")
+                        .failureHandler(failureHandler)
                         .permitAll())
                 .logout((logout) -> logout.permitAll()
                                         .logoutSuccessUrl("/"))

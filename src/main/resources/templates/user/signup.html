@@ -32,7 +32,7 @@
       </label>
       <label class="password_field_title">이름</label>
       <label class="password_field">
-        <input type="text" name="userId" id="userId" class="required" title="이름" placeholder="이름"/>
+        <input type="text" name="name" id="name" class="required" title="이름" placeholder="이름"/>
       </label>
       <label class="warning userId required" style="display: none;">
         이름을 정확히 입력하세요.
@@ -48,6 +48,7 @@
     <input type="hidden" name="size" th:value="${param.size}">
     <input type="hidden" name="kw_opt" th:value="${param.kw_opt}">
     <input type="hidden" name="kw" th:value="${param.kw}">
+    <input type="hidden" name="rscode" id="rscode"/>
   </form>
 </body>
 <th:block th:replace="~{/layout/footer :: footerFragment}"/>
@@ -87,34 +88,33 @@
       }
 
       if(validForm){
+          let dataJson = {};
+          dataJson.email = $("#email").val();
+          dataJson.password = $("#password").val();
+          dataJson.name = $("#name").val();
 
+          $.ajax({
+            url: '/user/signup',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(dataJson),
+            success: function(res){
+              $("#rscode").val('s');
+              $("#loginForm").attr("action", "/login");
+              $("#loginForm").submit();
+            },
+            error: function(res){
+              let responseJson = res.responseJSON;
+              if(responseJson != null){
+                let rCode = responseJson.code;
+                let rMessage = responseJson.message;
+                alert(rMessage);
+              } else {
+                alert("회원가입에 실패하였습니다.");
+              }
+            }
+          });
       }
-      // if(common.validate.checkRequired(".password_confirm .required")){
-      //   let dataJson = {};
-      //   dataJson.email = $("#email").val();
-      //   dataJson.password = $("#password").val();
-      //
-      //   $.ajax({
-      //     url: '/login',
-      //     method: 'post',
-      //     contentType: 'application/json',
-      //     data: JSON.stringify(dataJson),
-      //     success: function(res){
-      //      document.loginForm.submit();
-      //     },
-      //     error: function(res){
-      //       let responseJson = res.responseJSON;
-      //       let rCode = responseJson.code;
-      //       let rMessage = responseJson.message;
-      //
-      //       if(rMessage != null){
-      //         alert(rMessage);
-      //       }else{
-      //         alert("로그인에 실패하였습니다.");
-      //       }
-      //     }
-      //   });
-      // }
     });
 
     $(".bt_wrap #cancelBtn").click(function(e){

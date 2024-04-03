@@ -22,7 +22,7 @@ import java.util.List;
 public class BlogController {
 
     private final PostService postService;
-    @RequestMapping("/blog")
+    @GetMapping("/blog")
     public String blog(@ModelAttribute PostSearch postSearch, Model model) {
         Integer page = postSearch.getPage();
         /**

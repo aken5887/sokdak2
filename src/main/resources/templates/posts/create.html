@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <th:block th:replace="~{/layout/header :: headerFragment}"/>
 <body>
 <div class="board_wrap">
@@ -36,10 +36,11 @@
                 <dl>
                     <dt>글쓴이</dt>
                     <dd>
-                        <input th:if="${sessionUser == null}"
+                        <input sec:authorize="isAnonymous()"
                             type="text" class="required" name="userId" title="작성자" placeholder="작성자 입력">
-                        <input th:if="${sessionUser != null}"
-                            type="text" class="sessionUserName" readonly name="userId" title="작성자" th:value="${sessionUser.name}"/>
+                        <input sec:authorize="isAuthenticated()"
+                            type="hidden" class="sessionUserName" readonly name="userId" title="작성자" sec:authentication="principal.username"
+                            th:value="${#authentication.name}"/>
                     </dd>
                 </dl>
                 <dl>
