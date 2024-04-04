@@ -38,8 +38,10 @@
                     <img th:if="${p.thumbnailImage == null}" src="/image/default_300.png" class="card-img-top" alt="...">
                     <img th:if="${p.thumbnailImage != null}" th:src="${p.thumbnailImage}" class="card-img-top" alt="...">
                     <div class="card-body">
-                        <h4 class="card-title" th:text="${p.title}"></h4>
-                        <h5 class="card-subtitle mb-2 text-muted" th:text="${p.userId}"></h5>
+                        <h4 class="card-title" th:if="${p.locked == 0}" th:text="${p.title}"></h4>
+                        <h4 class="card-title" th:if="${p.locked == 1}" th:text="|🔒 ${p.title}|"></h4>
+                        <h5 class="card-subtitle mb-2 text-muted" th:text="|작성자 : ${p.userId}|"></h5>
+                        <h5 class="card-subtitle mb-2 text-muted" th:text="|작성일 : ${p.createdTime}|"></h5>
                         <p class="card-text" th:utext="${p.contentPreview}"></p>
                     </div>
                 </div>
@@ -134,8 +136,11 @@
             }
 
             htmls += "<div class='card-body'>";
-            htmls += "<h4 class='card-title'>"+p.title+"</h4>";
-            htmls += "<h6 class='card-subtitle mb-2 text-muted'>"+p.userId+"</h6>";
+            htmls += "<h4 class='card-title'>"
+            if(p.locked === 1) htmls += "🔒";
+            htmls += p.title+"</h4>";
+            htmls += "<h6 class='card-subtitle mb-2 text-muted'>작성자 : "+p.userId+"</h6>";
+            htmls += "<h6 class='card-subtitle mb-2 text-muted'>작성일 : "+p.createdTime+"</h6>";
             htmls += "<p class='card-text'>"+p.contentPreview+"</p>";
             htmls += "</div></div></div>";
         }

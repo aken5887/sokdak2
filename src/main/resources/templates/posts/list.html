@@ -82,6 +82,7 @@
 <th:block th:replace="~{/layout/footer :: footerFragment}"/>
 <script th:inline="javascript">
     $(document).ready(function(){
+        $(".write-btn").css("display","block");
         const pf = $("#postForm");
         const category = [[${postSearch.category}]];
 
