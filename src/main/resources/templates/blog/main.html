@@ -38,7 +38,7 @@
                     <img th:if="${p.thumbnailImage == null}" src="/image/default_300.png" class="card-img-top" alt="...">
                     <img th:if="${p.thumbnailImage != null}" th:src="${p.thumbnailImage}" class="card-img-top" alt="...">
                     <div class="card-body">
-                        <h4 class="card-title" th:if="${p.locked == 0}" th:text="${p.title}"></h4>
+                        <h4 class="card-title" th:if="${p.locked != 1}" th:text="${p.title}"></h4>
                         <h4 class="card-title" th:if="${p.locked == 1}" th:text="|🔒 ${p.title}|"></h4>
                         <h5 class="card-subtitle mb-2 text-muted" th:text="|작성자 : ${p.userId}|"></h5>
                         <h5 class="card-subtitle mb-2 text-muted" th:text="|작성일 : ${p.createdTime}|"></h5>
