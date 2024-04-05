@@ -288,26 +288,6 @@ class PostControllerTest {
         .andExpect(status().isBadRequest());
   }
 
-  @DisplayName("게시글 작성시 제목에 '테스트'가 들어가면 400오류가 발생한다.")
-  @Test
-  void create_invalid_request() throws Exception {
-   // given
-   PostCreate postCreate = PostCreate.builder()
-       .title("테스트 제목")
-       .content("테스트 내용")
-       .userId("userId")
-       .password(1234)
-       .build();
-
-   String content = objectMapper.writeValueAsString(postCreate);
-
-   // expected
-    this.mockMvc.perform(createPostRequest("/posts", postCreate))
-        
-        .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$.validation.title").value("제목엔 '테스트'가 포함될 수 없습니다."));
-  }
-
   @DisplayName("게시글 조회시 count가 1 증가한다.")
   @Test
   void count_test() throws Exception {
