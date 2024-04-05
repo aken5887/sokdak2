@@ -1,13 +1,12 @@
 package com.project.sokdak2.api.request;
 
-import com.project.sokdak2.api.exception.InvalidRequestException;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 @ToString
@@ -24,13 +23,8 @@ public class PostCreate {
   private Integer password;
   private Integer locked;
   private List<MultipartFile> files;
+  private Long postUserId;
 
   public void validate() {
-    if(this.title != null && this.title.contains("테스트")){
-        throw InvalidRequestException.builder()
-              .field("title")
-              .fieldMessage("제목엔 '테스트'가 포함될 수 없습니다.")
-              .build();
-    }
   }
 }

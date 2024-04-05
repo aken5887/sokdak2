@@ -4,6 +4,7 @@ import com.project.sokdak2.api.config.annotation.Timer;
 import com.project.sokdak2.api.domain.common.File;
 import com.project.sokdak2.api.domain.post.Post;
 import com.project.sokdak2.api.domain.post.PostEditor;
+import com.project.sokdak2.api.domain.user.User;
 import com.project.sokdak2.api.exception.FileNotFoundException;
 import com.project.sokdak2.api.exception.InvalidPasswordException;
 import com.project.sokdak2.api.exception.PageNotFoundException;
@@ -11,6 +12,7 @@ import com.project.sokdak2.api.exception.PostNotFoundException;
 import com.project.sokdak2.api.mapper.PostMapper;
 import com.project.sokdak2.api.repository.FileRepository;
 import com.project.sokdak2.api.repository.PostRepository;
+import com.project.sokdak2.api.repository.UserRepository;
 import com.project.sokdak2.api.request.PostCreate;
 import com.project.sokdak2.api.request.PostEdit;
 import com.project.sokdak2.api.request.PostSearch;
@@ -26,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,10 +43,20 @@ public class PostService {
   private final FileService fileService;
   private final FileRepository fileRepository;
   private final PostMapper postMapper;
+  private final UserRepository userRepository;
 
   @Transactional
   public PostResponse save(PostCreate postCreate) {
     Post post = new Post().toEntity(postCreate);
+
+    /** 사용자 엔티티 릴레이션 추가 */
+    if(postCreate.getPostUserId() != null){
+      Optional<User> user = userRepository.findById(postCreate.getPostUserId());
+      if(user.isPresent()){
+        post.addUser(user.get());
+      }
+    }
+
     postRepository.save(post);
 
     List<File> files = new ArrayList<>();

@@ -1,13 +1,14 @@
 package com.project.sokdak2.api.domain.post;
 
 import com.project.sokdak2.api.domain.common.File;
+import com.project.sokdak2.api.domain.user.User;
 import com.project.sokdak2.api.request.PostCreate;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ public class Post {
   @Enumerated(EnumType.STRING)
   private Category category;
   private String title;
+  @Column(name="WRITER")
   private String userId;
   @Lob
   private String content;
@@ -41,6 +43,9 @@ public class Post {
 
   @OneToMany
   private List<PostReply> replies = new ArrayList<>();
+
+  @ManyToOne(fetch=FetchType.LAZY)
+  private User user;
 
   @Builder
   public Post(String title, String userId, String content, int password, Integer locked, Category category){
@@ -93,5 +98,9 @@ public class Post {
   public void addReplies(List<PostReply> replies){
     this.replies.addAll(replies);
     replies.forEach(r -> r.updatePost(this));
+  }
+
+  public void addUser(User user){
+    this.user = user;
   }
 }

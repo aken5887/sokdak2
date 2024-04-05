@@ -41,6 +41,7 @@
                         <input sec:authorize="isAuthenticated()"
                             type="hidden" class="sessionUserName" readonly name="userId" title="작성자" sec:authentication="principal.name"
                             th:value="${#authentication.principal.name}"/>
+                        <input sec:authorize="isAuthenticated()" type="hidden" name="postUserId" th:value="${#authentication.principal.id}"/>
                     </dd>
                 </dl>
                 <dl>
