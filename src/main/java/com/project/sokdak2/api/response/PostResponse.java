@@ -48,6 +48,10 @@ public class PostResponse {
     this.locked = post.getLocked();
     this.password = post.getPassword();
 
+    if(post.getUser() != null){
+      this.userId = post.getUser().getName();
+    }
+
     if(this.content != null && !this.content.isEmpty()){
       /** 1. 섬네일 이미지 추출 **/
       // 정규 표현식 패턴 생성
