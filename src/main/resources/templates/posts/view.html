@@ -108,7 +108,7 @@
             <a th:if="${postSearch.categoryCode == 'BBS'}" href="javascript:void(0);" id="deleteBtn" class="warning">삭제</a>
             <a href="javascript:void(0);" id="listBtn">목록</a>
         </div>
-        <form id="viewForm" th:action="@{/posts}" method="get">
+        <form id="viewForm" th:action="@{/blog}" method="get">
             <input type="hidden" name="page" th:value="${postSearch.page}">
             <input type="hidden" name="size" th:value="${postSearch.size}">
             <input type="hidden" name="kw_opt" th:value="${postSearch.kw_opt}">

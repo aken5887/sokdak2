@@ -64,6 +64,7 @@
 
     const DEFAULT_SCROLL_Y = "110";
     function fn_onload() {
+        $(".write-btn").show();
         const scrollY = parseInt(sessionStorage.getItem("scrollY"));
         if(scrollY && scrollY > 0){
             window.scrollTo(0, scrollY);
