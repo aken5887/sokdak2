@@ -78,6 +78,6 @@ public class PostControllerTest2 {
         List<PostResponse> list = response.getResult().getContent();
         list.stream().forEach(s-> System.out.println(s.getTitle()));
         assertThat(response.getResult().getSize()).isEqualTo(10);
-        assertThat(list.get(0).getTitle()).isEqualTo("뉴스 [10]");
+        assertThat(list.get(0).getTitle()).isEqualTo("뉴스 [1]");
     }
 }

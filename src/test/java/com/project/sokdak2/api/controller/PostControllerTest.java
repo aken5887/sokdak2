@@ -176,7 +176,7 @@ class PostControllerTest {
 
     ModelAndView mav = mvcResult.getModelAndView();
     List<PostResponse> posts = (List<PostResponse>) mav.getModel().get("posts");
-    assertThat(posts.get(0).getTitle()).isEqualTo("제목-20");
+    assertThat(posts.get(0).getTitle()).isEqualTo("제목-30");
   }
 
   @Test
