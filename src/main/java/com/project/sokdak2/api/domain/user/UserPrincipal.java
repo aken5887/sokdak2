@@ -20,7 +20,7 @@ public class UserPrincipal extends User implements Serializable {
     private String username;
     private String name;
     public UserPrincipal(com.project.sokdak2.api.domain.user.User user){
-        super(user.getEmail(), user.getPassword(), List.of(new SimpleGrantedAuthority("ADMIN")));
+        super(user.getEmail(), user.getPassword(), List.of(new SimpleGrantedAuthority(user.getRole().getCode())));
         this.id = user.getId();
         this.username = user.getEmail();
         this.name = user.getName();

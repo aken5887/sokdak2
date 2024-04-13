@@ -417,6 +417,10 @@ h1, h2, h3 {
     padding: 15px;
 }
 
+.board_write .locked {
+    font-size: 0;
+}
+
 .board_write .info {
     border-bottom: 1px solid #000;
     font-size: 0;
@@ -463,6 +467,7 @@ h1, h2, h3 {
     width: calc(100% - 100px);
 }
 
+.board_write .locked input,
 .board_write .admin select,
 .board_write .title input[type="text"],
 .board_write .info input[type="text"],
@@ -479,6 +484,7 @@ h1, h2, h3 {
     width: 80%;
 }
 
+.board_write .locked dl,
 .board_write .info dl {
     display: inline-block;
     width: 50%;

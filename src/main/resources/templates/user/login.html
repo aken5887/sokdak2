@@ -50,6 +50,12 @@
           alert('이메일과 비밀번호가 잘못되었습니다.');
       }
 
+    $("#lgForm input").keyup(function(e){
+       if(e.keyCode == '13'){
+           $(".bt_wrap #loginBtn").click();
+       }
+    });
+
     $(".bt_wrap #loginBtn").click(function(e){
       if(common.validate.checkRequired(".password_confirm .required")){
           $("#lgForm").attr("action","/user/login");

@@ -24,6 +24,7 @@ public class PostCreate {
   private Integer locked;
   private List<MultipartFile> files;
   private Long postUserId;
+  private String createdTime;
 
   public void validate() {
   }

@@ -120,6 +120,11 @@ public class PostService {
         .build();
     post.edit(postEditor);
 
+    /** 관리자 권한 작성 시간 변경 */
+    if(postEdit.getCreatedTime() != null){
+      post.updateCreatedTime(postEdit.getCreatedTime());
+    }
+
     if(postEdit.isFile1Edit(postEdit)){
       File file = fileRepository.findById(postEdit.getDelFile1())
                       .orElseThrow(() -> new FileNotFoundException());

@@ -64,7 +64,11 @@ public class Post {
     this.password = postCreate.getPassword()==null? 0000:postCreate.getPassword();
     this.locked = postCreate.getLocked();
     this.category = Category.BBS;
-    this.createdTime = LocalDateTime.now();
+    if(postCreate.getCreatedTime() != null){
+      this.createdTime = LocalDateTime.parse(postCreate.getCreatedTime()+"T00:00:00");
+    } else {
+      this.createdTime = LocalDateTime.now();
+    }
     return this;
   }
 
@@ -102,5 +106,9 @@ public class Post {
 
   public void addUser(User user){
     this.user = user;
+  }
+
+  public void updateCreatedTime(String createdTime){
+    this.createdTime = LocalDateTime.parse(createdTime+"T00:00:00");
   }
 }

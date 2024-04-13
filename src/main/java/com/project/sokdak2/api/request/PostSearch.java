@@ -22,7 +22,7 @@ public class PostSearch {
   private String kw_opt;
   private String kw;
   private String dir = "desc";
-  private String dir_props = "id";
+  private String dir_props = "createdTime";
   private Integer pwd;
   private Category category;
   private String categoryCode;

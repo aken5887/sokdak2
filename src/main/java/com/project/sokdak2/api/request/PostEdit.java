@@ -26,6 +26,7 @@ public class PostEdit {
   private Long delFile1;
   private Long delFile2;
   private Integer locked;
+  private String createdTime;
 
   public void validate(){
   }
