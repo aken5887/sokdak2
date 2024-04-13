@@ -166,9 +166,8 @@ class PostControllerTest {
 
     // expected
     MvcResult mvcResult =
-      this.mockMvc.perform(get("/posts?page=2")
+      this.mockMvc.perform(get("/posts?page=2&dir_props=id&dir=desc")
           .contentType(MediaType.APPLICATION_JSON))
-          
           .andExpect(status().isOk())
           .andExpect(model().attribute("response", hasProperty("result")))
           .andExpect(model().attribute("posts", hasSize(10)))
@@ -176,7 +175,7 @@ class PostControllerTest {
 
     ModelAndView mav = mvcResult.getModelAndView();
     List<PostResponse> posts = (List<PostResponse>) mav.getModel().get("posts");
-    assertThat(posts.get(0).getTitle()).isEqualTo("제목-30");
+    assertThat(posts.get(0).getTitle()).isEqualTo("제목-20");
   }
 
   @Test
