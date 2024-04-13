@@ -42,6 +42,11 @@ public class QueryDslUtil {
          Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
          OrderSpecifier<?> orderSpec = QueryDslUtil.getSortedColumn(direction, QPost.post, order.getProperty());
          ORDERS.add(orderSpec);
+         /** 작성일 기준 정렬인 경우 id 내림차순 조건을 추가해준다. */
+         if(order.getProperty().equals("createdTime")){
+           orderSpec = QueryDslUtil.getSortedColumn(direction, QPost.post, "id");
+           ORDERS.add(orderSpec);
+         }
       }
     }
 
