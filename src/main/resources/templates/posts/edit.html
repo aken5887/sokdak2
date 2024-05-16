@@ -99,8 +99,10 @@
         th:src="@{/tuiEditor/toastui-editor-all.min.js}"></script>
 <script th:inline="javascript">
     $(document).ready(function(){
-        const ef = $("#editForm");
         const postId = [[${response.id}]];
+        history.replaceState(null, '', `/posts/edit/${postId}`);
+
+        const ef = $("#editForm");
         const Editor = toastui.Editor;
         const editor = new Editor({
             el: document.querySelector('#editor'),

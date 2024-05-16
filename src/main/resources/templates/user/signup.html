@@ -54,6 +54,7 @@
 <th:block th:replace="~{/layout/footer :: footerFragment}"/>
 <script th:inline="javascript">
   $(document).ready(function(){
+    history.replaceState(null, '', `/signup`);
     $("#password2").on('change', function(e){
         const password1 = $("#password").val();
         const password2 = $(this).val();

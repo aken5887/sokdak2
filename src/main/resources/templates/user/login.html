@@ -39,6 +39,7 @@
 <th:block th:replace="~{/layout/footer :: footerFragment}"/>
 <script th:inline="javascript">
   $(document).ready(function(){
+      history.replaceState(null, '', `/lorgin`);
       const errorCode = [[${param.errorCode}]];
       const rscode = [[${param.rscode}]];
 

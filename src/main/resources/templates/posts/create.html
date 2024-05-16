@@ -87,6 +87,8 @@
         th:src="@{/tuiEditor/toastui-editor-all.min.js}"></script>
 <script th:inline="javascript">
     $(document).ready(function() {
+        history.replaceState(null, '', '/posts/create');
+
         const wf = $("#writeForm");
         const fileMaxSize = [[${@environment.getProperty('spring.servlet.multipart.max-file-size')}]];
         const maxByteSize = fileMaxSize.replace(/[^0-9]/g, '') * 1024 * 1024;

@@ -69,6 +69,7 @@
         if(scrollY && scrollY > 0){
             window.scrollTo(0, scrollY);
         }
+        history.replaceState(null, '', '/blog');
     }
 
     function fn_load() {

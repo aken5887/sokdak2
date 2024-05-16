@@ -126,7 +126,8 @@
         th:src="@{/tuiEditor/toastui-editor-all.min.js}"></script>
 <script th:inline="javascript">
     $(document).ready(function(){
-
+        const postId = [[${response.id}]];
+        history.replaceState(null, '', `/posts/${postId}`);
         let vf = $("#viewForm");
         const viewer = toastui.Editor.factory({
             el: document.querySelector('#viewer'),
@@ -147,7 +148,6 @@
 
         $("div.bt_wrap #modifyBtn").click(function(e){
             e.preventDefault();
-            const postId = [[${response.id}]];
             vf.attr("action", "/posts/edit/"+postId);
             vf.submit();
         });
