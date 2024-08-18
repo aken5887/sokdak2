@@ -127,8 +127,19 @@
 <script th:inline="javascript">
     $(document).ready(function(){
         const postId = [[${response.id}]];
-        history.replaceState(null, '', `/posts/${postId}`);
         let vf = $("#viewForm");
+
+        history.replaceState(null, '', `/posts/${postId}`);
+        /** title, meta tag 변경 **/
+        const postTitle = [[${response.title}]];
+        document.title = postTitle;
+        const metaTag = document.createElement('meta');
+        metaTag.setAttribute('http-equiv', 'X-UA-Compatible');
+        metaTag.setAttribute('name', 'description');
+        metaTag.setAttribute('content', postTitle);
+        document.getElementsByTagName('head')[0].insertBefore(metaTag, document.getElementsByTagName('head')[0].firstChild);
+
+
         const viewer = toastui.Editor.factory({
             el: document.querySelector('#viewer'),
             viewer: true,

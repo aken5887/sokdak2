@@ -24,7 +24,7 @@ public class PostSearch {
   private String dir = "desc";
   private String dir_props = "createdTime";
   private Integer pwd;
-  private Category category;
+  private Category category = Category.BBS; // 기본 값
   private String categoryCode;
   private String searchUserId;
 

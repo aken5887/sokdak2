@@ -77,7 +77,7 @@ public class PostResponse {
       // html 태그 제거
       this.contentPreview = Jsoup.clean(this.contentPreview, Safelist.none());
       // markdown 문법 제거
-      this.contentPreview = this.contentPreview.replaceAll("[*#-]","");
+      this.contentPreview = this.contentPreview.replaceAll("[*#-`]","");
       if(contentPreview.length() > 60){
         this.contentPreview = this.contentPreview.substring(0, 60) + "...";
       }
