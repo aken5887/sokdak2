@@ -2,6 +2,7 @@ package com.project.sokdak2.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.sokdak2.api.config.AppConfig;
+import com.project.sokdak2.api.domain.post.Category;
 import com.project.sokdak2.api.domain.post.Post;
 import com.project.sokdak2.api.domain.user.Role;
 import com.project.sokdak2.api.domain.user.User;
@@ -12,6 +13,7 @@ import com.project.sokdak2.api.request.PostCreate;
 import com.project.sokdak2.api.request.PostEdit;
 import com.project.sokdak2.api.response.PostResponse;
 import com.project.sokdak2.api.util.PageMaker;
+import groovy.util.logging.Slf4j;
 import jakarta.servlet.http.Cookie;
 import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,8 +39,10 @@ import java.util.stream.IntStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Slf4j
 @AutoConfigureMockMvc
 @SpringBootTest
 class PostControllerTest {
@@ -161,6 +165,7 @@ class PostControllerTest {
               .title("제목-"+i)
               .content("내용-"+i)
               .userId("choi-"+i)
+              .category(Category.BBS)
               .build()).collect(Collectors.toList())
     );
 
@@ -318,17 +323,20 @@ class PostControllerTest {
             .title("mymy-"+i)
             .content("content")
             .userId("사용자")
+            .category(Category.BBS)
             .password(1234).build())
         .collect(Collectors.toList())
     );
 
-    // expected
+    System.out.println("####### "+ postRepository.count());
     MvcResult result =
       this.mockMvc.perform(get("/posts?kw={kw}&kw_opt={kw_opt}", "mymy-10", "title"))
-          .andExpect(status().isOk())
-          .andReturn();
+              .andDo(print())
+              .andExpect(status().isOk())
+              .andReturn();
 
     PageMaker<PostResponse> response = (PageMaker<PostResponse>) result.getModelAndView().getModel().get("response");
+    List<PostResponse> results = response.getResult().getContent();
     assertThat(response.getResult().getContent().get(0).getTitle()).isEqualTo("mymy-10");
   }
 
