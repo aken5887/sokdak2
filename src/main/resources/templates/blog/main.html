@@ -34,7 +34,7 @@
         </div>
         <div class="row">
             <div class="col-md-4 mb-4" th:each="p:${posts}">
-                <div class="card" th:onclick="'fn_detail(\''+${p.id}+'\')'">
+                <div class="card" th:onclick="'fn_detail(\''+${p.id}+'\')'" th:title="${p.title}">
                     <img th:if="${p.thumbnailImage == null}" src="/image/default_300.png" class="card-img-top" alt="...">
                     <img th:if="${p.thumbnailImage != null}" th:src="${p.thumbnailImage}" class="card-img-top" alt="...">
                     <div class="card-body">
@@ -42,7 +42,8 @@
                         <h4 class="card-title" th:if="${p.locked == 1}" th:text="|🔒 ${p.title}|"></h4>
                         <h5 class="card-subtitle mb-2 text-muted" th:text="|작성자 : ${p.userId}|"></h5>
                         <h5 class="card-subtitle mb-2 text-muted" th:text="|작성일 : ${p.createdTime}|"></h5>
-                        <p class="card-text" th:utext="${p.contentPreview}"></p>
+                        <p class="card-text" th:if="${p.locked != 1}" th:utext="${p.contentPreview}"></p>
+                        <p class="card-text" th:if="${p.locked == 1}">⚠️ 악명글 입니다.</p>
                     </div>
                 </div>
             </div>
@@ -143,7 +144,11 @@
             htmls += p.title+"</h4>";
             htmls += "<h5 class='card-subtitle mb-2 text-muted'>작성자 : "+p.userId+"</h5>";
             htmls += "<h5 class='card-subtitle mb-2 text-muted'>작성일 : "+p.createdTime+"</h5>";
-            htmls += "<p class='card-text'>"+p.contentPreview+"</p>";
+            if(p.locked === 1) {
+                htmls += "<p class='card-text'>⚠️ 익명글 입니다.</p>";
+            } else {
+                htmls += "<p class='card-text'>"+p.contentPreview+"</p>";
+            }
             htmls += "</div></div></div>";
         }
         $('div.row').append(htmls);

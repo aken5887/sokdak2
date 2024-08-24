@@ -149,10 +149,14 @@
         document.title = postTitle;
         createMetaTag('description', postTitle);
         createMetaTag('og:title', postTitle);
-        createMetaTag('og:type', 'blog');
         createMetaTag('og:url', location.href);
         createMetaTag('og:image', thumbnailImage);
         createMetaTag('og:description', postTitle);
+
+        createMetaTag('twitter:title', postTitle);
+        createMetaTag('twitter:card', 'summary_large_image');
+        createMetaTag('twitter:image', thumbnailImage);
+        createMetaTag('twitter:description', postTitle);
 
         const viewer = toastui.Editor.factory({
             el: document.querySelector('#viewer'),
