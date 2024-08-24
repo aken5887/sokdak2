@@ -130,15 +130,29 @@
         let vf = $("#viewForm");
 
         history.replaceState(null, '', `/posts/${postId}`);
+        const createMetaTag = function(name, content) {
+            let metaTag = document.createElement('meta');
+            metaTag.setAttribute('name', name);
+            metaTag.setAttribute('content', content);
+            document.getElementsByTagName('head')[0].insertBefore(metaTag, document.getElementsByTagName('head')[0].firstChild);
+        }
+
         /** title, meta tag 변경 **/
         const postTitle = [[${response.title}]];
-        document.title = postTitle;
-        const metaTag = document.createElement('meta');
-        metaTag.setAttribute('http-equiv', 'X-UA-Compatible');
-        metaTag.setAttribute('name', 'description');
-        metaTag.setAttribute('content', postTitle);
-        document.getElementsByTagName('head')[0].insertBefore(metaTag, document.getElementsByTagName('head')[0].firstChild);
+        let thumbnailImage = [[${response.thumbnailImage}]];
+        if(thumbnailImage) {
+            thumbnailImage = `${location.origin}${thumbnailImage}`;
 
+        } else {
+            thumbnailImage = `${location.origin}/image/default_300.png`;
+        }
+        document.title = postTitle;
+        createMetaTag('description', postTitle);
+        createMetaTag('og:title', postTitle);
+        createMetaTag('og:type', 'blog');
+        createMetaTag('og:url', location.href);
+        createMetaTag('og:image', thumbnailImage);
+        createMetaTag('og:description', postTitle);
 
         const viewer = toastui.Editor.factory({
             el: document.querySelector('#viewer'),

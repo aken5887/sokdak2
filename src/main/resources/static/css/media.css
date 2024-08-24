@@ -131,4 +131,13 @@
     .bt_wrap a {
         min-width: 40px;
     }
+    .toastui-editor.md-mode  {
+        width : 100% !important;
+    }
+    .toastui-editor-md-splitter {
+        display : none !important;
+    }
+    .toastui-editor-md-preview {
+        display : none !important;
+    }
 }

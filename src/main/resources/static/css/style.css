@@ -227,6 +227,8 @@ h1, h2, h3 {
 }
 
 .board_search {
+    display: flex;
+    justify-content: center;
     margin-top: 30px;
     text-align: center;
     font-size: 0;
@@ -773,4 +775,19 @@ nav a:hover {
 
 nav a.on {
     color: #009999;
+}
+
+/* 컨텐츠 소개 글 */
+.board_write .info {
+    border-bottom : 1px dashed #ddd !important;
+}
+.preview {
+    border-top : 1px dashed #ddd !important;
+    border-bottom : 1px solid #000 !important;
+}
+.contentPreview {
+    width: 100%;
+    height: 150px;
+    resize: none;
+    padding: 10px;
 }
