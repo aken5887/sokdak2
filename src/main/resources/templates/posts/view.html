@@ -132,9 +132,15 @@
         history.replaceState(null, '', `/posts/${postId}`);
         const createMetaTag = function(name, content) {
             let metaTag = document.createElement('meta');
+            metaTag.setAttribute('data-rh', 'true');
             metaTag.setAttribute('name', name);
             metaTag.setAttribute('content', content);
-            document.getElementsByTagName('head')[0].insertBefore(metaTag, document.getElementsByTagName('head')[0].firstChild);
+            if(document.getElementsByTagName('meta')) {
+                let len = document.getElementsByTagName('meta').length;
+                document.getElementsByTagName('meta')[len-1].insertAdjacentElement('afterend', metaTag);
+            } else {
+                document.getElementsByTagName('title')[0].insertAdjacentElement('afterend', metaTag);
+            }
         }
 
         /** title, meta tag 변경 **/
