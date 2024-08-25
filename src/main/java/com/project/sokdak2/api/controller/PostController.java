@@ -113,12 +113,12 @@ public class PostController {
     createMetaTag('twitter:image', thumbnailImage);
     createMetaTag('twitter:description', postTitle);
     */
-
+    String reqUrl = req.getRequestURL().toString().replace("http://", "https://");
     MetaResponse metaResponse = MetaResponse.builder()
             .postTitle(response.getTitle())
             .description(response.getTitle())
-            .url(req.getRequestURL().toString().replace("http://", "https://"))
-            .image(req.getRequestURL().toString()+response.getThumbnailImage())
+            .url(reqUrl)
+            .image(reqUrl+response.getThumbnailImage())
             .twitterCard("summary_large_image")
             .build();
 
