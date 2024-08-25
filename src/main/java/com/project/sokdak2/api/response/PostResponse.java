@@ -27,7 +27,7 @@ public class PostResponse {
   private List<File> files;
   private Integer locked;
   private Integer password;
-  private String thumbnailImage;
+  private String thumbnailImage = "/image/default_300.png";
   private String contentPreview;
 
   public PostResponse(Post post) {

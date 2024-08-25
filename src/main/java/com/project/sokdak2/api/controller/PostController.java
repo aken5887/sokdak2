@@ -7,6 +7,7 @@ import com.project.sokdak2.api.request.PostCreate;
 import com.project.sokdak2.api.request.PostEdit;
 import com.project.sokdak2.api.request.PostSearch;
 import com.project.sokdak2.api.request.SessionUser;
+import com.project.sokdak2.api.response.MetaResponse;
 import com.project.sokdak2.api.response.PostResponse;
 import com.project.sokdak2.api.service.PostService;
 import com.project.sokdak2.api.util.CommonUtil;
@@ -99,6 +100,29 @@ public class PostController {
     postService.increaseCount(postId, clientAddress, update);
     model.addAttribute("response", response);
 
+    /* meta 태그 */
+    /*
+    createMetaTag('description', postTitle);
+    createMetaTag('og:title', postTitle);
+    createMetaTag('og:url', location.href);
+    createMetaTag('og:image', thumbnailImage);
+    createMetaTag('og:description', postTitle);
+
+    createMetaTag('twitter:title', postTitle);
+    createMetaTag('twitter:card', 'summary_large_image');
+    createMetaTag('twitter:image', thumbnailImage);
+    createMetaTag('twitter:description', postTitle);
+    */
+
+    MetaResponse metaResponse = MetaResponse.builder()
+            .postTitle(response.getTitle())
+            .description(response.getTitle())
+            .url(req.getRequestURL().toString()+"/posts/"+postId)
+            .image(req.getRequestURL().toString()+response.getThumbnailImage())
+            .twitterCard("summary_large_image")
+            .build();
+
+    model.addAttribute("meta", metaResponse);
     return "/posts/view";
   }
 

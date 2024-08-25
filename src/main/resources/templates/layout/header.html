@@ -2,7 +2,22 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="headerFragment">
   <head>
-    <title>속닥속닥</title>
+    <th:block th:if="${meta == null}">
+      <title>속닥속닥</title>
+    </th:block>
+    <th:block th:if="${meta != null}">
+      <title th:text="${meta.postTitle }"></title>
+      <meta name="description" th:content="${meta.description}"/>
+      <meta name="og:title" th:content="${meta.postTitle}"/>
+      <meta name="og:url" th:content="${meta.url}"/>
+      <meta name="og:image" th:content="${meta.image}"/>
+      <meta name="og:description" th:content="${meta.description}"/>
+      <meta name="twitter:title" th:content="${meta.postTitle}"/>
+      <meta name="twitter:card" th:content="${meta.twitterCard}"/>
+      <meta name="twitter:image" th:content="${meta.image}"/>
+      <meta name="twitter:description" th:content="${meta.description}"/>
+    </th:block>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
