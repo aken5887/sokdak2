@@ -113,12 +113,17 @@ public class PostController {
     createMetaTag('twitter:image', thumbnailImage);
     createMetaTag('twitter:description', postTitle);
     */
-    String reqUrl = req.getRequestURL().toString().replace("http://", "https://");
+    String reqUrl = req.getRequestURL().toString();
+    String domainUrl = reqUrl.substring(0, reqUrl.indexOf(req.getRequestURI()));
+    if(req.isSecure()) {
+      reqUrl = reqUrl.replace("http://", "https://");
+      domainUrl = domainUrl.replace("http://", "https://");
+    }
     MetaResponse metaResponse = MetaResponse.builder()
             .postTitle(response.getTitle())
             .description(response.getTitle())
             .url(reqUrl)
-            .image(reqUrl+response.getThumbnailImage())
+            .image(domainUrl+response.getThumbnailImage())
             .twitterCard("summary_large_image")
             .build();
 
