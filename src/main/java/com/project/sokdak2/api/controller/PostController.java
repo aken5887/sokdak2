@@ -117,7 +117,7 @@ public class PostController {
     MetaResponse metaResponse = MetaResponse.builder()
             .postTitle(response.getTitle())
             .description(response.getTitle())
-            .url(req.getRequestURL().toString())
+            .url(req.getRequestURL().toString().replace("http://", "https://"))
             .image(req.getRequestURL().toString()+response.getThumbnailImage())
             .twitterCard("summary_large_image")
             .build();
